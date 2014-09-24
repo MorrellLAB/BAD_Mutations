@@ -1,9 +1,9 @@
-Objective: 
-==========
 
-Generate a flexible pipeline for predicting deleterious mutations, capable of handling 
+<p>
+<b>Objective:</b>Generate a flexible pipeline for predicting deleterious mutations, capable of handling 
 queries from different plant species and easily updated with new plant genomes that become 
 available.
+</p>
 
 <ol>
   <li>
