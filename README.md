@@ -1,15 +1,12 @@
 
-<p>
-<b>Objective:</b>Generate a flexible pipeline for predicting deleterious mutations, capable of handling 
+Objective:
+==========
+Generate a flexible pipeline for predicting deleterious mutations, capable of handling 
 queries from different plant species and easily updated with new plant genomes that become 
 available.
-</p>
 
-<ol>
-  <li>
-  <p>
-    Data files, sources and formats
-  </p>
+Data files, sources and formats
+===============================
 <p>
 <b>Sequences:</b>
 Multisequence FASTA file of all coding sequences (nucleotide) for each plant genome 
@@ -51,10 +48,8 @@ BLAT works fine for >80% ID and I don't think we want distant homologues, which 
 designed to detect. We should also modify blast parameters to suite our project.
 </p>
 
-</li>
-
-<li>
 Alignment pipeline
+==================
 <ol>
   <li>Given a query sequence, blastp to protein database(s).</li>
   <li>Filter results for only best hit for each species</li>
@@ -66,7 +61,8 @@ Alignment pipeline
 </ol>
 </li>
 
-<li>LRT and SIFT calling LRT requires a nucleotide alignment and will output calls for any site specified. SIFT requires a protein alignment and will output calls for any or all sites. Hopefully, we can implement 1 & 2 for all genes and then SIFT and LRT can run quickly with each user query. 1 & 2 can be updated only when new genomes/annotations are available or if someone 
+LRT and SIFT calling
+====================
+LRT requires a nucleotide alignment and will output calls for any site specified. SIFT requires a protein alignment and will output calls for any or all sites. Hopefully, we can implement 1 & 2 for all genes and then SIFT and LRT can run quickly with each user query. 1 & 2 can be updated only when new genomes/annotations are available or if someone 
 wants to do predictions using another species (e.g. soy).
-</li>
-</ol>
+
