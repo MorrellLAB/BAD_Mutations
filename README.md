@@ -66,3 +66,14 @@ LRT and SIFT calling
 LRT requires a nucleotide alignment and will output calls for any site specified. SIFT requires a protein alignment and will output calls for any or all sites. Hopefully, we can implement 1 & 2 for all genes and then SIFT and LRT can run quickly with each user query. 1 & 2 can be updated only when new genomes/annotations are available or if someone 
 wants to do predictions using another species (e.g. soy).
 
+TO DO
+=====
+Tom: Can you specify data source and parameters so we can agree and move forward with 
+downloads.
+
+Peter: Can you point out any genomes that are available but not in phytozome. E.g. those in ensembl-
+plants: http://plants.ensembl.org/info/website/species.html or any others you know of.
+
+Yancy: Perhaps with Toms help you can do a quick benchmark for speed of blasting a database with
+multiple species or multiple databases with one species each. Default parameters for blastp. Just 
+email me with any questions.
