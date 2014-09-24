@@ -35,8 +35,10 @@ should be fine for 20k blast searches based on barley genes. But some attention 
 useful. One possibility is to use BLAT (100x faster but less sensitive). I think this is possible since 
 BLAT works fine for >80% ID and I don't think we want distant homologues, which is what blastp is 
 designed to detect. We should also modify blast parameters to suite our project.
+</li>
 
-<li>Alignment pipeline
+<li>
+Alignment pipeline
 <ol>
   <li>Given a query sequence, blastp to protein database(s).</li>
   <li>Filter results for only best hit for each species</li>
