@@ -7,9 +7,12 @@ available.
 
 <ol>
   <li>
+  <p>
     Data files, sources and formats
-
-Sequences: Multisequence FASTA file of all coding sequences (nucleotide) for each plant genome 
+  </p>
+<p>
+<b>Sequences:</b> 
+Multisequence FASTA file of all coding sequences (nucleotide) for each plant genome 
 available. Corresponding multisequence FASTA file of translated protein sequences. This can be 
 done using EMBOSS's transeq command. Output should be checked for stop codons (*) in translation 
 before the end of the protein. These will be removed unless there are too many (100s) indicating 
@@ -18,6 +21,7 @@ Source: We need to specify source of CDS (e.g. ensembl or phytozome, assembly/re
 for both genome and annotation) and specific parameters used, e.g. whether to use primary transcript 
 (e.g. longest) or all transcripts for a gene and any other settings used to obtain the data from BioMart.
 downloads.
+</p>
 
 Species: We also need to specify a list of plant genomes that we intend to use. Although for Barley 
 we focus on grasses and could limit database to angiosperms, I don't see harm in having other more 
