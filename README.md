@@ -11,34 +11,46 @@ available.
     Data files, sources and formats
   </p>
 <p>
-<b>Sequences:</b> 
+<b>Sequences:</b>
 Multisequence FASTA file of all coding sequences (nucleotide) for each plant genome 
 available. Corresponding multisequence FASTA file of translated protein sequences. This can be 
 done using EMBOSS's transeq command. Output should be checked for stop codons (*) in translation 
 before the end of the protein. These will be removed unless there are too many (100s) indicating 
 problems with frame or A-I editing.
-Source: We need to specify source of CDS (e.g. ensembl or phytozome, assembly/release number 
+</p>
+
+<p>
+<b>Source:</b> We need to specify source of CDS (e.g. ensembl or phytozome, assembly/release number 
 for both genome and annotation) and specific parameters used, e.g. whether to use primary transcript 
 (e.g. longest) or all transcripts for a gene and any other settings used to obtain the data from BioMart.
 downloads.
 </p>
 
-Species: We also need to specify a list of plant genomes that we intend to use. Although for Barley 
+<p>
+<b>Species:</b> We also need to specify a list of plant genomes that we intend to use. Although for Barley 
 we focus on grasses and could limit database to angiosperms, I don't see harm in having other more 
 distant genomes included.
+</p>
 
-
+<p>
 Phyozome info for releases is here: http://phytozome.jgi.doe.gov/pz/portal.html#!releaseNotes
-Format: Each protein/species dataset needs to be formated as a blast database. (Record blast 
+</p>
+
+<p>
+<b>Format:</b> Each protein/species dataset needs to be formated as a blast database. (Record blast 
 version). As we discussed we can also try formating a single database with all species included. In this 
 case, we have to ensure that each sequence name ( after > ) can be used to know which species it 
 came from.
+</p>
 
+<p>
 One issue we may face is speed. Computing clusters can give us 100-1000 nodes, which I suspect 
 should be fine for 20k blast searches based on barley genes. But some attention to this would be 
 useful. One possibility is to use BLAT (100x faster but less sensitive). I think this is possible since 
 BLAT works fine for >80% ID and I don't think we want distant homologues, which is what blastp is 
 designed to detect. We should also modify blast parameters to suite our project.
+</p>
+
 </li>
 
 <li>
