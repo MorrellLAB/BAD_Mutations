@@ -10,9 +10,10 @@ def parse_args():
     parser.add_argument('--user', required=True, help='user name for jgi.doe.gov')
     parser.add_argument('--password', required=True, help='password for jgi.doe.gov')
     args = parser.parse_args()
+    return args
 
-def sign_on():
-    login_data = {'commit':'1','login':'ribb0013','password':''}
+def sign_on(args):
+    login_data = {'commit':'1','login':args.user,'password':args.password}
     s = requests.Session()
     s.auth = ('user', 'pass')
     s.headers.update({'x-test': 'true'})
@@ -34,11 +35,10 @@ def download_file(url,s):
     return local_filename
 
 def main():
-    parse_args()
+    args = parse_args()
     test_fil_url ='http://genome.jgi.doe.gov/PhytozomeV10/download/_JAMO/53112a6949607a1be0055904/Sitalica_164_v2.1.cds_primaryTranscriptOnly.fa.gz'
 
-    s = sign_on()
+    s = sign_on(args)
     download_file(test_fil_url,s)
 
-parse_args()
-#main()
+main()
