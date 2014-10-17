@@ -6,11 +6,10 @@ from xml.etree import ElementTree
 from requests.auth import HTTPDigestAuth
 
 def parse_args():
-    print "parse args"
     parser = argparse.ArgumentParser(description='Process some integers.')
-    parser.add_argument('--foo', help='foo help')
+    parser.add_argument('--user', required=True, help='user name for jgi.doe.gov')
+    parser.add_argument('--password', required=True, help='password for jgi.doe.gov')
     args = parser.parse_args()
-    parser.print_help()
 
 def sign_on():
     login_data = {'commit':'1','login':'ribb0013','password':''}
@@ -21,7 +20,6 @@ def sign_on():
     signon_page ="https://signon.jgi.doe.gov/signon"
     requests.post(signon_page,login_data,verify=True)
     return s
-
 
 def download_file(url,s):
     local_filename = url.split('/')[-1]
