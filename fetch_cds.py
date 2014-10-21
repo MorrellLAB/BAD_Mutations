@@ -17,7 +17,6 @@ def sign_on(args):
     payload = {'login':args.user,'password':args.password}
     signon_page ="https://signon.jgi.doe.gov/signon/create"
     r = s.post(signon_page, data=payload)
-    print r.text
     return s
 
 def download_file(url,s):
@@ -30,12 +29,15 @@ def download_file(url,s):
                 f.flush()
     return local_filename
 
+def fetch_xml(s):
+    url = "http://genome.jgi.doe.gov/ext-api/downloads/get-directory"
+    payload = {'organism':'PhytozomeV10'}
+    r = s.get(url,params=payload)
+    print r.text
 
 def main():
     args = parse_args()
-    test_file_url ='http://genome.jgi.doe.gov/PhytozomeV10/download/_JAMO/53112a6949607a1be0055904/Sitalica_164_v2.1.cds_primaryTranscriptOnly.fa.gz'
     s = sign_on(args)
-      
-    download_file(test_file_url,s)
+    fetch_xml(s)
 
 main()
