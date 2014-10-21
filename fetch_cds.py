@@ -1,9 +1,6 @@
 #!/usr/bin/env python
-
 import requests
 import argparse
-from xml.etree import ElementTree
-from requests.auth import HTTPDigestAuth
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Process some integers.')
