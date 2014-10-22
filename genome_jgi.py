@@ -22,7 +22,7 @@ def fetch_xml(s):
     url = "http://genome.jgi.doe.gov/ext-api/downloads/get-directory"
     payload = {'organism':'PhytozomeV10'}
     xml = s.get(url,params=payload)
-    return xml
+    return xml.text
 
 #def main():
 #    args = parse_args()

@@ -17,6 +17,7 @@ class TestJGIFunctions(unittest.TestCase):
         s = genome_jgi.sign_on(self.jgi_user,self.jgi_password)
         xml = genome_jgi.fetch_xml(s)
         self.assertTrue( xml != None )
+        self.assertTrue( xml.find("cds") )
 
 if __name__ == '__main__':
       unittest.main()
