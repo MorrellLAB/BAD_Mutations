@@ -23,10 +23,10 @@ class JGIUtils(object):
                     f.flush()
         return local_filename
 
-    def fetch_xml(self,s):
+    def fetch_xml(self):
         url = "http://genome.jgi.doe.gov/ext-api/downloads/get-directory"
         payload = {'organism':'PhytozomeV10'}
-        xml = s.get(url,params=payload)
+        xml = self.s.get(url,params=payload)
         return xml.text
 
 #def fetch_cds_list():
