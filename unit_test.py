@@ -34,6 +34,7 @@ class TestJGIFunctions(unittest.TestCase):
         cds_list = self.jgi.fetch_cds_list(url_list)
         self.assertTrue( len(cds_list) > 0 )
         for url in cds_list:
+            print url
             part = url.split(".")
             self.assertTrue('cds' in part)
 

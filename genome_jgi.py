@@ -43,12 +43,18 @@ class JGIUtils(object):
             part = url.split(".")
             for p in part:
                 if p == "cds":
-                    cds_url_list.append(url)
+                    cds_url_list.append( url.split("/")[-1] )
         return cds_url_list
 
     def download_cds_files(self):
-        for url in url_list:
-            self.download_file(url,self.s)
+        xml_url = "http://genome.jgi.doe.gov/ext-api/downloads/get-directory"
+        xml = self.fetch_xml(xml_url)
+        url_list = self.fetch_url_list(xml)
+        cds_list = self.fetch_cds_list(url_list)
+        for cds_file in cds_list:
+            dl_url = "http://genome.jgi.doe.gov/PhytozomeV10/download/_JAMO/53ebd93a0d878557fd3b5efd/" + cds_file
+            print "downloding: " + dl_url
+            self.download_file(dl_url,self.s)
 
 #def main():
 #    args = parse_args()
