@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import requests
+from xml.etree import ElementTree
 
 class JGIUtils(object):
 
@@ -27,10 +28,18 @@ class JGIUtils(object):
         url = "http://genome.jgi.doe.gov/ext-api/downloads/get-directory"
         payload = {'organism':'PhytozomeV10'}
         xml = self.s.get(url,params=payload)
-        return xml.text
+        return xml.content
 
-#def fetch_cds_list():
-    
+    def fetch_url_list(self):
+        print "fetch cds list"
+        url_list = []
+        xml = self.fetch_xml()
+        tree = ElementTree.fromstring(xml)
+        for elem in tree.findall('.//file'):
+            url = elem.attrib.get('url')
+            url_list.append(url)
+
+        return url_list
 
 #def main():
 #    args = parse_args()
