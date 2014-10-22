@@ -1,17 +1,9 @@
 #!/usr/bin/env python
 import requests
-import argparse
 
-def parse_args():
-    parser = argparse.ArgumentParser(description='Process some integers.')
-    parser.add_argument('--user', required=True, help='user name for jgi.doe.gov')
-    parser.add_argument('--password', required=True, help='password for jgi.doe.gov')
-    args = parser.parse_args()
-    return args
-
-def sign_on(args):
+def sign_on(user,password):
     s = requests.session()
-    payload = {'login':args.user,'password':args.password}
+    payload = {'login':user,'password':password}
     signon_page ="https://signon.jgi.doe.gov/signon/create"
     r = s.post(signon_page, data=payload)
     return s
@@ -32,9 +24,9 @@ def fetch_xml(s):
     r = s.get(url,params=payload)
     print r.text
 
-def main():
-    args = parse_args()
-    s = sign_on(args)
-    fetch_xml(s)
+#def main():
+#    args = parse_args()
+#    s = sign_on(args)
+#    fetch_xml(s)
 
-main()
+#main()
