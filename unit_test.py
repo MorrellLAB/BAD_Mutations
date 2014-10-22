@@ -14,7 +14,9 @@ class TestJGIFunctions(unittest.TestCase):
         self.assertTrue( self.jgi_password != None)
 
     def test_fetch_xml(self):
-        print "jgi_user"
+        s = genome_jgi.sign_on(self.jgi_user,self.jgi_password)
+        xml = genome_jgi.fetch_xml(s)
+        self.assertTrue( xml != None )
 
 if __name__ == '__main__':
       unittest.main()
