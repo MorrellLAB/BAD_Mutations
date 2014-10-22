@@ -24,23 +24,22 @@ class JGIUtils(object):
                     f.flush()
         return local_filename
 
-    def fetch_xml(self):
+    def fetch_xml(self,url):
         url = "http://genome.jgi.doe.gov/ext-api/downloads/get-directory"
         payload = {'organism':'PhytozomeV10'}
         xml = self.s.get(url,params=payload)
         return xml.content
 
-    def fetch_url_list(self):
+    def fetch_url_list(self,xml):
         url_list = []
         xml = self.fetch_xml()
         tree = ElementTree.fromstring(xml)
         for elem in tree.findall('.//file'):
             url = elem.attrib.get('url')
             url_list.append(url)
-
         return url_list
 
-    def fetch_cds_list(self):
+    def fetch_cds_list(self,all_urls):
         cds_url_list = []
         urls = self.fetch_url_list()
         for url in urls:
@@ -49,6 +48,10 @@ class JGIUtils(object):
                 if p == "cds":
                     cds_url_list.append(url)
         return cds_url_list
+
+    def download_cds_files(self):
+        for url in url_list:
+            self.download_file(url,self.s)
 
 #def main():
 #    args = parse_args()
