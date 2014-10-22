@@ -31,7 +31,6 @@ class JGIUtils(object):
         return xml.content
 
     def fetch_url_list(self):
-        print "fetch cds list"
         url_list = []
         xml = self.fetch_xml()
         tree = ElementTree.fromstring(xml)
@@ -40,6 +39,16 @@ class JGIUtils(object):
             url_list.append(url)
 
         return url_list
+
+    def fetch_cds_list(self):
+        cds_url_list = []
+        urls = self.fetch_url_list()
+        for url in urls:
+            part = url.split(".")
+            for p in part:
+                if p == "cds":
+                    cds_url_list.append(url)
+        return cds_url_list
 
 #def main():
 #    args = parse_args()

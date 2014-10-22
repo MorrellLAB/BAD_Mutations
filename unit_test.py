@@ -19,9 +19,16 @@ class TestJGIFunctions(unittest.TestCase):
         self.assertTrue( xml != None )
         self.assertTrue( xml.find("cds") )
 
-    def test_cds_list(self):
+    def test_url_list(self):
         url_list = self.jgi.fetch_url_list()
         self.assertTrue( len(url_list) > 0 )
+
+    def test_cds_list(self):
+        cds_list = self.jgi.fetch_cds_list()
+        self.assertTrue( len(cds_list) > 0 )
+        for url in cds_list:
+            part = url.split(".")
+            self.assertTrue('cds' in part)
 
 if __name__ == '__main__':
       unittest.main()
