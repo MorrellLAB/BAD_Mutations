@@ -15,5 +15,10 @@ def parse_args():
         '--password', 
         required=True, 
         help='Password for jgi.doe.gov')
+    parser.add_argument(
+        '--base',
+        '-b',
+        help='Base directory for species databases. Defaults to .',
+        default='.')
     args = parser.parse_args()
     return args

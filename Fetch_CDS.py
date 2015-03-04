@@ -2,8 +2,13 @@
 #   This script will take the URLs of the CDS files and download them from
 #   Phytozome.
 
+#   To handle operating system commands like mkdir
+import os
+
 #   Define a base URL for downloading
 dl_base = 'http://genome.jgi.doe.gov'
+#   The base directory
+lrt_base = '.'
 
 #   A function that downloads the CDS file
 def dl(session, url):
@@ -22,4 +27,3 @@ def dl(session, url):
                 #   and flush the buffer
                 f.flush()
     return localname
-
