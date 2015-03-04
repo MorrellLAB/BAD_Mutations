@@ -8,6 +8,8 @@
 
 #   Dependencies:
 #       1) requests http://www.python-requests.org
+#       2) argparse https://code.google.com/p/argparse/
+#           (Not required for Python 3 and Python 2 >= 2.7)
 
 ###############################################################################
 ##### Future? #################################################################

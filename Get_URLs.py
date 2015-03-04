@@ -2,7 +2,11 @@
 #   A script to get URLs for the CDS files out of Phytozome XML
 
 #   To handle HTTP requests
-import requests
+try:
+    import requests
+except ImportError:
+    print 'Error! You need to have the requests module installed.'
+    exit(1)
 #   To parse XML files
 from xml.etree import ElementTree
 

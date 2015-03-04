@@ -2,11 +2,15 @@
 #   Helper script for Phytozome.py
 #   Contains argument parsing code
 
-import argparse
+try:
+    import argparse
+except ImportError:
+    print 'Error! You need to have the argparse module installed.'
+    exit(1)
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description = "Script to download CDS FASTA files from Phytozome.")
+        description = 'Script to download CDS FASTA files from Phytozome.')
     parser.add_argument(
         '--user', 
         required=True, 
