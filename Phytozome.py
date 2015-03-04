@@ -13,7 +13,9 @@ import Get_Urls as GU
 arguments = PA.parse_args()
 
 session = GU.signon(arguments.user, arguments.password)
-cds_list = GU.extract_cds(session)
+urls = GU.extract_all_urls(session)
+cds = GU.extract_cds_urls(urls)
+print cds
 # import requests
 # from xml.etree import ElementTree
 
