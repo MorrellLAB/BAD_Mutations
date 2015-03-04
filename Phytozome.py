@@ -8,7 +8,9 @@ import sys
 #   Import our argument parsing script
 import Parse_Args as PA
 #   Import the Phytozome signon and URL parsing script
-import Get_Urls as GU
+import Get_URLs as GU
+#   Import the downloading script
+import Fetch_CDS as FC
 
 arguments = PA.parse_args()
 

@@ -17,18 +17,18 @@ def signon(username, password):
     #   We create a new session object, which maintains our login credentials
     s = requests.Session()
     #   Create a dictionary that contains the data to be sent to the login form
-    d = {'user': username, 'password': password}
+    d = {'login': username, 'password': password}
     #   We sign on to Phytozome with our username and password with HTTP POST
     #   This creates a Response object
     r = s.post(sign_on_page, data=d)
-    #   Return the Response object so we can requests data from it later
-    return(r)
+    #   Return the Session object so we can use it to fetch data later
+    return s
 
 
 #   A function to get all URLs out of the XML file
-def extract_all_urls(response):
-    #   Get the XML file itself
-    xml = response.get(xml_dir, params=xml_data)
+def extract_all_urls(session):
+    #   Get the XML file itself, in a Response object
+    xml = session.get(xml_dir, params=xml_data)
     #   Next, we create a tree of elements out of it
     #   Response.text contains the Unicode text of the response
     xmltree = ElementTree.fromstring(xml.text)
@@ -37,7 +37,7 @@ def extract_all_urls(response):
     for e in xmltree.findall('.//file'):
         urls.append(e.attrib.get('url'))
     #   And return the list of URLs
-    return(urls)
+    return urls 
 
 
 #   A function to extract the URLs to the CDS files from the XML
@@ -50,4 +50,4 @@ def extract_cds_urls(url_list):
         if u.endswith(suffix):
             cds.append(u)
     #   And return the list of cds URLs
-    return(cds)
+    return cds
