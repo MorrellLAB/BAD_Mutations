@@ -22,13 +22,13 @@
 #   To take arguments
 import sys
 #   Import our argument parsing script
-import Parse_Args as PA
+from General import Parse_Args as PA
 #   Import the Phytozome signon and URL parsing script
-import Get_URLs as GU
+from Fetching import Get_URLs as GU
 #   Import the downloading script
-import Fetch_CDS as FC
+from Fetching import Fetch_CDS as FC
 #   Import the directory handling script
-import Dir_Funcs as DF
+from Fetching import Dir_Funcs as DF
 
 #   Main function
 def main():
