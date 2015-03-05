@@ -12,8 +12,8 @@ Data Sources
 ------------
 Currently, the package downloads all CDS FASTA files from
 [Phytozome 10](http://phytozome.jgi.doe.gov/). In order to run the script, you
-will need a JGI Genomes account. Fetching data from Ensembl is not yet
-implemented, but is planned.
+will need a JGI Genomes account. Fetching data from 
+[Ensembl](http://plants.ensembl.org) is not yet implemented, but is planned.
 
 Method
 ------
