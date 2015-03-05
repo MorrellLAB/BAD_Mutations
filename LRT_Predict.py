@@ -25,18 +25,20 @@ import getpass
 #   To cd
 import os
 #   Import our argument parsing script
-from General import Parse_Args as PA
+from General import Parse_Args as ParseArgs
 #   Import the directory handling script
-from General import Dir_Funcs as DF
+from General import Dir_Funcs as DirFuncs
+#   Import our file handling script
+from General import File_Checks as FileCheck
 #   Import the Phytozome signon and URL parsing script
-from Fetching import Get_URLs as GU
+from Fetching import Get_URLs as GetURL
 #   Import the downloading script
-from Fetching import Fetch_CDS as FC
+from Fetching import Fetch_CDS as FetchCDS
 
 #   A function to perform the fetching
 def fetch(base, user, password):
     #   create the base for the LRT
-    DF.makebase(base)
+    DirFuncs.makebase(base)
     #   cd into the base. This should work since we already checked the
     #   permissions with the function call above
     os.chdir(base)
@@ -46,32 +48,34 @@ def fetch(base, user, password):
     else:
         password = getpass.getpass('Password: ')
     #   Start a new login session to Phyotozome
-    session = GU.signon(user, password)
+    session = GetURL.signon(user, password)
     #   If session is NoneType, then there was a login problem
     if not session:
         print 'There was a problem logging in to JGI Genomes Portal. Check your\
 username and password and try again.'
         exit(1)
-    #   Get the list of all URLs from the downloads tree
-    urls = GU.extract_all_urls(session)
+    #   Get the list of all URLs and md5s from the downloads tree
+    urls, md5s = GetURL.extract_all_urls(session)
     #   Get the CDS only
-    cds = GU.extract_cds_urls(urls)
+    cds = GetURL.extract_cds_urls(urls)
     #   What are the filenames?
     cds_names = []
     for c in cds:
         #   Download the files
-        fname = FC.dl(session, c)
+        fname = FetchCDS.dl(session, c)
         print 'Downloaded ' + fname
         cds_names.append(fname)
     #   Now, move all the files into their correct directories
-    for c in cds_names:
+    #   Save a MD5 in each directory
+    for c, m in zip(cds_names, md5s):
         #   Build the directory name from the filename
         #   the species is the first field, separated by _
         spname = c.split('_')[0]
         #   Create the species directory
-        spdir = DF.make_species_dir(base, spname)
+        spdir = DirFuncs.make_species_dir(base, spname)
         #   And move the file into it
-        DF.move_file(c, spdir)
+        DirFuncs.move_file(c, spdir)
+
     print "Done!"
     return
 
@@ -84,7 +88,7 @@ def predict():
 #   Main function
 def main():
     #   Parse the arguments
-    arguments = PA.parse_args()
+    arguments = ParseArgs.parse_args()
     #   Which command was invoked?
     if arguments.action == 'fetch':
         fetch(arguments.base, arguments.user, arguments.password)

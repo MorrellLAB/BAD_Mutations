@@ -49,10 +49,13 @@ def extract_all_urls(session):
     xmltree = ElementTree.fromstring(xml.text)
     #   We step through the tree and save all URLs from the XML
     urls = []
+    #   And the md5 sums
+    md5s = []
     for e in xmltree.findall('.//file'):
-        urls.append(e.attrib.get('url'))
+        urls.append((e.attrib.get('url'))
+        md5s.append(e.attrib.get('md5'))
     #   And return the list of URLs
-    return urls 
+    return (urls, md5s)
 
 
 #   A function to extract the URLs to the CDS files from the XML
