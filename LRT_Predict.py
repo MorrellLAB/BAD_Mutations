@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
-#   Script to download CDS files from phytozome.net
-#   requires a user name and password for the JGI phyotzome portal (Free)
+#   Script to perform LRT from Chun and Fay (2009) to predict deleterious SNPs
+#   in plants.
+#   Requires a user name and password for the JGI phyotzome portal (Free)
 #   Thomas Kono
 #       March 4, 2015
 #       Saint Paul, MN

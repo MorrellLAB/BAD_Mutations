@@ -29,3 +29,11 @@ variant is deleterious will be returned.
 Input
 -----
 To be written.
+
+TODO
+----
+* Add downloading from Ensembl Plants
+* Integreate creation of BLAST databases
+* Add MD5 checking for CDS files to avoid unnecessary downloads
+* Write BLAST command and parser scripts
+* Implement the LRT itself
