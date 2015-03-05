@@ -25,19 +25,19 @@ import getpass
 import os
 #   Import our argument parsing script
 from General import Parse_Args as PA
+#   Import the directory handling script
+from General import Dir_Funcs as DF
 #   Import the Phytozome signon and URL parsing script
 from Fetching import Get_URLs as GU
 #   Import the downloading script
 from Fetching import Fetch_CDS as FC
-#   Import the directory handling script
-from Fetching import Dir_Funcs as DF
-
 
 #   A function to perform the fetching
 def fetch(base, user, password):
     #   create the base for the LRT
     DF.makebase(base)
-    #   cd into the base
+    #   cd into the base. This should work since we already checked the
+    #   permissions with the function call above
     os.chdir(base)
     #   Check for an entered password, else take it
     if password:
@@ -46,6 +46,11 @@ def fetch(base, user, password):
         password = getpass.getpass('Password: ')
     #   Start a new login session to Phyotozome
     session = GU.signon(user, password)
+    #   If session is NoneType, then there was a login problem
+    if not session:
+        print 'There was a problem logging in to JGI Genomes Portal. Check your\
+username and password and try again.'
+        exit(1)
     #   Get the list of all URLs from the downloads tree
     urls = GU.extract_all_urls(session)
     #   Get the CDS only

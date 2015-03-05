@@ -15,6 +15,10 @@ sign_on_page = 'https://signon.jgi.doe.gov/signon/create'
 xml_dir = 'http://genome.jgi.doe.gov/ext-api/downloads/get-directory'
 #   These are the HTTP GET variables that are needed to get the full XML tree
 xml_data = {'organism':'PhytozomeV10'}
+#   Text to check for if a login was successful or not
+#   This is VERY delicate, if JGI changes the wording on their form,
+#   then this will have to be updated.
+failed_login_text = 'Login and password do not match'
 
 #   A function to sign onto Phyotozome.net, and maintain an active session
 def signon(username, password):
@@ -25,8 +29,14 @@ def signon(username, password):
     #   We sign on to Phytozome with our username and password with HTTP POST
     #   This creates a Response object
     r = s.post(sign_on_page, data=d)
-    #   Return the Session object so we can use it to fetch data later
-    return s
+    #   Check to see if there was a successful login
+    #   This is VERY delicate, if JGI changes the wording on their form,
+    #   then this will have to be updated.
+    if failed_login_text in r.text:
+        return None
+    else:
+        #   Return the Session object so we can use it to fetch data later
+        return s
 
 
 #   A function to get all URLs out of the XML file
