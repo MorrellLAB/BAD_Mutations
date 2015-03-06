@@ -14,7 +14,6 @@ def makebase(basedir):
         exit(1)
     #    If the directory exists, then just skip it
     if os.path.exists(basedir):
-        print 'Directory ' + basedir + ' exists, skipping ...'
         return
     else:
         print 'Creating base ' + basedir + ' ...'
@@ -32,10 +31,9 @@ def make_species_dir(basedir, spdir):
         print 'Error! Your LRT base directory ' + basedir + ' is not writable'
         exit(1)
     #   create the name of the target directory
-    target_dir = basedir + '/' + spdir
+    target_dir =os.path.join(basedir, spdir)
     #   Now do the checks
     if os.path.exists(target_dir):
-        print 'Directory ' + target_dir + ' exists, skipping ...'
         return target_dir
     else:
         print 'Creating ' + target_dir + ' ...'

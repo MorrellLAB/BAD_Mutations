@@ -52,20 +52,22 @@ def extract_all_urls(session):
     #   And the md5 sums
     md5s = []
     for e in xmltree.findall('.//file'):
-        urls.append((e.attrib.get('url'))
+        urls.append(e.attrib.get('url'))
         md5s.append(e.attrib.get('md5'))
     #   And return the list of URLs
     return (urls, md5s)
 
 
 #   A function to extract the URLs to the CDS files from the XML
-def extract_cds_urls(url_list):
+def extract_cds_urls(url_list, md5list):
     #   The CDS files end in .cds.fa.gz
     #   A little messy, but it works...
     suffix = '.cds.fa.gz'
     cds = []
-    for u in url_list:
+    md5s = []
+    for u, m in zip(url_list, md5list):
         if u.endswith(suffix):
             cds.append(u)
+            md5s.append(m)
     #   And return the list of cds URLs
-    return cds
+    return (cds, md5s)

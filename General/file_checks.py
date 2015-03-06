@@ -40,6 +40,16 @@ def calculate_md5(fname, blocksize=8192):
 #   A function to check if the md5 of our local file is the same as that of the
 #   remote file
 def md5_is_same(local_md5, remote_md5):
+    #   First, check if the local_md5 is a reference to a file or not
+    #   If it is, read the contents
+    if file_exists(local_md5 + '.md5'):
+        handle = open(local_md5 + '.md5', 'r')
+        #   This may break our program if someone has tampered with the
+        #   md5 file. This shouldn't be the case, but it is possible.
+        local_md5 = handle.read().strip()
+        handle.close()
+    else:
+        pass
     if local_md5 == remote_md5:
         return True
     else:
