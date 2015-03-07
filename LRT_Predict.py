@@ -32,6 +32,8 @@ from General import file_checks
 from Fetching import get_urls
 #   Import the downloading script
 from Fetching import fetch_cds
+#   Import the BLAST formatting script
+from Fetching import blast_databases
 
 #   A function to perform the fetching
 def fetch(base, user, password):
@@ -55,8 +57,8 @@ def fetch(base, user, password):
     urls, md5s = get_urls.extract_all_urls(session)
     #   Get the CDS only
     cds, md5s_flt = get_urls.extract_cds_urls(urls, md5s)
-    #   What are the filenames?
-    cds_names = []
+    #   We will make a list of those that were udpated
+    cds_updated = []
     for c, m in zip(cds, md5s_flt):
         #   What is the local name?
         local_name = fetch_cds.local_name(c)
@@ -69,7 +71,7 @@ def fetch(base, user, password):
         os.chdir(spdir)
         #   Do these files exist already?
         if file_checks.file_exists(local_name):
-            #   If it's not there, calculate it
+            #   Calculate the md5
             calc_md5 = file_checks.calculate_md5(local_name)
             #   And then compare
             md5s_same = file_checks.md5_is_same(calc_md5, m)
@@ -87,6 +89,9 @@ def fetch(base, user, password):
                     r_md5 = m
                     l_md5 = file_checks.calculate_md5(local_name)
                     same = file_checks.md5_is_same(l_md5, r_md5)
+                #   Take the path onto the list of species that need to be made into
+                #   BLAST databases
+                cds_updated.append(os.path.join(base, spdir, local_name)
         #   If the files don't exist already, then we just download them
         else:
             #   a variable to tell if we've checked out
@@ -97,7 +102,17 @@ def fetch(base, user, password):
                 r_md5 = m
                 l_md5 = file_checks.calculate_md5(local_name)
                 same = file_checks.md5_is_same(l_md5, r_md5)
-    print "Done!"
+            cds_updated.append(os.path.join(base, spdir, local_name)
+    #   Then, we create BLAST databases as necessary
+    if cds_updated:
+        for c in cds_updated:
+            retval = blast_databases.format_blast(c)
+            #   Check the return value
+            if retval == 0:
+                pass
+            else:
+                echo 'Error! makeblastdb on ' + c + ' returned ' + str(retval)
+    print 'Done!'
     return
 
 
