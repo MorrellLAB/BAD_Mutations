@@ -6,8 +6,15 @@ import re
 
 #   Does the directory exist, and is it readable and writable?
 def valid_dir(dname):
+    parent = os.path.dirname(dname)
     if os.path.isdir(dname):
         if (os.access(dname, os.R_OK) and os.access(dname, os.W_OK)):
+            return True
+        else:
+            return False
+    #   Check the parent directory
+    elif os.path.isdir(parent):
+        if (os.access(parent, os.R_OK) and os.access(dname, os.W_OK)):
             return True
         else:
             return False
