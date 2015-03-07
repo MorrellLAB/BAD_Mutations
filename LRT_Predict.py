@@ -91,7 +91,7 @@ def fetch(base, user, password):
                     same = file_checks.md5_is_same(l_md5, r_md5)
                 #   Take the path onto the list of species that need to be made into
                 #   BLAST databases
-                cds_updated.append(os.path.join(base, spdir, local_name)
+                cds_updated.append(os.path.join(base, spdir, local_name))
         #   If the files don't exist already, then we just download them
         else:
             #   a variable to tell if we've checked out
@@ -102,7 +102,7 @@ def fetch(base, user, password):
                 r_md5 = m
                 l_md5 = file_checks.calculate_md5(local_name)
                 same = file_checks.md5_is_same(l_md5, r_md5)
-            cds_updated.append(os.path.join(base, spdir, local_name)
+            cds_updated.append(os.path.join(base, spdir, local_name))
     #   Then, we create BLAST databases as necessary
     if cds_updated:
         for c in cds_updated:
