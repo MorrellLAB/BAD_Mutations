@@ -8,6 +8,11 @@ except ImportError:
     print 'Error! You need to have the argparse module installed.'
     exit(1)
 
+
+#   Import the helper script to validate arguments
+import check_args
+
+#   A function to actually parse the arguments
 def parse_args():
     parser = argparse.ArgumentParser(
         description = 'LRT for deleterious SNP prediction in plants.')
@@ -44,3 +49,23 @@ def parse_args():
         help='Run the LRT prediction pipeline')
     args = parser.parse_args()
     return args
+
+
+#   Here we validate the arguments
+def validate_args(args):
+    #   We will convert it into a dictionary to access the data
+    dict_args = vars(args)
+    #   Then check the action
+    #   If we are fetching, we have to check the username and base
+    #   argparse should have checked for missing arguments by now
+    #   If the arguments do not check out, return a message
+    if dict_args['action'] == 'fetch':
+        if not check_args.valid_email(dict_args['user']):
+            return (False, 'Username is not a valid e-mail address.')
+        elif not check_args.valid_dir(dict_args['base']):
+            return (False, 'Base directory is not readable/writable, or does not exist.')
+        else:
+            return (args, None)
+    #   The other subcommand isn't implemented yet
+    else:
+        return (args, None)

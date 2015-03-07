@@ -55,7 +55,6 @@ def fetch(base, user, password):
     urls, md5s = get_urls.extract_all_urls(session)
     #   Get the CDS only
     cds, md5s_flt = get_urls.extract_cds_urls(urls, md5s)
-    print len(cds), len(md5s_flt)
     #   What are the filenames?
     cds_names = []
     for c, m in zip(cds, md5s_flt):
@@ -111,11 +110,16 @@ def predict():
 def main():
     #   Parse the arguments
     arguments = parse_args.parse_args()
-    #   Which command was invoked?
-    if arguments.action == 'fetch':
-        fetch(arguments.base, arguments.user, arguments.password)
-    elif arguments.action == 'predict':
-        predict()
+    arguments_valid, msg = parse_args.validate_args(arguments)
+    #   If we got a return value that isn't False, then our arguments are good
+    if arguments_valid:
+        #   Which command was invoked?
+        if arguments_valid.action == 'fetch':
+            fetch(arguments_valid.base, arguments_valid.user, arguments_valid.password)
+        elif arguments_valid.action == 'predict':
+            predict()
+    else:
+        print 'Error!', msg
     return
 
 

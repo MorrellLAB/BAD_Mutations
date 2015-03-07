@@ -8,10 +8,6 @@ import os
 def makebase(basedir):
     #   Get the dirname of the LRT base
     base_parent = os.path.dirname(basedir)
-    #   Make sure the directory is readable/writeable
-    if not (os.access(base_parent, os.W_OK) and os.access(base_parent, os.R_OK)):
-        print 'Error! Your LRT base directory ' + basedir + ' is not writable'
-        exit(1)
     #    If the directory exists, then just skip it
     if os.path.exists(basedir):
         return
@@ -26,10 +22,6 @@ def makebase(basedir):
 
 #   A general function to make a directory
 def make_species_dir(basedir, spdir):
-    #   Again make sure the directory is readable/writeable
-    if not(os.access(basedir, os.W_OK) and os.access(basedir, os.R_OK)):
-        print 'Error! Your LRT base directory ' + basedir + ' is not writable'
-        exit(1)
     #   create the name of the target directory
     target_dir =os.path.join(basedir, spdir)
     #   Now do the checks
@@ -46,10 +38,6 @@ def make_species_dir(basedir, spdir):
 
 #   A function for moving files
 def move_file(filename, dirname):
-    #   Check the target is read/write
-    if not(os.access(dirname, os.W_OK) and os.access(dirname, os.R_OK)):
-        print 'Error! ' + dirname + ' is not read/write'
-        exit(1)
     #   Check that the file is read/write
     if not(os.access(filename, os.W_OK) and os.access(filename, os.R_OK)):
         print 'Error! ' + filename + ' is not read/write'
