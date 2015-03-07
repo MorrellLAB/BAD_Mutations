@@ -111,7 +111,7 @@ def fetch(base, user, password):
             if retval == 0:
                 pass
             else:
-                echo 'Error! makeblastdb on ' + c + ' returned ' + str(retval)
+                print 'Error! makeblastdb on ' + c + ' returned ' + str(retval)
     print 'Done!'
     return
 
