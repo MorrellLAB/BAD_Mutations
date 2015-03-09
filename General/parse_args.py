@@ -44,6 +44,13 @@ def parse_args():
         required=False,
         help='Base directory for species databses. Defaults to .',
         default='.')
+    fetch_args.add_argument(
+        '--fetch-only',
+        required=False,
+        action='store_true',
+        default=False,
+        help='Do not convert CDS files to BLAST databases, just fetch.'
+        )
     #   Create a parser for 'predict'
     predict_args = subparser.add_parser(
         'predict',

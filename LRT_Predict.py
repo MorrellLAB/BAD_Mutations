@@ -38,7 +38,7 @@ from Fetching import fetch_cds
 from Fetching import blast_databases
 
 #   A function to perform the fetching
-def fetch(base, user, password):
+def fetch(base, user, password, fetchonly):
     #   create the base for the LRT
     dir_funcs.makebase(base)
     #   cd into the base. This should work since we already checked the
@@ -105,15 +105,17 @@ def fetch(base, user, password):
                 l_md5 = file_checks.calculate_md5(local_name)
                 same = file_checks.md5_is_same(l_md5, r_md5)
             cds_updated.append(os.path.join(base, spdir, local_name))
-    #   Then, we create BLAST databases as necessary
-    if cds_updated:
-        for c in cds_updated:
-            retval = blast_databases.format_blast(c)
-            #   Check the return value
-            if retval == 0:
-                pass
-            else:
-                print 'Error! makeblastdb on ' + c + ' returned ' + str(retval)
+    #   Does the user want to fetch only?
+    if not fetchonly:
+        #   Then, we create BLAST databases as necessary
+        if cds_updated:
+            for c in cds_updated:
+                retval = blast_databases.format_blast(c)
+                #   Check the return value
+                if retval == 0:
+                    pass
+                else:
+                    print 'Error! makeblastdb on ' + c + ' returned ' + str(retval)
     print 'Done!'
     return
 
@@ -137,7 +139,7 @@ def main():
     if arguments_valid:
         #   Which command was invoked?
         if arguments_valid.action == 'fetch':
-            fetch(arguments_valid.base, arguments_valid.user, arguments_valid.password)
+            fetch(arguments_valid.base, arguments_valid.user, arguments_valid.password, arguments_valid.fetch_only)
         elif arguments_valid.action == 'predict':
             predict()
     else:
