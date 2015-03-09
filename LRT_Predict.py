@@ -22,6 +22,8 @@
 import getpass
 #   To cd
 import os
+#   to check arguments
+import sys
 #   Import our argument parsing script
 from General import parse_args
 #   Import the directory handling script
@@ -124,6 +126,11 @@ def predict():
 #   Main function
 def main():
     #   Parse the arguments
+    #   First, a check to see if any arguments were sent at all
+    #   If not, then print the usage and exit
+    if not sys.argv[1:]:
+        parse_args.usage()
+        exit(1)
     arguments = parse_args.parse_args()
     arguments_valid, msg = parse_args.validate_args(arguments)
     #   If we got a return value that isn't False, then our arguments are good

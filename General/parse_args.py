@@ -15,7 +15,8 @@ import check_args
 #   A function to actually parse the arguments
 def parse_args():
     parser = argparse.ArgumentParser(
-        description = 'LRT for deleterious SNP prediction in plants.')
+        description = 'LRT for deleterious SNP prediction in plants.',
+        add_help=True)
     #   Define a sub-parser to handle the different actions we can perform
     #   we can either 'fetch' or 'predict'
     subparser = parser.add_subparsers(
@@ -69,3 +70,29 @@ def validate_args(args):
     #   The other subcommand isn't implemented yet
     else:
         return (args, None)
+
+
+#   This is just a simple function that shows when the user does not supply
+#   any arguments. This is an issue with Python 2.*, and has been "fixed" in
+#   Python 3+.
+def usage():
+    print '''Usage: LRT_Predict.py <subcommand> <options>
+
+where <subcommand> is one of 'fetch' or 'predict.' This script will download
+the necessary data to perform the likelihood ratio test (LRT) of deleterious
+SNP prediction in plants, as described in Chun and Fay (2009) in Genome
+Research. 
+
+'fetch' will download gzipped CDS FASTA files from Phytozome, unzip them, and
+convert them into BLAST databases. It requires a username and password for the
+JGI Genomes Portal, which is free. Check with Phytozome for their data release
+and usage policies. Use 'LRT_Predict.py fetch -h' for more infomration.
+
+'predict' will run the LRT with a given query sequence and a list of affected
+codons. This feature has not yet been implemented.
+
+Dependencies:
+    tblastx (NCBI BLAST executables)
+    requests (Python HTTP requests module)
+    prank-msa (Phylogeny-aware sequence alignment)'''
+    return
