@@ -6,7 +6,11 @@
 
 #   Gain access to the NCBI executables
 #   This line is specific to the Minnesota Supercomputing Institute
-module load ncbi_blast+
+#module load ncbi_blast+
+#MAKE_BLAST_DB=`which makeblastdb`
+#   Or, if we don't have module, specify the full path to the makeblastdb
+#   executable
+MAKE_BLAST_DB=/soft/ncbi_blast+/2.2.29/bin/makeblastdb
 
 #   Filename as argument
 CDS=$1
@@ -16,4 +20,4 @@ new_file=${CDS/.gz/}
 #   Ungzip the files, and drop it into the same directory
 gzip -cd $x > ${new_file}
 #   Make BLAST databases out of each of the files
-makeblastdb -in ${new_file} -dbtype nucl
+${MAKE_BLAST_DB} -in ${new_file} -dbtype nucl
