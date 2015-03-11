@@ -8,6 +8,8 @@ except ImportError:
     print 'Error! You need to have the argparse module installed.'
     exit(1)
 
+import os
+
 
 #   Import the helper script to validate arguments
 import check_args
@@ -30,7 +32,8 @@ def parse_args():
     #   And give it some arguments
     fetch_args.add_argument(
         '--user',
-        required=True,
+        required=False,
+        default=None,
         help='Username for jgi.doe.gov (For fetching from Phytozome)')
     fetch_args.add_argument(
         '--password',
@@ -43,13 +46,23 @@ def parse_args():
         '-b',
         required=False,
         help='Base directory for species databses. Defaults to .',
-        default='.')
-    fetch_args.add_argument(
+        default=os.getcwd())
+    #   Create a new mutually exclusive group for deciding if we want to only
+    #   fetch, or if we want to convert
+    actions = fetch_args.add_mutually_exclusive_group(required=False)
+    actions.add_argument(
         '--fetch-only',
         required=False,
         action='store_true',
         default=False,
         help='Do not convert CDS files to BLAST databases, just fetch.'
+        )
+    actions.add_argument(
+        '--convert-only',
+        required=False,
+        action='store_true',
+        default=False,
+        help='Do not fetch new CDS from databases, just convert to BLAST db.'
         )
     #   Create a parser for 'predict'
     predict_args = subparser.add_parser(
@@ -68,8 +81,9 @@ def validate_args(args):
     #   argparse should have checked for missing arguments by now
     #   If the arguments do not check out, return a message
     if dict_args['action'] == 'fetch':
-        if not check_args.valid_email(dict_args['user']):
-            return (False, 'Username is not a valid e-mail address.')
+        if dict_args['user']:
+            if not check_args.valid_email(dict_args['user']):
+                return (False, 'Username is not a valid e-mail address.')
         elif not check_args.valid_dir(dict_args['base']):
             return (False, 'Base directory is not readable/writable, or does not exist.')
         else:

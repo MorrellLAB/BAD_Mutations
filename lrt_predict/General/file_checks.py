@@ -4,6 +4,7 @@
 
 import os
 import hashlib
+import subprocess
 
 #   A simple wrapper around os.path.isfile(), since this name is easier to read
 def file_exists(fname):
@@ -44,3 +45,18 @@ def md5_is_same(local_md5, remote_md5):
         return True
     else:
         return False
+
+
+#   A function to find all files with a given suffix in a certain directory
+#   This is essentially a wrapper around the unix find command. This probably
+#   will not work on windows, but this shouldn't be running on Windows 
+#   anyway......
+def get_cds_files(basedir):
+    #   cd into the base directory
+    os.chdir(basedir)
+    #   Then execute the find command to get all gzipped cds files
+    #   Normally, shell=True is a security hazard, but since we aren't actually
+    #   running user-fed commands, we should be okay here
+    raw_files = subprocess.check_output('find . -name "*.cds.fa.gz"', shell=True)
+    file_list = raw_files.strip().split('\n')
+    return file_list

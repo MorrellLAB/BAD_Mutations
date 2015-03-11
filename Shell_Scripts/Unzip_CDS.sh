@@ -18,6 +18,6 @@ CDS=$1
 #   Build a new filename, we replace the .gz with nothing
 new_file=${CDS/.gz/}
 #   Ungzip the files, and drop it into the same directory
-gzip -cd $x > ${new_file}
+gzip -cd $CDS > ${new_file}
 #   Make BLAST databases out of each of the files
 ${MAKE_BLAST_DB} -in ${new_file} -dbtype nucl
