@@ -15,13 +15,16 @@ MAKE_BLAST_DB=/soft/ncbi_blast+/2.2.29/bin/makeblastdb
 #   Filename as argument
 CDS=$1
 
+#   What is today's date?
+YMD=$(date +%Y%m%d)
+
 #   Build a new filename, we replace the .gz with nothing
 new_file=${CDS/.gz/}
 #   Ungzip the files, and drop it into the same directory
 gzip -cd $CDS > ${new_file}
 #   Create a log file
-LOG=${new_file}.makeblastdb_log
+LOG=${new_file}.${YMD}_makeblastdb_log
 #   And an error file
-ERR=${new_file}.makeblastdb_err
+ERR=${new_file}.${YMD}_makeblastdb_err
 #   Make BLAST databases out of each of the files
 ${MAKE_BLAST_DB} -in ${new_file} -dbtype nucl > $LOG 2> $ERR
