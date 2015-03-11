@@ -4,6 +4,7 @@
 
 #   Import Python stdlib packages here
 import getpass
+import os
 
 #   Import the directory handling script
 from lrt_predict.General import dir_funcs

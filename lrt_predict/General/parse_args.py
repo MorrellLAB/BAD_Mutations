@@ -76,6 +76,11 @@ def parse_args():
 def validate_args(args):
     #   We will convert it into a dictionary to access the data
     dict_args = vars(args)
+    #   Check the base argument. If it starts with something other than a /
+    #   then it is a relative path, and we should fix it
+    if not dict_args['base'].startswith('/'):
+        #   Add the cwd onto it, since the script fails otherwise
+        dict_args['base'] = os.path.join(os.getcwd(), dict_args['base'])
     #   Then check the action
     #   If we are fetching, we have to check the username and base
     #   argparse should have checked for missing arguments by now
@@ -87,10 +92,10 @@ def validate_args(args):
         elif not check_args.valid_dir(dict_args['base']):
             return (False, 'Base directory is not readable/writable, or does not exist.')
         else:
-            return (args, None)
+            return (dict_args, None)
     #   The other subcommand isn't implemented yet
     else:
-        return (args, None)
+        return (dict_args, None)
 
 
 #   This is just a simple function that shows when the user does not supply

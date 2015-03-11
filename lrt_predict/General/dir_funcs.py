@@ -23,7 +23,7 @@ def makebase(basedir):
 #   A general function to make a directory
 def make_species_dir(basedir, spdir):
     #   create the name of the target directory
-    target_dir =os.path.join(basedir, spdir)
+    target_dir = os.path.join(basedir, spdir)
     #   Now do the checks
     if os.path.exists(target_dir):
         return target_dir
@@ -43,7 +43,7 @@ def move_file(filename, dirname):
         print 'Error! ' + filename + ' is not read/write'
         exit(1)
     try:
-        os.rename(filename, dirname + '/' + filename)
+        os.rename(filename, os.path.join(dirname, filename))
     except(OSError, IOError) as msg:
         print 'Could not move', filename, 'into', dirname, msg
     return

@@ -47,17 +47,17 @@ def main():
     #   If we got a return value that isn't False, then our arguments are good
     if arguments_valid:
         #   Which command was invoked?
-        if arguments_valid.action == 'fetch':
-            if arguments_valid.convert_only:
-                mainfetch.convert(arguments_valid.base, None)
+        if arguments_valid['action'] == 'fetch':
+            if arguments_valid['convert_only']:
+                mainfetch.convert(arguments_valid['base'], None)
             else:
                 updated_cds = mainfetch.fetch(
-                    arguments_valid.base,
-                    arguments_valid.user,
-                    arguments_valid.password,
-                    arguments_valid.fetch_only)
+                    arguments_valid['base'],
+                    arguments_valid['user'],
+                    arguments_valid['password'],
+                    arguments_valid['fetch_only'])
                 mainfetch.convert(updated_cds)
-        elif arguments_valid.action == 'predict':
+        elif arguments_valid['action'] == 'predict':
             predict()
     else:
         print 'Error!', msg
