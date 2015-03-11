@@ -19,5 +19,9 @@ CDS=$1
 new_file=${CDS/.gz/}
 #   Ungzip the files, and drop it into the same directory
 gzip -cd $CDS > ${new_file}
+#   Create a log file
+LOG=${new_file}.makeblastdb_log
+#   And an error file
+ERR=${new_file}.makeblastdb_err
 #   Make BLAST databases out of each of the files
-${MAKE_BLAST_DB} -in ${new_file} -dbtype nucl
+${MAKE_BLAST_DB} -in ${new_file} -dbtype nucl > $LOG 2> $ERR
