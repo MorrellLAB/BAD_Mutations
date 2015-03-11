@@ -32,8 +32,14 @@ To be written.
 
 TODO
 ----
-* Add downloading from Ensembl Plants
-* Integreate creation of BLAST databases
-* Add MD5 checking for CDS files to avoid unnecessary downloads
-* Write BLAST command and parser scripts
-* Implement the LRT itself
+* 'fetch' subcommand
+    * Add downloading from Ensembl Plants
+    * ~~Integreate creation of BLAST databases~~ **Done!**
+    * ~~Add MD5 checking for CDS files to avoid unnecessary downloads~~ **Done!**
+* 'predict' subcommand
+    * Write input parsing script
+    * Write BLAST searching script
+    * Write BLAST output parsing script
+    * Write PRANK sequence alignment script
+    * Compute phylogentic tree of species in database
+    * Implement the LRT itself
