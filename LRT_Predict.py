@@ -56,7 +56,7 @@ def main():
                     arguments_valid['user'],
                     arguments_valid['password'],
                     arguments_valid['fetch_only'])
-                mainfetch.convert(updated_cds)
+                mainfetch.convert(arguments_valid['base'], updated_cds)
         elif arguments_valid['action'] == 'predict':
             predict()
     else:
