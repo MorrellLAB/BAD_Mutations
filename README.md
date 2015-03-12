@@ -31,8 +31,11 @@ Input
 This package accepts input into the prediction pipeline in the form of a FASTA-
 formatted file, with affected codon information in the defline. The first piece
 of qualifier information is the list of codons with nonsynonymous variants in 
-them, and the second (optional) is an ID for the variants. The two qualifiers
-should be space-delimited. Multi-record FASTA is supported.
+them, and the second (optional) is an ID for the variants. Within each piece of
+qualifying information, the elements should be comma-separated. If present, the
+list of SNP IDs should be the same length as the list of affected codons.
+
+The two qualifiers should be space-delimited. Multi-record FASTA is supported.
 
 Example:
 ```
@@ -40,13 +43,17 @@ Example:
 ATG...
 >Sequence_2 codons=20,122 IDs=SNP_5,SNP_6
 ATG...
-...
-...
-...
 ```
 
+contains six missense variants to predict. The first four are in ``Sequence_1``
+at positions 4, 10, 25, and 100 in the **protein** sequence, and have the IDs
+``SNP_1``, ``SNP_2``, ``SNP_3``, and ``SNP_4``, respectively. The last two are
+in ``Sequence_2``, affect codons 20 and 122, and have IDs ``SNP_5`` and
+``SNP_6``.
+
 Note that even though the defline contains codon information, the sequence in
-the FASTA file should be protein-coding **nucleotide** sequence.
+the FASTA file should be protein-coding **nucleotide** sequence. This is
+necessary as it allows the test to calculate synonymous divergence.
 
 TODO
 ----
