@@ -105,19 +105,21 @@ def usage():
     print '''Usage: LRT_Predict.py <subcommand> <options>
 
 where <subcommand> is one of 'fetch' or 'predict.' This script will download
-the necessary data to perform the likelihood ratio test (LRT) of deleterious
-SNP prediction in plants, as described in Chun and Fay (2009) in Genome
-Research. 
+the necessary data to perform the likelihood ratio test (LRT) for deleterious
+SNP prediction as described in Chun and Fay (2009) in Genome Research. Because 
+of the data sources used, this implementation is specific to SNP annotation
+in plants.
 
-'fetch' will download gzipped CDS FASTA files from Phytozome, unzip them, and
-convert them into BLAST databases. It requires a username and password for the
-JGI Genomes Portal, which is free. Check with Phytozome for their data release
-and usage policies. Use 'LRT_Predict.py fetch -h' for more infomration.
+The 'fetch' subcommand will download gzipped CDS FASTA files from Phytozome, 
+unzip them, and convert them into BLAST databases. It requires a (free) username
+and password for the JGI Genomes Portal. Check with Phytozome for their data
+release and usage policies. Use 'LRT_Predict.py fetch -h' for more information.
 
-'predict' will run the LRT with a given query sequence and a list of affected
-codons. This feature has not yet been implemented.
+The 'predict' subcommand will run the LRT with a given query sequence and a
+list of affected codons. This feature has not yet been implemented.
 
 Dependencies:
+    Biopython
     tblastx (NCBI BLAST executables)
     requests (Python HTTP requests module)
     prank-msa (Phylogeny-aware sequence alignment)'''

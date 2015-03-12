@@ -2,7 +2,7 @@
 
 #   Shell script to unzip the CDS fasta files and format them as BLAST
 #   databases
-#   Modified for LRT package from P. Hoffman's scipt.
+#   Modified for LRT package from Paul Hoffman's scipt.
 
 #   Gain access to the NCBI executables
 #   This line is specific to the Minnesota Supercomputing Institute

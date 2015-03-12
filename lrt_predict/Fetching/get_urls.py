@@ -40,7 +40,7 @@ def signon(username, password):
 
 
 #   A function to get all URLs out of the XML file
-#   Borrowed from YR's code
+#   Borrowed from Yancy Ribbens's code
 def extract_all_urls(session):
     #   Get the XML file itself, in a Response object
     xml = session.get(XML_URL, params=XML_DATA)
