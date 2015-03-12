@@ -28,7 +28,25 @@ variant is deleterious will be returned.
 
 Input
 -----
-To be written.
+This package accepts input into the prediction pipeline in the form of a FASTA-
+formatted file, with affected codon information in the defline. The first piece
+of qualifier information is the list of codons with nonsynonymous variants in 
+them, and the second (optional) is an ID for the variants. The two qualifiers
+should be space-delimited. Multi-record FASTA is supported.
+
+Example:
+```
+>Sequence_1 codons=4,10,25,100 IDs=SNP_1,SNP_2,SNP_3,SNP_4
+ATG...
+>Sequence_2 codons=20,122 IDs=SNP_5,SNP_6
+ATG...
+...
+...
+...
+```
+
+Note that even though the defline contains codon information, the sequence in
+the FASTA file should be protein-coding **nucleotide** sequence.
 
 TODO
 ----
