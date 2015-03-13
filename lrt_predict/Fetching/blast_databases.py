@@ -7,8 +7,15 @@ import subprocess
 #   To handle paths
 import os
 
+#   create a variable to hold the path to our installation directory
+#   It is two levels above this one
+#   os.path.realpath(__file__) is the full path to this script, blast_databases.py
+#   rsplit() splits from the right end of the file, and the number argumetn
+#   tells how many times to split. We take the first element of the resulting list.
+LRT_PATH = os.path.realpath(__file__).rsplit(os.path.sep, 3)[0]
+
 #   The directory that contains shell scripts
-DBFORMAT_SCRIPT = os.path.join(os.getcwd(), 'Shell_Scripts', 'Unzip_CDS.sh')
+DBFORMAT_SCRIPT = os.path.join(LRT_PATH, 'Shell_Scripts', 'Unzip_CDS.sh')
 
 #   Function that just calls the shell script that handles the BLAST database
 #   formatting
