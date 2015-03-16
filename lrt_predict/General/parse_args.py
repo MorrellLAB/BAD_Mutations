@@ -76,6 +76,14 @@ def parse_args():
         default=None,
         help='Prefix for input file name (name without extension). See the\
         manual for more infomration.')
+    predict_args.add_argument(
+        '--evalue',
+        '-e',
+        required=False,
+        default=0.05,
+        type=float,
+        help='E-value threshold for accepting sequences into the alignment.'
+        )
     args = parser.parse_args()
     return args
 
