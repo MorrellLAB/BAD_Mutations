@@ -38,11 +38,13 @@ def parse_args():
     #   And give it some arguments
     fetch_args.add_argument(
         '--user',
+        '-u',
         required=False,
         default=None,
         help='Username for jgi.doe.gov (For fetching from Phytozome)')
     fetch_args.add_argument(
         '--password',
+        '-p',
         required=False,
         help='Password for jgi.doe.gov. If you are not comfortable supplying\
         this on the command-line in text, you can enter it on the prompt.',
@@ -67,15 +69,20 @@ def parse_args():
     #   Create a parser for 'predict'
     predict_args = subparser.add_parser(
         'predict',
-        help='Run the LRT prediction pipeline')
+        help='Run the LRT prediction pipeline.')
     #   Give 'predict' some arguments
     predict_args.add_argument(
-        '--input',
-        '-i',
+        '--fasta',
+        '-f',
         required=True,
         default=None,
-        help='Prefix for input file name (name without extension). See the\
-        manual for more infomration.')
+        help='Path to the input FASTA file.')
+    predict_args.add_argument(
+        '--substitutions',
+        '-s',
+        required=True,
+        default=None,
+        help='Path to the input substitutions file.')
     predict_args.add_argument(
         '--evalue',
         '-e',
