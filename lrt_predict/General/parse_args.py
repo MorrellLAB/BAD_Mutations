@@ -19,6 +19,12 @@ def parse_args():
     parser = argparse.ArgumentParser(
         description = 'LRT for deleterious SNP prediction in plants.',
         add_help=True)
+    parser.add_argument(
+        '--base',
+        '-b',
+        required=False,
+        help='Base directory for species databses. Defaults to .',
+        default=os.getcwd())
     #   Define a sub-parser to handle the different actions we can perform
     #   we can either 'fetch' or 'predict'
     subparser = parser.add_subparsers(
@@ -41,12 +47,6 @@ def parse_args():
         help='Password for jgi.doe.gov. If you are not comfortable supplying\
         this on the command-line in text, you can enter it on the prompt.',
         default=None)
-    fetch_args.add_argument(
-        '--base',
-        '-b',
-        required=False,
-        help='Base directory for species databses. Defaults to .',
-        default=os.getcwd())
     #   Create a new mutually exclusive group for deciding if we want to only
     #   fetch, or if we want to convert
     actions = fetch_args.add_mutually_exclusive_group(required=False)
@@ -68,6 +68,14 @@ def parse_args():
     predict_args = subparser.add_parser(
         'predict',
         help='Run the LRT prediction pipeline')
+    #   Give 'predict' some arguments
+    predict_args.add_argument(
+        '--input',
+        '-i',
+        required=True,
+        default=None,
+        help='Prefix for input file name (name without extension). See the\
+        manual for more infomration.')
     args = parser.parse_args()
     return args
 
