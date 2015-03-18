@@ -70,14 +70,15 @@ def md5_is_same(local_md5, remote_md5, l):
 #   This is essentially a wrapper around the unix find command. This probably
 #   will not work on windows, but this shouldn't be running on Windows 
 #   anyway......
-def get_cds_files(basedir, l):
-    l.debug('Finding all *.cds.fa.gz files in ' + basedir)
-    #   cd into the base directory
-    os.chdir(basedir)
+def get_file_by_ext(basedir, suffix, l):
+    l.debug('Finding all files with suffix ' + suffix + ' in ' + basedir)
     #   Then execute the find command to get all gzipped cds files
     #   Normally, shell=True is a security hazard, but since we aren't actually
     #   running user-fed commands, we should be okay here
-    raw_files = subprocess.check_output('find . -name "*.cds.fa.gz"', shell=True)
+    #   Example, with basedir=/tmp and suffix=.fasta we have
+    #       find /tmp -name "*.fasta"
+    command = ' '.join(['find', basedir, '-name', '"*'+suffix+'"']
+    raw_files = subprocess.check_output(command, shell=True)
     file_list = raw_files.strip().split('\n')
-    l.debug('Found ' + str(len(file_list)) + ' .cds.fa.gz files in ' + basedir)
+    l.debug('Found ' + str(len(file_list)) +  ' ' + suffix + ' files in ' + basedir)
     return file_list

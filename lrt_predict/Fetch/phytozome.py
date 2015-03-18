@@ -145,7 +145,7 @@ class Phytozome:
         #   Check if the list of updated CDS files is empty or not
         if not self.to_convert:
             #   If it is empty, then populate it with all of them
-            fname_list = file_funcs.get_cds_files(self.base, self.filelog)
+            fname_list = file_funcs.get_file_by_ext(self.base, , '.cds.fa.gz', self.filelog)
         else:
             fname_list = self.to_convert
         #   for each one

@@ -24,13 +24,48 @@ import sys
 #   for verbosity messages
 import logging
 
+#   Import the dependency checking script
+from lrt_predict.General import check_modules
 #   Import the main fetching script
 import lrt_predict.Fetch.phytozome as phytozome
 #   Import the verbosity script
 from lrt_predict.General import set_verbosity
 #   Import our argument parsing script
 from lrt_predict.General import parse_args
+#   Import the BLAST search script
+from lrt_predict.Blast import blast_search
 
+#   A function to do the fetching
+def fetch(arg, log):
+    #   Create a new Phytozome instance that will handle our work with
+    #   the JGI Genomes Portal.
+    log.info('Creating a new instance to fetch data')
+    #   We give it username, password, base directory, whether or not we have to log in and 
+    p = phytozome.Phytozome(arg['user'], arg['password'], arg['base'], arg['convert_only'], arg['verbose'])
+    if arg['convert_only']:
+        verbose.info('Only converting files.')
+        p.convert()
+    elif arg['fetch_only']:
+        verbose.info('Only downloading files.')
+        p.get_xml_urls()
+        p.fetch_cds()
+    else:
+        verbose.info('Downloading and converting files.')
+        p.get_xml_urls()
+        p.fetch_cds()
+        p.convert()
+    return
+
+
+#   A function to do the BLAST searching
+def blast(arg, log):
+    log.info('Creating a new instance to BLAST.')
+    b = blast_search.BlastSearch(arg['base'], arg['fasta'], arf['evalue'], arg['verbose'])
+    b.blast_all()
+    return b.homologues
+
+
+#   A function to do the predicting
 #   Main function
 def main():
     #   Parse the arguments
@@ -48,25 +83,11 @@ def main():
         verbose.debug(arguments_valid['action'] + ' subcommand was invoked')
         #   Which command was invoked?
         if arguments_valid['action'] == 'fetch':
-            #   Create a new Phytozome instance that will handle our work with
-            #   the JGI Genomes Portal.
-            verbose.debug('Creating a new instance to fetch data')
-            p = phytozome.Phytozome(
-                arguments_valid['user'],
-                arguments_valid['password'],
-                arguments_valid['base'],
-                arguments_valid['convert_only'],
-                arguments_valid['verbose'])
-            if arguments_valid['convert_only']:
-                verbose.info('Only converting files.')
-                p.convert()
-            else:
-                verbose.info('Downloading and converting files.')
-                p.get_xml_urls()
-                p.fetch_cds()
-                p.convert()
+            #   Send it to the fetch command
+            fetch(arguments_valid, verbose)
         elif arguments_valid['action'] == 'predict':
-            pass
+            homologues = blast(arguments_valid, verbose)
+            print homologues
     else:
         verbose.error(msg)
     return
