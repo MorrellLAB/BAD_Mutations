@@ -150,7 +150,7 @@ def validate_args(args):
 #   any arguments. This is an issue with Python 2.*, and has been "fixed" in
 #   Python 3+.
 def usage():
-    print '''Usage: LRT_Predict.py <options> <subcommand> <arguments>
+    print '''Usage: LRT_Predict.py <subcommand> <arguments>
 
 where <subcommand> is one of 'fetch' or 'predict.' This script will download
 the necessary data to perform the likelihood ratio test (LRT) for deleterious

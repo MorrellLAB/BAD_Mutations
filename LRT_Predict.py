@@ -60,7 +60,7 @@ def fetch(arg, log):
 #   A function to do the BLAST searching
 def blast(arg, log):
     log.info('Creating a new instance to BLAST.')
-    b = blast_search.BlastSearch(arg['base'], arg['fasta'], arf['evalue'], arg['verbose'])
+    b = blast_search.BlastSearch(arg['base'], arg['fasta'], arg['evalue'], arg['verbose'])
     b.blast_all()
     return b.homologues
 
