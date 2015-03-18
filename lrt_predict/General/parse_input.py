@@ -22,7 +22,7 @@ def valid_fasta(f, log):
     else:
         #   Start checking it
         try:
-            s = SeqIO.read(f, 'fatsta')
+            s = SeqIO.read(f, 'fasta')
         except ValueError:
             log.error('Input file ' + f + ' has more than one record. This script only accepts single-record FASTA files.')
             return False
