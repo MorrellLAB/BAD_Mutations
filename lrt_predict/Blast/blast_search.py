@@ -68,7 +68,7 @@ class BlastSearch:
         out.seek(0)
         #   Then read the xml out
         self.mainlog.debug('Beginning to parse the BLAST output for ' + self.query + '.')
-        blast_records = NCBIXML.parse(self.blastout)
+        blast_records = NCBIXML.parse(out)
         #   Convert it to a list, since it should be relatively small...
         blast_records = list(blast_records)
         self.mainlog.info('We found ' + str(len(blast_records)) + ' hits for ' + self.query + '.')
