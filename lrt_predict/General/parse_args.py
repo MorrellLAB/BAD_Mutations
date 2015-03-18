@@ -26,6 +26,12 @@ def parse_args():
         help='Fetch CDS files from Phytozome and Ensembl')
     #   And give it some arguments
     fetch_args.add_argument(
+        '--base',
+        '-b',
+        required=False,
+        help='Base directory for species databses. Defaults to .',
+        default=os.getcwd())
+    fetch_args.add_argument(
         '--user',
         '-u',
         required=False,
@@ -61,6 +67,12 @@ def parse_args():
         help='Run the LRT prediction pipeline.')
     #   Give 'predict' some arguments
     predict_args.add_argument(
+        '--base',
+        '-b',
+        required=False,
+        help='Base directory for species databses. Defaults to .',
+        default=os.getcwd())
+    predict_args.add_argument(
         '--fasta',
         '-f',
         required=True,
@@ -88,12 +100,6 @@ def parse_args():
         action='store_true',
         default=False,
         help='Verbose output.')
-    parser.add_argument(
-        '--base',
-        '-b',
-        required=False,
-        help='Base directory for species databses. Defaults to .',
-        default=os.getcwd())
     args = parser.parse_args()
     return args
 
@@ -144,7 +150,7 @@ def validate_args(args):
 #   any arguments. This is an issue with Python 2.*, and has been "fixed" in
 #   Python 3+.
 def usage():
-    print '''Usage: LRT_Predict.py <subcommand> <options>
+    print '''Usage: LRT_Predict.py <options> <subcommand> <arguments>
 
 where <subcommand> is one of 'fetch' or 'predict.' This script will download
 the necessary data to perform the likelihood ratio test (LRT) for deleterious

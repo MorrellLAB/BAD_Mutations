@@ -43,14 +43,14 @@ def fetch(arg, log):
     #   We give it username, password, base directory, whether or not we have to log in and 
     p = phytozome.Phytozome(arg['user'], arg['password'], arg['base'], arg['convert_only'], arg['verbose'])
     if arg['convert_only']:
-        verbose.info('Only converting files.')
+        log.info('Only converting files.')
         p.convert()
     elif arg['fetch_only']:
-        verbose.info('Only downloading files.')
+        log.info('Only downloading files.')
         p.get_xml_urls()
         p.fetch_cds()
     else:
-        verbose.info('Downloading and converting files.')
+        log.info('Downloading and converting files.')
         p.get_xml_urls()
         p.fetch_cds()
         p.convert()
