@@ -98,7 +98,7 @@ class BlastSearch:
             #   Get the BLAST output
             blast_output = self.run_blast(d)
             #   And parse it
-            homologous_locus = get_seq_ID(blast_output)
+            homologous_locus = self.get_seq_ID(blast_output)
             #   And then tack it onto the list of homologues
             self.homologues.append(homologous_locus)
         return
