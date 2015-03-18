@@ -78,12 +78,14 @@ class BlastSearch:
             for r in blast_records:
                 #   For each alignment in the record
                 for a in r.alignments:
-                    #   Check the e-value
-                    if hsp.expect <= self.evalue:
-                        #   If it's less than or equal to our threshold, keep it
-                        homologue = a.title
-                        self.mainlog.info('Saving ' + a.title + ' as best hit.')
-                        break
+                    #   And then for each high-scoring pair, check the e-value
+                    for hsp in a.hsps:
+                        #   Check the e-value
+                        if hsp.expect <= self.evalue:
+                            #   If it's less than or equal to our threshold, keep it
+                            homologue = a.title
+                            self.mainlog.info('Saving ' + a.title + ' as best hit.')
+                            break
         #   Close the temporary file to clean up
         #   it's automatically deleted
         out.close()
