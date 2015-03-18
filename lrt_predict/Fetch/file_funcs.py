@@ -77,7 +77,7 @@ def get_file_by_ext(basedir, suffix, l):
     #   running user-fed commands, we should be okay here
     #   Example, with basedir=/tmp and suffix=.fasta we have
     #       find /tmp -name "*.fasta"
-    command = ' '.join(['find', basedir, '-name', '"*'+suffix+'"']
+    command = ' '.join(['find', basedir, '-name', '"*'+suffix+'"'])
     raw_files = subprocess.check_output(command, shell=True)
     file_list = raw_files.strip().split('\n')
     l.debug('Found ' + str(len(file_list)) +  ' ' + suffix + ' files in ' + basedir)
