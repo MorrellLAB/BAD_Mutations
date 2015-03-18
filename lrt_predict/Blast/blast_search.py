@@ -36,7 +36,7 @@ class BlastSearch:
             for hsp in a.hsps:
                 if hsp.expect <= self.evalue:
                     return a.title
-        else
+        else:
             return None
 
     #   Define a function to create and manage output paths
