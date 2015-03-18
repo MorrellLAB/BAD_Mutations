@@ -91,11 +91,10 @@ class BlastSearch:
                 if best:
                     self.mainlog.info('Saving ' + best + ' as best hit.')
                     break
-
         #   Close the temporary file to clean up
         #   it's automatically deleted
         out.close()
-        return homologue
+        return best
 
     #   Define a function to BLAST against every database
     def blast_all(self):
