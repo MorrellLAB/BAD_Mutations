@@ -106,6 +106,9 @@ class BlastSearch:
             blast_output = self.run_blast(d)
             #   And parse it
             homologous_locus = self.get_seq_ID(blast_output)
-            #   And then tack it onto the list of homologues
-            self.homologues.append(homologous_locus)
+            #   We do this check in case there is no match in a species
+            #   Only save those that have a match
+            if homologous_locus:
+                #   And then tack it onto the list of homologues
+                self.homologues.append(homologous_locus)
         return
