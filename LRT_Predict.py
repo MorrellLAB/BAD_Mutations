@@ -87,7 +87,7 @@ def main():
             fetch(arguments_valid, verbose)
         elif arguments_valid['action'] == 'predict':
             homologues = blast(arguments_valid, verbose)
-            print homologues
+            print '\n'.join(homologues)
     else:
         verbose.error(msg)
     return

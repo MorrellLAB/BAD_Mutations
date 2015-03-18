@@ -28,6 +28,17 @@ class BlastSearch:
         self.mainlog = set_verbosity.verbosity('BLAST_Search', verbose)
         self.basedir = base
 
+    #   Define a special function to get the best hit out of a BlastRecord
+    #   We need to do this because of the ugly nested nature of the data structure
+    #   'return' immediately stops iteration, whereas 'break' only works on one loop
+    def best_hit(self, br):
+        for a in br.alignments:
+            for hsp in a.hsps:
+                if hsp.expect <= self.evalue:
+                    return a.title
+        else
+            return None
+
     #   Define a function to create and manage output paths
     def gen_output(self):
         self.mainlog.debug('Creating named temporary file for BLAST output.')
@@ -76,16 +87,11 @@ class BlastSearch:
         if len(blast_records) > 0:
             #   For each record
             for r in blast_records:
-                #   For each alignment in the record
-                for a in r.alignments:
-                    #   And then for each high-scoring pair, check the e-value
-                    for hsp in a.hsps:
-                        #   Check the e-value
-                        if hsp.expect <= self.evalue:
-                            #   If it's less than or equal to our threshold, keep it
-                            homologue = a.title
-                            self.mainlog.info('Saving ' + a.title + ' as best hit.')
-                            break
+                best = self.best_hit(r)
+                if best:
+                    self.mainlog.info('Saving ' + best + ' as best hit.')
+                    break
+
         #   Close the temporary file to clean up
         #   it's automatically deleted
         out.close()
