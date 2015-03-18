@@ -35,7 +35,8 @@ class BlastSearch:
         #   temporary file when the handle is closed. We will just use it to
         #   store the BLAST output
         #   We use mode=w+t since we want read/write in text mode.
-        temp_output = tempfile.TemporaryFile(mode='w+t')
+        #   We also need the filename, so used the NamedTemporaryFile method
+        temp_output = tempfile.NamedTemporaryFile(mode='w+t')
         self.mainlog.debug('Temp file created with name ' + temp_output.name)
         #   Return the file-like object
         return temp_output
@@ -51,7 +52,7 @@ class BlastSearch:
         #   Start building a command line
         cline = NcbitblastxCommandline(
             query=self.query,
-            out=blastout,
+            out=blastout.name,
             db=db,
             evalue=self.evalue,
             outfmt=5,
