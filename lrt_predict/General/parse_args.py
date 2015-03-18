@@ -2,12 +2,7 @@
 #   Helper script for Phytozome.py
 #   Contains argument parsing code
 
-try:
-    import argparse
-except ImportError:
-    print 'Error! You need to have the argparse module installed.'
-    exit(1)
-
+import argparse
 import os
 import getpass
 
@@ -117,15 +112,24 @@ def validate_args(args):
     #   argparse should have checked for missing arguments by now
     #   If the arguments do not check out, return a message
     if dict_args['action'] == 'fetch':
+        #   If username is supplied:
         if dict_args['user']:
+            #   Check if it's valid
             if not check_args.valid_email(dict_args['user']):
                 return (False, 'Username is not a valid e-mail address.')
-        else:
+        #   Username not supplied, and we need to access JGI
+        elif not dict_args['convert_only']:
             dict_args['user'] = raw_input('Username for JGI Genomes Portal: ')
+        #   Else, we only want to convert
+        else:
+            pass
+        #   Same with password
         if dict_args['password']:
             pass
-        else:
+        elif not dict_args['convert_only']:
             dict_args['password'] = getpass.getpass('Password for JGI Genomes Portal: ')
+        else:
+            pass
         if not check_args.valid_dir(dict_args['base']):
             return (False, 'Base directory is not readable/writable, or does not exist.')
         else:
