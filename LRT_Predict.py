@@ -68,6 +68,12 @@ def blast(arg, log):
 #   A function to do the predicting
 #   Main function
 def main():
+    #   The very first thing we do is do a base check to make sure that we can
+    #   parse arguments
+    dep = check_modules.check_modules(fetch=False, predict=False)
+    if dep:
+        check_modules.missing_mods(dep)
+        exit(1)
     #   Parse the arguments
     #   First, a check to see if any arguments were sent at all
     #   If not, then print the usage and exit
@@ -83,9 +89,19 @@ def main():
         verbose.debug(arguments_valid['action'] + ' subcommand was invoked')
         #   Which command was invoked?
         if arguments_valid['action'] == 'fetch':
+            #   Next, we check the modules that are required by each subcommand
+            fetchdeps = check_modules.check_modules(fetch=True, predict=False)
+            if fetchdeps:
+                check_modules.missing_mods(fetchdeps)
+                exit(1)
             #   Send it to the fetch command
             fetch(arguments_valid, verbose)
         elif arguments_valid['action'] == 'predict':
+            #   Next, we check the modules that are required by each subcommand
+            predictdeps = check_modules.check_modules(fetch=False, predict=True)
+            if predictdeps:
+                check_modules.missing_mods(predictdeps)
+                exit(1)
             homologues = blast(arguments_valid, verbose)
             print '\n'.join(homologues)
     else:
