@@ -24,7 +24,7 @@ class BlastSearch:
     def __init__(self, base, query, evalue, verbose):
         self.query = query
         self.evalue = evalue
-        self.homologues = []
+        self.homologues = {}
         self.mainlog = set_verbosity.verbosity('BLAST_Search', verbose)
         self.basedir = base
 
@@ -109,6 +109,8 @@ class BlastSearch:
             #   We do this check in case there is no match in a species
             #   Only save those that have a match
             if homologous_locus:
+                #   We only need the first part of it, which is separated by a space
+                seq_id = homologous_locus.split(' ')[0]
                 #   And then tack it onto the list of homologues
-                self.homologues.append(homologous_locus)
+                self.homologues[d] = seq_id
         return
