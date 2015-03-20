@@ -24,7 +24,7 @@ def blastdbcmd(path, db, seqID):
     #   The script is written in shell, so this function just calls it and
     #   checks the output
     #   Build the shell command
-    cmd = ['sh', SEQ_FETCH_SCRIPT, path, db, esc_seqID]
+    cmd = ['sh', SEQ_FETCH_SCRIPT, path, db, seqID]
     #   Execute the script
     #   shell=False to ensure that we aren't executing commands from untrusted
     #   sources. We set out and err to subprocess.PIPE so we can save the actual
