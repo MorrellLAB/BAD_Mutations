@@ -68,7 +68,7 @@ TODO
     * ~~Integreate creation of BLAST databases~~ **Done!**
     * ~~Add MD5 checking for CDS files to avoid unnecessary downloads~~ **Done!**
 * 'predict' subcommand
-    * Write input parsing script
+    * ~~Write input parsing script~~ **Done!**
     * ~~Write BLAST searching script~~ **Done!**
     * ~~Write BLAST output parsing script~~ **Done!**
     * Write PRANK sequence alignment script
