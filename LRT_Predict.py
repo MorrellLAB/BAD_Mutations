@@ -62,6 +62,7 @@ def main():
                 check_modules.missing_mods(fetchdeps)
                 exit(1)
             #   Import the main fetching script
+            #   We do it here, since we only want to import this if we are fetching
             import lrt_predict.Fetch.phytozome as phytozome
             #   A function to do the fetching
             def fetch(arg, log):
@@ -92,6 +93,7 @@ def main():
                 check_modules.missing_mods(predictdeps)
                 exit(1)
             #   Import the BLAST search script
+            #   Again, import here because we only want call these functions if we are running BLAST
             from lrt_predict.Blast import blast_search
             #   A function to do the BLAST searching
             def blast(arg, log):
