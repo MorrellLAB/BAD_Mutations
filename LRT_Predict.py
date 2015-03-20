@@ -104,8 +104,8 @@ def main():
                 hom.seek(0)
                 hom.read()
                 hom.close()
-            homologues = blast(arguments_valid, verbose)
-            print '\n'.join(homologues)
+                return
+            blast(arguments_valid, verbose)
     else:
         verbose.error(msg)
     return

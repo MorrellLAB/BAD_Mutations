@@ -51,7 +51,7 @@ class BlastSearch:
         #   store the BLAST output
         #   We use mode=w+t since we want read/write in text mode.
         #   We also need the filename, so used the NamedTemporaryFile method
-        temp_output = tempfile.NamedTemporaryFile(mode='w+t', prefix='LRTPredict_BlastSearch_', suffix='BLASTout.xml')
+        temp_output = tempfile.NamedTemporaryFile(mode='w+t', prefix='LRTPredict_BlastSearch_', suffix='_BLASTout.xml')
         self.mainlog.debug('Temp file created with name ' + temp_output.name)
         #   Return the file-like object
         return temp_output
@@ -128,14 +128,16 @@ class BlastSearch:
     def get_hit_seqs(self):
         #   Create a temporary file for holding sequence information while we collect it
         self.mainlog.debug('Creating named temporary file for homologous sequences.')
-        temp_output = tempfile.NamedTemporaryFile(mode='w+t', prefix='LRTPredict_BlastSearch_', suffix='homologues.fasta')
+        temp_output = tempfile.NamedTemporaryFile(mode='w+t', prefix='LRTPredict_BlastSearch_', suffix='_homologues.fasta')
         self.mainlog.debug('Created temporary file ' + temp_output.name)
         #   Check to see if the blastdbcmd command is avilable
         blastdbcmd_path = check_modules.check_executable('blastdbcmd')
         if blastdbcmd_path:
+            self.mainlog.debug('Using ' + blastdbcmd)
             for database, seqID in self.homologues.iteritems():
                 temp_output.write(sequence_fetch.blastdbcmd(blastdbcmd_path, database, seqID))
         else:
+            self.mainlog.debug('Using regex')
             for database, seqID in self.homologues.iteritems():
                 temp_output.write(sequence_fetch.get_seq_by_regex())
         return temp_output
