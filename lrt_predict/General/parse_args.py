@@ -8,6 +8,8 @@ import getpass
 
 #   Import the helper script to validate arguments
 import check_args
+#   And the script to check the input files
+import parse_input
 
 #   A function to actually parse the arguments
 def parse_args():
@@ -105,7 +107,7 @@ def parse_args():
 
 
 #   Here we validate the arguments
-def validate_args(args):
+def validate_args(args, log):
     #   We will convert it into a dictionary to access the data
     dict_args = vars(args)
     #   Check the base argument. If it starts with something other than a /
@@ -140,9 +142,14 @@ def validate_args(args):
             return (False, 'Base directory is not readable/writable, or does not exist.')
         else:
             pass
-    #   The other subcommand isn't implemented yet
-    else:
-        pass
+    #   Check arguments to predict
+    elif dict_args['action'] == 'predict':
+        if not parse_input.valid_fasta(dict_args['fasta'], log):
+            return (False, 'The input FASTA file provided is not valid.')
+            exit(1)
+        if not parse_input.parse_subs(dict_args['substitutions'], log):
+            return (False, 'The input substitutions file provided is not valid.')
+            exit(1)
     return (dict_args, None)
 
 

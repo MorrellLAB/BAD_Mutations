@@ -58,10 +58,6 @@ class BlastSearch:
 
     #   Define a function to run the BLAST command
     def run_blast(self, db):
-        #   Check to see if the input file is okay
-        if not parse_input.valid_fasta(self.query, self.mainlog):
-            self.mainlog.error('The input FASTA file provided is not valid.')
-            exit(1)
         #   Create a temp file
         blastout = self.gen_output()
         #   Start building a command line

@@ -50,7 +50,7 @@ def main():
     arguments = parse_args.parse_args()
     #   Pull out the verbosity switch right away
     verbose = set_verbosity.verbosity('LRT_Predict', arguments.verbose)
-    arguments_valid, msg = parse_args.validate_args(arguments)
+    arguments_valid, msg = parse_args.validate_args(arguments, verbose)
     #   If we got a return value that isn't False, then our arguments are good
     if arguments_valid:
         verbose.debug(arguments_valid['action'] + ' subcommand was invoked')
