@@ -37,8 +37,8 @@ def parse_subs(f, log):
     else:
         #   Begin parsing it
         subs_data = []
-        with open('f', 'r') as f:
-            for index, line in enumerate(f):
+        with open(f, 'r') as subfile:
+            for index, line in enumerate(subfile):
                 tmp = line.strip().split('\t')
                 #   Check the fields. The first one should be numeric
                 try:
