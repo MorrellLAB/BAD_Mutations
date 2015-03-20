@@ -102,7 +102,7 @@ def main():
                 b.blast_all()
                 hom = b.get_hit_seqs()
                 hom.seek(0)
-                hom.read()
+                print hom.read()
                 hom.close()
                 return
             blast(arguments_valid, verbose)

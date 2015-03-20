@@ -118,10 +118,13 @@ class BlastSearch:
             #   We do this check in case there is no match in a species
             #   Only save those that have a match
             if homologous_locus:
-                #   We only need the first part of it, which is separated by a space
-                seq_id = homologous_locus.split(' ')[0]
+                #   We want the first and second parts, separated by a space
+                fasta_info = homologous_locus.split(' ')
+                seq_id = fasta_info[0]
+                #   We need this part if we want to search by regex
+                gb_id = fasta_info[1]
                 #   And then tack it onto the list of homologues
-                self.homologues[d] = seq_id
+                self.homologues[d] = (seq_id, gb_id)
         return
 
     #   Define a function to get the hit sequences out of the databses
@@ -135,10 +138,11 @@ class BlastSearch:
         if blastdbcmd_path:
             self.mainlog.debug('Using ' + blastdbcmd_path)
             for database, seqID in self.homologues.iteritems():
-                s_out, s_err = sequence_fetch.blastdbcmd(blastdbcmd_path, database, seqID)
-                temp_output.write(s_out.strip())
+                fasta, error = sequence_fetch.blastdbcmd(blastdbcmd_path, database, seqID[0])
+                temp_output.write(fasta.strip())
         else:
             self.mainlog.debug('Using regex')
             for database, seqID in self.homologues.iteritems():
-                temp_output.write(sequence_fetch.get_seq_by_regex())
+                fasta = sequence_fetch.get_seq_by_regex(database, seqID[1])
+                temp_output.write(fasta.strip())
         return temp_output
