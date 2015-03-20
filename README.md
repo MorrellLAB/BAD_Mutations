@@ -69,8 +69,8 @@ TODO
     * ~~Add MD5 checking for CDS files to avoid unnecessary downloads~~ **Done!**
 * 'predict' subcommand
     * Write input parsing script
-    * Write BLAST searching script
-    * Write BLAST output parsing script
+    * ~~Write BLAST searching script~~ **Done!**
+    * ~~Write BLAST output parsing script~~ **Done!**
     * Write PRANK sequence alignment script
     * Compute phylogentic tree of species in database
     * Implement the LRT itself
