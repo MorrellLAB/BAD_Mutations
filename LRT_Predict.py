@@ -26,43 +26,10 @@ import logging
 
 #   Import the dependency checking script
 from lrt_predict.General import check_modules
-#   Import the main fetching script
-import lrt_predict.Fetch.phytozome as phytozome
 #   Import the verbosity script
 from lrt_predict.General import set_verbosity
 #   Import our argument parsing script
 from lrt_predict.General import parse_args
-#   Import the BLAST search script
-from lrt_predict.Blast import blast_search
-
-#   A function to do the fetching
-def fetch(arg, log):
-    #   Create a new Phytozome instance that will handle our work with
-    #   the JGI Genomes Portal.
-    log.info('Creating a new instance to fetch data')
-    #   We give it username, password, base directory, whether or not we have to log in and 
-    p = phytozome.Phytozome(arg['user'], arg['password'], arg['base'], arg['convert_only'], arg['verbose'])
-    if arg['convert_only']:
-        log.info('Only converting files.')
-        p.convert()
-    elif arg['fetch_only']:
-        log.info('Only downloading files.')
-        p.get_xml_urls()
-        p.fetch_cds()
-    else:
-        log.info('Downloading and converting files.')
-        p.get_xml_urls()
-        p.fetch_cds()
-        p.convert()
-    return
-
-
-#   A function to do the BLAST searching
-def blast(arg, log):
-    log.info('Creating a new instance to BLAST.')
-    b = blast_search.BlastSearch(arg['base'], arg['fasta'], arg['evalue'], arg['verbose'])
-    b.blast_all()
-    return b.homologues
 
 
 #   A function to do the predicting
@@ -94,6 +61,28 @@ def main():
             if fetchdeps:
                 check_modules.missing_mods(fetchdeps)
                 exit(1)
+            #   Import the main fetching script
+            import lrt_predict.Fetch.phytozome as phytozome
+            #   A function to do the fetching
+            def fetch(arg, log):
+                #   Create a new Phytozome instance that will handle our work with
+                #   the JGI Genomes Portal.
+                log.info('Creating a new instance to fetch data')
+                #   We give it username, password, base directory, whether or not we have to log in and 
+                p = phytozome.Phytozome(arg['user'], arg['password'], arg['base'], arg['convert_only'], arg['verbose'])
+                if arg['convert_only']:
+                    log.info('Only converting files.')
+                    p.convert()
+                elif arg['fetch_only']:
+                    log.info('Only downloading files.')
+                    p.get_xml_urls()
+                    p.fetch_cds()
+                else:
+                    log.info('Downloading and converting files.')
+                    p.get_xml_urls()
+                    p.fetch_cds()
+                    p.convert()
+                return
             #   Send it to the fetch command
             fetch(arguments_valid, verbose)
         elif arguments_valid['action'] == 'predict':
@@ -102,6 +91,14 @@ def main():
             if predictdeps:
                 check_modules.missing_mods(predictdeps)
                 exit(1)
+            #   Import the BLAST search script
+            from lrt_predict.Blast import blast_search
+            #   A function to do the BLAST searching
+            def blast(arg, log):
+                log.info('Creating a new instance to BLAST.')
+                b = blast_search.BlastSearch(arg['base'], arg['fasta'], arg['evalue'], arg['verbose'])
+                b.blast_all()
+                return b.homologues
             homologues = blast(arguments_valid, verbose)
             print '\n'.join(homologues)
     else:
