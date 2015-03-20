@@ -79,6 +79,6 @@ def get_file_by_ext(basedir, suffix, l):
     #       find /tmp -name "*.fasta"
     command = ' '.join(['find', basedir, '-name', '"*'+suffix+'"'])
     raw_files = subprocess.check_output(command, shell=True)
-    file_list = raw_files.strip().split('\n')
+    file_list = raw_files.strip().split('\n').strip()
     l.debug('Found ' + str(len(file_list)) +  ' ' + suffix + ' files in ' + basedir)
     return file_list

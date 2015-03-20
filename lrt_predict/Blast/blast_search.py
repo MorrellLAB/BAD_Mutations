@@ -105,7 +105,9 @@ class BlastSearch:
         databases = file_funcs.get_file_by_ext(self.basedir, '.cds.fa', self.mainlog)
         self.mainlog.info('Running BLAST on ' + str(len(databases)) + ' species databases.')
         self.mainlog.debug('BLAST databases:\n' + '\n'.join(databases))
-        if not databases:
+        #   databases will always be at least length 1
+        #   if there is nothing, then the list will just have the empty string
+        if databases[0] == '':
             self.mainlog.error('The base directory ' + self.basedir + ' does not contain any BLAST databases!')
             exit(1)
         for d in databases:
