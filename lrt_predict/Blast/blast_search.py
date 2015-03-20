@@ -133,7 +133,7 @@ class BlastSearch:
         #   Check to see if the blastdbcmd command is avilable
         blastdbcmd_path = check_modules.check_executable('blastdbcmd')
         if blastdbcmd_path:
-            self.mainlog.debug('Using ' + blastdbcmd)
+            self.mainlog.debug('Using ' + blastdbcmd_path)
             for database, seqID in self.homologues.iteritems():
                 temp_output.write(sequence_fetch.blastdbcmd(blastdbcmd_path, database, seqID))
         else:
