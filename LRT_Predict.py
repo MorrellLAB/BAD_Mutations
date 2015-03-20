@@ -26,14 +26,10 @@ import logging
 
 #   Import the dependency checking script
 from lrt_predict.General import check_modules
-#   Import the main fetching script
-import lrt_predict.Fetch.phytozome as phytozome
 #   Import the verbosity script
 from lrt_predict.General import set_verbosity
 #   Import our argument parsing script
 from lrt_predict.General import parse_args
-#   Import the BLAST search script
-from lrt_predict.Blast import blast_search
 
 #   A function to do the fetching
 def fetch(arg, log):
@@ -70,7 +66,7 @@ def blast(arg, log):
 def main():
     #   The very first thing we do is do a base check to make sure that we can
     #   parse arguments
-    dep = check_modules.check_modules(fetch=False, predict=False)
+    dep = check_modules.check_modules()
     if dep:
         check_modules.missing_mods(dep)
         exit(1)
@@ -89,16 +85,20 @@ def main():
         verbose.debug(arguments_valid['action'] + ' subcommand was invoked')
         #   Which command was invoked?
         if arguments_valid['action'] == 'fetch':
+            #   Import the main fetching script
+            import lrt_predict.Fetch.phytozome as phytozome
             #   Next, we check the modules that are required by each subcommand
-            fetchdeps = check_modules.check_modules(fetch=True, predict=False)
+            fetchdeps = check_modules.check_modules(fetch=True)
             if fetchdeps:
                 check_modules.missing_mods(fetchdeps)
                 exit(1)
             #   Send it to the fetch command
             fetch(arguments_valid, verbose)
         elif arguments_valid['action'] == 'predict':
+            #   Import the BLAST search script
+            from lrt_predict.Blast import blast_search
             #   Next, we check the modules that are required by each subcommand
-            predictdeps = check_modules.check_modules(fetch=False, predict=True)
+            predictdeps = check_modules.check_modules(predict=True)
             if predictdeps:
                 check_modules.missing_mods(predictdeps)
                 exit(1)

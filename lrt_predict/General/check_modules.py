@@ -2,8 +2,11 @@
 
 #   A script to check for the presence of all the required modules
 
+#   Gain access to the spawn.find_executable(), which works a lot like `which`
+from distutils import spawn
+
 #   Try to import them, return names of those that are not installed
-def check_modules(fetch, predict):
+def check_modules(fetch=False, predict=False):
     missing_modules = []
     #   Argparse
     try:
@@ -34,3 +37,10 @@ install them and try again. The following modules were not found:'''
     print '\n'.join(modules)
     return
 
+#   A function that checks for a path to an executable
+def check_executable(exe):
+    path = spawn.find_executable(exe)
+    if path:
+        return path
+    else:
+        return False
