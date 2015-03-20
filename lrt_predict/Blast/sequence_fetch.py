@@ -32,7 +32,7 @@ def blastdbcmd(path, db, seqID):
     p = subprocess.Popen(cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = p.communicate()
     #   return the output, which is just the fasta file.
-    return out
+    return (out, err)
 
 #   Failing that, we can use a regular expression to get it
 #   Regular expression written by Paul Hoffman.

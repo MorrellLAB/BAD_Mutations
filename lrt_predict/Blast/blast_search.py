@@ -135,8 +135,8 @@ class BlastSearch:
         if blastdbcmd_path:
             self.mainlog.debug('Using ' + blastdbcmd_path)
             for database, seqID in self.homologues.iteritems():
-                s = sequence_fetch.blastdbcmd(blastdbcmd_path, database, seqID)
-                self.mainlog.debug(s)
+                s_out, s_err = sequence_fetch.blastdbcmd(blastdbcmd_path, database, seqID)
+                self.mainlog.debug(s_out, s_err)
                 temp_output.write(s)
         else:
             self.mainlog.debug('Using regex')
