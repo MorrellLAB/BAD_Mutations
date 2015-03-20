@@ -17,14 +17,14 @@ LRT_PATH = os.path.realpath(__file__).rsplit(os.path.sep, 3)[0]
 SEQ_FETCH_SCRIPT = os.path.join(LRT_PATH, 'Shell_Scripts', 'Seq_From_BLASTdb.sh')
 
 #   Easier way: just use the packaged blastdbcmd from NCBI
-def blastdbcmd(db, seqID):
+def blastdbcmd(path, db, seqID):
     #   The only thing is we have to be careful with pipes in the sequence ID
     #   escape them.
     esc_seqID = seqID.replace('|', '\|')
     #   The script is written in shell, so this function just calls it and
     #   checks the output
     #   Build the shell command
-    cmd = ['sh', SEQ_FETCH_SCRIPT, db, seqID]
+    cmd = ['sh', SEQ_FETCH_SCRIPT, path, db, seqID]
     #   Execute the script
     #   shell=False to ensure that we aren't executing commands from untrusted
     #   sources. We set out and err to subprocess.PIPE so we can save the actual

@@ -100,7 +100,10 @@ def main():
                 log.info('Creating a new instance to BLAST.')
                 b = blast_search.BlastSearch(arg['base'], arg['fasta'], arg['evalue'], arg['verbose'])
                 b.blast_all()
-                return b.homologues
+                hom = b.get_hit_seqs()
+                hom.seek(0)
+                hom.read()
+                hom.close()
             homologues = blast(arguments_valid, verbose)
             print '\n'.join(homologues)
     else:

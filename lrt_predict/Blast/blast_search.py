@@ -16,6 +16,10 @@ from ..General import set_verbosity
 from ..General import parse_input
 #   Operate on files
 from ..Fetch import file_funcs
+#   For checking for the presence of executables
+from ..General import check_modules
+#   For fetching sequences from the BLAST databases
+import sequence_fetch
 
 #   A class to handle our BLAST searches
 #   Borrowing heavily from script written by Paul Hoffman
@@ -47,7 +51,7 @@ class BlastSearch:
         #   store the BLAST output
         #   We use mode=w+t since we want read/write in text mode.
         #   We also need the filename, so used the NamedTemporaryFile method
-        temp_output = tempfile.NamedTemporaryFile(mode='w+t')
+        temp_output = tempfile.NamedTemporaryFile(mode='w+t', prefix='LRTPredict_BlastSearch_', suffix='BLASTout.xml')
         self.mainlog.debug('Temp file created with name ' + temp_output.name)
         #   Return the file-like object
         return temp_output
@@ -101,6 +105,9 @@ class BlastSearch:
         databases = file_funcs.get_file_by_ext(self.basedir, '.cds.fa', self.mainlog)
         self.mainlog.info('Running BLAST on ' + str(len(databases)) + ' species databases.')
         self.mainlog.debug('BLAST databases:\n' + '\n'.join(databases))
+        if not databases:
+            self.mainlog.error('The base directory ' + self.basedir + ' does not contain any BLAST databases!')
+            exit(1)
         for d in databases:
             #   Get the BLAST output
             blast_output = self.run_blast(d)
@@ -114,3 +121,19 @@ class BlastSearch:
                 #   And then tack it onto the list of homologues
                 self.homologues[d] = seq_id
         return
+
+    #   Define a function to get the hit sequences out of the databses
+    def get_hit_seqs(self):
+        #   Create a temporary file for holding sequence information while we collect it
+        self.mainlog.debug('Creating named temporary file for homologous sequences.')
+        temp_output = tempfile.NamedTemporaryFile(mode='w+t', prefix='LRTPredict_BlastSearch_', suffix='homologues.fasta')
+        self.mainlog.debug('Created temporary file ' + temp_output.name)
+        #   Check to see if the blastdbcmd command is avilable
+        blastdbcmd_path = check_modules.check_executable('blastdbcmd')
+        if blastdbcmd_path:
+            for database, seqID in self.homologues.iteritems():
+                temp_output.write(sequence_fetch.blastdbcmd(blastdbcmd_path, database, seqID))
+        else:
+            for database, seqID in self.homologues.iteritems():
+                temp_output.write(sequence_fetch.get_seq_by_regex())
+        return temp_output
