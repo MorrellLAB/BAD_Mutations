@@ -11,6 +11,8 @@ import dir_funcs
 import file_funcs
 import format_blast
 from ..General import set_verbosity
+from ..General import check_modules
+
 #   A new class to handle the requests to and responses from JGI
 class Phytozome:
     #   These are common variables for every new Phytozome class
@@ -142,6 +144,8 @@ class Phytozome:
 
     #   A function to convert downloaded files to BLAST databases
     def convert(self):
+        #   What is the path to the makeblastdb executable?
+        makeblastdb_path = check_modules.check_executable('makeblastdb')
         #   Check if the list of updated CDS files is empty or not
         if not self.to_convert:
             #   If it is empty, then populate it with all of them
@@ -150,11 +154,7 @@ class Phytozome:
             fname_list = self.to_convert
         #   for each one
         for f in fname_list:
-            retval = format_blast.format_blast(f)
-            #   Check the return value
-            self.mainlog.debug('format_blast returned ' + str(retval))
-            if retval == 0:
-                pass
-            else:
-                self.mainlog.warning('format_blast returned non-zero status ' + str(retval))
+            out, error = format_blast.format_blast(makeblastdb_path, f)
+            self.mainlog.info('stdout: \n' + out)
+            self.mainlog.info('stderr: \n' + error)
         return

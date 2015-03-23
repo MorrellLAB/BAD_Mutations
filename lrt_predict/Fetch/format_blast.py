@@ -19,13 +19,14 @@ DBFORMAT_SCRIPT = os.path.join(LRT_PATH, 'Shell_Scripts', 'Unzip_CDS.sh')
 
 #   Function that just calls the shell script that handles the BLAST database
 #   formatting
-def format_blast(fname):
+def format_blast(makeblastdb_path, fname):
     #   The script is written in shell, so this function just calls it and
     #   checks the output
     #   Build the shell command
-    cmd = ['sh', DBFORMAT_SCRIPT, fname]
+    cmd = ['bash', DBFORMAT_SCRIPT, makeblastdb_path, fname]
     #   Execute the script
     #   shell=False to ensure that we aren't executing commands from untrusted
     #   sources
-    retval = subprocess.call(cmd, shell=False)
-    return retval
+    p = subprocess.Popen(cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, err = p.communicate()
+    return (out, err)

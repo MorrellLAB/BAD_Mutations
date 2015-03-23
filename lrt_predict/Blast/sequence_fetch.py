@@ -22,7 +22,7 @@ def blastdbcmd(path, db, seqID):
     #   checks the output
     #   Build the shell command. Apparently, we do no have to escape the pipe characters,
     #   the python warpper must handle that
-    cmd = ['sh', SEQ_FETCH_SCRIPT, path, db, seqID]
+    cmd = ['bash', SEQ_FETCH_SCRIPT, path, db, seqID]
     #   Execute the script
     #   shell=False to ensure that we aren't executing commands from untrusted
     #   sources. We set out and err to subprocess.PIPE so we can save the actual

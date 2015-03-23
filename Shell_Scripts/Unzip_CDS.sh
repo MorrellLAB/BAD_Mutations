@@ -4,16 +4,10 @@
 #   databases
 #   Modified for LRT package from Paul Hoffman's scipt.
 
-#   Gain access to the NCBI executables
-#   This line is specific to the Minnesota Supercomputing Institute
-#module load ncbi_blast+
-#MAKE_BLAST_DB=`which makeblastdb`
-#   Or, if we don't have module, specify the full path to the makeblastdb
-#   executable
-MAKE_BLAST_DB=/soft/ncbi_blast+/2.2.29/bin/makeblastdb
-
+#   First argument is path to makeblastdb
+MAKE_BLAST_DB=$1
 #   Filename as argument
-CDS=$1
+CDS=$2
 
 #   What is today's date?
 YMD=$(date +%Y%m%d)
@@ -27,4 +21,8 @@ LOG=${new_file}.${YMD}_makeblastdb_log
 #   And an error file
 ERR=${new_file}.${YMD}_makeblastdb_err
 #   Make BLAST databases out of each of the files
-${MAKE_BLAST_DB} -in ${new_file} -dbtype nucl > $LOG 2> $ERR
+#   We print stdout and stderr since we can handle these in python, but we
+#   would also like them to be saved on disk for reference.
+echo "Log file is stored in $LOG"
+echo "Error file is stored in $ERR"
+${MAKE_BLAST_DB} -in ${new_file} -dbtype nucl > >(tee $LOG) 2> >(tee $ERR >&2)
