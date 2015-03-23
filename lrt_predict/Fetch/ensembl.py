@@ -2,7 +2,6 @@
 
 #   Import python modules here
 import requests
-from xml.etree import ElementTree
 import logging
 import os
 
@@ -17,6 +16,7 @@ from ..General import check_modules
 class EnsemblPlants:
     #   When creating a new EnsemblPlants class, we have these following pieces of
     #   data created and attached to the class
+    ENSEMBL_BASE = 'ftp://ftp.ensemblgenomes.org/pub/plants/current/fasta/'
     def __init__(self, base, convertonly, verbose):
         self.mainlog = set_verbosity.verbosity(__name__, verbose)
         self.mainlog.debug('Creating new instance of EnsemblPlants')
