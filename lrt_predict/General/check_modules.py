@@ -44,3 +44,14 @@ def check_executable(exe):
         return path
     else:
         return False
+
+#   A function that checks for the presence of all the executable names
+#   passed to it
+def missing_executables(exelist):
+    missing_programs = []
+    for e in exelist:
+        if check_executable(e):
+            continue
+        else:
+            missing_programs.append(e)
+    return missing_programs

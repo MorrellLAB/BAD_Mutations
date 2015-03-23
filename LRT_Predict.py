@@ -61,6 +61,12 @@ def main():
             if fetchdeps:
                 check_modules.missing_mods(fetchdeps)
                 exit(1)
+            #   Next we check for the presence of the utilities we need to 
+            #   do the fetching
+            missing_reqs = check_modules.missing_executables(['bash', 'makeblastdb', 'gzip'])
+            if missing_reqs:
+                verbose.error('Some required executables were not found on your system: ' + '\n'.join(missing_reqs) + '\nPlease install them to continue.')
+                exit(1)
             #   Import the main fetching script
             #   We do it here, since we only want to import this if we are fetching
             import lrt_predict.Fetch.phytozome as phytozome
@@ -91,6 +97,11 @@ def main():
             predictdeps = check_modules.check_modules(predict=True)
             if predictdeps:
                 check_modules.missing_mods(predictdeps)
+                exit(1)
+            #   Similarly, check the blast dependencies here
+            missing_reqs = check_modules.missing_executables(['bash', 'tblastx', 'prank'])
+            if missing_reqs:
+                verbose.error('Some required executables were not found on your system: ' + '\n'.join(missing_reqs) + '\nPlease install them to continue.')
                 exit(1)
             #   Import the BLAST search script
             #   Again, import here because we only want call these functions if we are running BLAST
