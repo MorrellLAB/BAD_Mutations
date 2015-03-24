@@ -115,7 +115,7 @@ class Phytozome:
                 #   Get the md5
                 lmd5 = file_funcs.calculate_md5(lname, self.filelog)
                 #   Compare the MD5s
-                md5s_same = file_funcs.md5_is_same(lmd5, m, self.filelog)
+                md5s_same = file_funcs.checksum_is_same(lmd5, m, self.filelog)
                 #   If they are the same, skip it, and move on
                 if md5s_same:
                     self.mainlog.info(lname + ' already exists, and is current. Skipping.')
@@ -127,7 +127,7 @@ class Phytozome:
                     while not same:
                         self.download_file(u)
                         new_lmd5 = file_funcs.calculate_md5(lname, self.filelog)
-                        same = file_funcs.md5_is_same(new_lmd5, m, self.filelog)
+                        same = file_funcs.checksum_is_same(new_lmd5, m, self.filelog)
                     #   Tack it onto the list of files to convert
                     self.to_convert.append(os.path.join(self.base, target_dir, lname))
             else:
@@ -137,9 +137,9 @@ class Phytozome:
                 while not same:
                     self.download_file(u)
                     new_lmd5 = file_funcs.calculate_md5(lname, self.filelog)
-                    same = file_funcs.md5_is_same(new_lmd5, m, self.filelog)
+                    same = file_funcs.checksum_is_same(new_lmd5, m, self.filelog)
                 self.to_convert.append(os.path.join(self.base, target_dir, lname))
-        self.mainlog.info('Done downloading CDS files.')
+        self.mainlog.info('Done downloading CDS files from Phytozome.')
         return
 
     #   A function to convert downloaded files to BLAST databases

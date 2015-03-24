@@ -6,11 +6,11 @@ import os
 import hashlib
 import subprocess
 import logging
-
+import re
 
 #   A simple wrapper around os.path.isfile(), since this name is easier to read
 def file_exists(fname, l):
-    l.debug('Checking if ' + fname + ' exists.')
+    l.info('Checking if ' + fname + ' exists.')
     if os.path.isfile(fname):
         return True
     else:
@@ -31,9 +31,21 @@ def species_name(fname):
     return fname.split('_')[0]
 
 
+#   One for ensembl, too
+def ensembl_species_name(fname):
+    #   The argument to this one is a whole path on the FTP server, so we have
+    #   to split on / first
+    lfile = local_name(fname)
+    #   Ensembl filenames are like
+    #   Genus_species.blahlblah.blahblah ... .fa.gz
+    #   We want to match the genus_species part
+    binomial = re.match('^[a-zA-Z]+_[a-zA-Z]+', lfile)
+    return binomial.group()
+
+
 #   A function to calculate md5
 def calculate_md5(fname, l, blocksize=8192):
-    l.debug('Calculating MD5 on ' + fname + ' with a blocksize of ' + str(blocksize))
+    l.info('Calculating MD5 on ' + fname + ' with a blocksize of ' + str(blocksize))
     #   If the supplied block size isn't a multiple of 128, then we will exit
     #   with an error, since md5 has a digest block size of 128 bytes
     if (blocksize % 128) != 0:
@@ -56,11 +68,22 @@ def calculate_md5(fname, l, blocksize=8192):
     return md5.hexdigest()
 
 
-#   A function to check if the md5 of our local file is the same as that of the
+#   A function to calculate the CRC32 sum as implemented in the UNIX 'sum' cmd
+def calculate_crc32(fname, l):
+    l.info('Calculating CRC32 on ' + fname + ' with  `sum\' command.')
+    cmd = ['sum', fname]
+    p = subprocess.Popen(cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, err = p.communicate()
+    l.debug('stdout:\n' + out)
+    l.debug('stderr:\n' + err)
+    return int(out.strip().split()[0])
+
+
+#   A function to check if the checksum of our local file is the same as that of the
 #   remote file
-def md5_is_same(local_md5, remote_md5, l):
-    l.debug('Comparing local MD5 of ' + local_md5 + ' and remote MD5 of ' + remote_md5)
-    if local_md5 == remote_md5:
+def checksum_is_same(local_sum, remote_sum, l):
+    l.info('Comparing local checksum of ' + str(local_sum) + ' and remote checksum of ' + str(remote_sum))
+    if local_sum == remote_sum:
         return True
     else:
         return False
@@ -71,7 +94,7 @@ def md5_is_same(local_md5, remote_md5, l):
 #   will not work on windows, but this shouldn't be running on Windows 
 #   anyway......
 def get_file_by_ext(basedir, suffix, l):
-    l.debug('Finding all files with suffix ' + suffix + ' in ' + basedir)
+    l.info('Finding all files with suffix ' + suffix + ' in ' + basedir)
     #   Then execute the find command to get all gzipped cds files
     #   Normally, shell=True is a security hazard, but since we aren't actually
     #   running user-fed commands, we should be okay here

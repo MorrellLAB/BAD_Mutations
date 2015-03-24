@@ -32,7 +32,53 @@ from lrt_predict.General import set_verbosity
 from lrt_predict.General import parse_args
 
 
-#   A function to do the predicting
+#   Define a function for fetching
+def fetch(arg, log):
+    fetchdeps = check_modules.check_modules(fetch=True)
+    if fetchdeps:
+        check_modules.missing_mods(fetchdeps)
+        exit(1)
+    #   Next we check for the presence of the utilities we need to 
+    #   do the fetching
+    missing_reqs = check_modules.missing_executables(['bash', 'makeblastdb', 'gzip', 'sum'])
+    if missing_reqs:
+        log.error('Some required executables were not found on your system: ' + '\n'.join(missing_reqs) + '\nPlease install them to continue.')
+        exit(1)
+    #   Import the main fetching script
+    #   We do it here, since we only want to import this if we are fetching
+    import lrt_predict.Fetch.phytozome as phytozome
+    import lrt_predict.Fetch.ensembl as ensembl
+    #   Create a new Phytozome instance that will handle our work with
+    #   the JGI Genomes Portal.
+    log.info('Creating a new Phytozome instance to fetch data.')
+    #   We give it username, password, base directory, whether or not we have to log in and 
+    p = phytozome.Phytozome(arg['user'], arg['password'], arg['base'], arg['convert_only'], arg['verbose'])
+    log.info('Creating a new Ensembl instance to fetch data.')
+    ens = ensembl.EnsemblPlants(arg['base'], arg['convert_only'], arg['verbose'])
+    if arg['convert_only']:
+        log.info('Only converting files.')
+        ens.convert()
+        p.convert()
+    elif arg['fetch_only']:
+        log.info('Only downloading files.')
+        log.info('Fetching from Ensembl Plants...')
+        ens.get_ftp_urls()
+        ens.download_files()
+        log.info('Fetching from Phytozome...')
+        p.get_xml_urls()
+        p.fetch_cds()
+    else:
+        log.info('Downloading and converting Ensembl Plants files...')
+        ens.get_ftp_urls()
+        ens.download_files()
+        log.info('Downloading and converting files.')
+        p.get_xml_urls()
+        p.fetch_cds()
+        ens.convert()
+        p.convert()
+    return
+
+
 #   Main function
 def main():
     #   The very first thing we do is do a base check to make sure that we can
@@ -56,41 +102,6 @@ def main():
         verbose.debug(arguments_valid['action'] + ' subcommand was invoked')
         #   Which command was invoked?
         if arguments_valid['action'] == 'fetch':
-            #   Next, we check the modules that are required by each subcommand
-            fetchdeps = check_modules.check_modules(fetch=True)
-            if fetchdeps:
-                check_modules.missing_mods(fetchdeps)
-                exit(1)
-            #   Next we check for the presence of the utilities we need to 
-            #   do the fetching
-            missing_reqs = check_modules.missing_executables(['bash', 'makeblastdb', 'gzip'])
-            if missing_reqs:
-                verbose.error('Some required executables were not found on your system: ' + '\n'.join(missing_reqs) + '\nPlease install them to continue.')
-                exit(1)
-            #   Import the main fetching script
-            #   We do it here, since we only want to import this if we are fetching
-            import lrt_predict.Fetch.phytozome as phytozome
-            #   A function to do the fetching
-            def fetch(arg, log):
-                #   Create a new Phytozome instance that will handle our work with
-                #   the JGI Genomes Portal.
-                log.info('Creating a new instance to fetch data')
-                #   We give it username, password, base directory, whether or not we have to log in and 
-                p = phytozome.Phytozome(arg['user'], arg['password'], arg['base'], arg['convert_only'], arg['verbose'])
-                if arg['convert_only']:
-                    log.info('Only converting files.')
-                    p.convert()
-                elif arg['fetch_only']:
-                    log.info('Only downloading files.')
-                    p.get_xml_urls()
-                    p.fetch_cds()
-                else:
-                    log.info('Downloading and converting files.')
-                    p.get_xml_urls()
-                    p.fetch_cds()
-                    p.convert()
-                return
-            #   Send it to the fetch command
             fetch(arguments_valid, verbose)
         elif arguments_valid['action'] == 'predict':
             #   Next, we check the modules that are required by each subcommand
