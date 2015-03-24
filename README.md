@@ -64,7 +64,7 @@ necessary to allow the software to calculate synonymous substitution rates.
 TODO
 ----
 * 'fetch' subcommand
-    * Add fetching CDS genome sequences from Ensembl Plants
+    * ~~Add fetching CDS genome sequences from Ensembl Plants~~ **Done!**
     * ~~Integreate creation of BLAST databases~~ **Done!**
     * ~~Add MD5 checking for CDS files to avoid unnecessary downloads~~ **Done!**
 * 'predict' subcommand
