@@ -64,15 +64,15 @@ necessary to allow the software to calculate synonymous substitution rates.
 TODO
 ----
 * 'fetch' subcommand
-    * ~~Add fetching CDS genome sequences from Ensembl Plants~~ **Done!**
+    * ~~Add fetching CDS sequences from Ensembl Plants~~ **Done!**
     * ~~Integreate creation of BLAST databases~~ **Done!**
     * ~~Add MD5 checking for CDS files to avoid unnecessary downloads~~ **Done!**
+    * Add config file for excluding sequences from Phytozome
 * 'predict' subcommand
     * ~~Write input parsing script~~ **Done!**
     * ~~Write BLAST searching script~~ **Done!**
     * ~~Write BLAST output parsing script~~ **Done!**
-    * Add option to exclude species from the multiple sequence alignment
     * Write PRANK sequence alignment script
-    * Compute phylogentic tree of species in database
-    * Add option to "prune" species from the all-species phylogenetic tree
+    * ~~Compute phylogentic tree of species in database~~ **Not Necessary**
+    * ~~Add option to "prune" species from the all-species phylogenetic tree~~ **Not Necessary**
     * Implement the LRT itself
