@@ -22,7 +22,7 @@ using [tblastx](http://blast.ncbi.nlm.nih.gov/Blast.cgi) to identify likely
 homologues in other plant species. The nucleotide sequences from homologues
 will then be aligned using [PRANK](http://wasabiapp.org/software/prank/)
 and a precomputed phylogenetic tree of the species. The model from 
-[Chun and Fay(2009)](http://genome.cshlp.org/content/19/9/1553.abstract) will then
+[Chun and Fay (2009)](http://genome.cshlp.org/content/19/9/1553.abstract) will then
 be applied for each specified codon, and a prediction as to whether the query
 variant is deleterious will be returned.
 
@@ -71,6 +71,8 @@ TODO
     * ~~Write input parsing script~~ **Done!**
     * ~~Write BLAST searching script~~ **Done!**
     * ~~Write BLAST output parsing script~~ **Done!**
+    * Add option to exclude species from the multiple sequence alignment
     * Write PRANK sequence alignment script
     * Compute phylogentic tree of species in database
+    * Add option to "prune" species from the all-species phylogenetic tree
     * Implement the LRT itself
