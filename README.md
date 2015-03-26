@@ -67,7 +67,7 @@ TODO
     * ~~Add fetching CDS sequences from Ensembl Plants~~ **Done!**
     * ~~Integreate creation of BLAST databases~~ **Done!**
     * ~~Add MD5 checking for CDS files to avoid unnecessary downloads~~ **Done!**
-    * Add config file for excluding sequences from Phytozome
+    * ~~Add config file for excluding sequences from Phytozome~~ **Done!**
 * 'predict' subcommand
     * Write input parsing script **Deciding on Final Input Format**
     * ~~Write BLAST searching script~~ **Done!**

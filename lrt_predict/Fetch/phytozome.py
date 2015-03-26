@@ -10,6 +10,7 @@ import os
 import dir_funcs
 import file_funcs
 import format_blast
+import phytozome_species
 from ..General import set_verbosity
 from ..General import check_modules
 
@@ -22,6 +23,7 @@ class Phytozome:
     XML_URL = 'http://genome.jgi.doe.gov/ext-api/downloads/get-directory'
     XML_DATA = {'organism':'PhytozomeV10'}
     FAILED_LOGIN = 'Login and password do not match'
+    TO_FETCH = phyozome_species.phyto_fetch
     #   When creating a new Phytozome class, we have these following pieces of
     #   data created and attached to the class
     def __init__(self, u, p, base, convertonly, verbose):
@@ -75,8 +77,14 @@ class Phytozome:
         for e in xml_tree.findall('.//file'):
             #   if the URL ends in a certain suffix, then save it
             if e.attrib.get('url').endswith(suffix):
-                self.urls.append(e.attrib.get('url'))
-                self.md5s.append(e.attrib.get('md5'))
+                url = e.attrib.get('url')
+                md5 = e.attrib.get('md5')
+                #   Check to see that the file is in the list of species to download
+                local_filename = file_funcs.local_name(url)
+                species_name = file_funcs.species_name(local_filename)
+                if species_name in self.TO_FETCH:
+                    self.urls.append(url)
+                    self.md5s.append(md5)
         self.mainlog.debug('Found ' + str(len(self.urls)) + ' files to fetch')
         return
 
