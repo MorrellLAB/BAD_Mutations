@@ -7,8 +7,8 @@ import os
 from StringIO import StringIO
 
 #   Import our helper scripts here
-import dir_funcs
-import file_funcs
+from ..General import dir_funcs
+from ..General import file_funcs
 import format_blast
 import ensembl_species
 from ..General import set_verbosity

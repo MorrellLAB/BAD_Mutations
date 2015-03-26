@@ -7,8 +7,8 @@ import logging
 import os
 
 #   Import our helper scripts here
-import dir_funcs
-import file_funcs
+from ..General import dir_funcs
+from ..General import file_funcs
 import format_blast
 import phytozome_species
 from ..General import set_verbosity
