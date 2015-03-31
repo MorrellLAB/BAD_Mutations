@@ -79,6 +79,28 @@ def fetch(arg, log):
     return
 
 
+#   Define a function for BLASTing
+def blast(arg, log):
+    blastdeps = check_modules.check_modules(blast=True)
+    #   Check the module dependencies for the BLAST function
+    if blastdeps:
+        check_modules.missing_mods(blastdeps)
+        exit(1)
+    missing_reqs = check_modules.missing_executables(['bash', 'tblastx'])
+    #   And then check the executable dependencies
+    if missing_reqs:
+        log.error('Some required executables were not found on your system: ' + '\n'.join(missing_reqs) + '\nPlease install them to continue.')
+        exit(1)
+    #   If all that checks out, import the BLAST class script
+    from lrt_predict.Blast import blast_search
+    log.info('Creating a new instance to BLAST.')
+    b = blast_search.BlastSearch(arg['base'], arg['fasta'], arg['evalue'], arg['verbose'])
+    b.blast_all()
+    #   hom contains the filename that has the unaligned sequence in it.
+    hom = b.get_hit_seqs()
+    return hom
+
+
 #   Main function
 def main():
     #   The very first thing we do is do a base check to make sure that we can
@@ -104,30 +126,9 @@ def main():
         if arguments_valid['action'] == 'fetch':
             fetch(arguments_valid, verbose)
         elif arguments_valid['action'] == 'predict':
-            #   Next, we check the modules that are required by each subcommand
-            predictdeps = check_modules.check_modules(predict=True)
-            if predictdeps:
-                check_modules.missing_mods(predictdeps)
-                exit(1)
-            #   Similarly, check the blast dependencies here
-            missing_reqs = check_modules.missing_executables(['bash', 'tblastx', 'prank'])
-            if missing_reqs:
-                verbose.error('Some required executables were not found on your system: ' + '\n'.join(missing_reqs) + '\nPlease install them to continue.')
-                exit(1)
-            #   Import the BLAST search script
-            #   Again, import here because we only want call these functions if we are running BLAST
-            from lrt_predict.Blast import blast_search
-            #   A function to do the BLAST searching
-            def blast(arg, log):
-                log.info('Creating a new instance to BLAST.')
-                b = blast_search.BlastSearch(arg['base'], arg['fasta'], arg['evalue'], arg['verbose'])
-                b.blast_all()
-                hom = b.get_hit_seqs()
-                hom.seek(0)
-                print hom.read()
-                hom.close()
-                return
-            blast(arguments_valid, verbose)
+            #   We will return the filename that contains the unaligned
+            #   sequences, as we will use these as inputs for prank
+            unaligned_seqs = blast(arguments_valid, verbose)
     else:
         verbose.error(msg)
     return
