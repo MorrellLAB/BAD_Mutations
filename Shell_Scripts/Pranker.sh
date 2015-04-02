@@ -3,6 +3,11 @@
 #   Shell script to run PRANK on an input FASTA sequence
 #   To be used until a Python script for PRANK works
 
+set -e
+set -u
+set -o pipefail
+
+
 #   Path to the prank executable as an argument
 PRANK=$1
 #   Input sequence as an argument

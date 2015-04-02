@@ -1,6 +1,9 @@
 #!/bin/bash
-
 #   Small shell script to retrieve the FASTA sequence from 
+
+set -e
+set -u
+set -o pipefail
 
 BLASTDBCMD=$1
 
