@@ -23,7 +23,7 @@ class Phytozome:
     XML_URL = 'http://genome.jgi.doe.gov/ext-api/downloads/get-directory'
     XML_DATA = {'organism':'PhytozomeV10'}
     FAILED_LOGIN = 'Login and password do not match'
-    TO_FETCH = phyozome_species.phyto_fetch
+    TO_FETCH = phytozome_species.phyto_fetch
     #   When creating a new Phytozome class, we have these following pieces of
     #   data created and attached to the class
     def __init__(self, u, p, base, convertonly, verbose):

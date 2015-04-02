@@ -11,7 +11,7 @@ from Bio import SeqIO
 
 #   Our helper scripts
 import set_verbosity
-from ..Fetch import file_funcs
+import file_funcs
 
 #   A function to check the FASTA file input
 def valid_fasta(f, log):

@@ -15,7 +15,7 @@ from ..General import set_verbosity
 #   Check inputs and extract information from them
 from ..General import parse_input
 #   Operate on files
-from ..Fetch import file_funcs
+from ..General import file_funcs
 #   For checking for the presence of executables
 from ..General import check_modules
 #   For fetching sequences from the BLAST databases

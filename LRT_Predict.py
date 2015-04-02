@@ -81,7 +81,7 @@ def fetch(arg, log):
 
 #   Define a function for BLASTing
 def blast(arg, log):
-    blastdeps = check_modules.check_modules(blast=True)
+    blastdeps = check_modules.check_modules(predict=True)
     #   Check the module dependencies for the BLAST function
     if blastdeps:
         check_modules.missing_mods(blastdeps)
