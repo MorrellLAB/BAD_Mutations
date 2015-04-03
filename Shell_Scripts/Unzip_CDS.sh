@@ -1,8 +1,11 @@
 #!/bin/bash
-
 #   Shell script to unzip the CDS fasta files and format them as BLAST
 #   databases
 #   Modified for LRT package from Paul Hoffman's scipt.
+
+set -e
+set -u
+set -o pipefail
 
 #   First argument is path to makeblastdb
 MAKE_BLAST_DB=$1
