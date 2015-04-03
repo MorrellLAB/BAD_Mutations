@@ -101,6 +101,26 @@ def blast(arg, log):
     return hom
 
 
+#   Define a function for aligning
+def align(arg, unaligned, log):
+    aligndeps = check_modules.check_modules(predict=True)
+    if aligndeps:
+        check_modules.mossing_mods(aligndeps)
+        exit(1)
+    #   Check for the required executables
+    missing_reqs = check_modules.missing_executables(['bash', 'prank'])
+    if missing_reqs:
+        log.error('Some required executables were not found on your system: ' + '\n'.join(missing_reqs) + '\nPlease install them to continue.')
+        exit(1)
+    #   Then we import the necessary modules
+    from lrt_predict.Predict import align
+    log.info('Creating a new instance of PrankAlign.')
+    a = align.PrankAlign(unaligned, arg['fasta'], arg['verbose'])
+    #   Then align them
+    a.add_query_to_seqlist()
+    output = a.prank_align()
+    return output
+
 #   Main function
 def main():
     #   The very first thing we do is do a base check to make sure that we can
@@ -129,6 +149,14 @@ def main():
             #   We will return the filename that contains the unaligned
             #   sequences, as we will use these as inputs for prank
             unaligned_seqs = blast(arguments_valid, verbose)
+            #   Then add the query sequence and align them
+            alignment = align(arguments_valid, unaligned_seqs, verbose)
+            #   prank creates files with a certain prefix
+            alignment_file = alignment.name + '.best.fas'
+            #   Let's read it and see
+            handle = open(alignment_file, 'r')
+            print handle.read()
+            handle.close()
     else:
         verbose.error(msg)
     return

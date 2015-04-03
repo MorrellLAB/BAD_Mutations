@@ -15,12 +15,13 @@ from ..General import parse_input
 from ..General import set_verbosity
 from ..General import check_modules
 
-class LRTPredict:
-    def __init__(self, unaligned_sequences, query_sequence, substitutions, verbose):
-        self.mainlog = set_verbosity('LRT Prediction', verbose)
+class PrankAlign:
+    def __init__(self, unaligned_sequences, query_sequence, verbose):
+        self.mainlog = set_verbosity.verbosity('Prank_Align', verbose)
+        #   This is file-like object
         self.input_seq = unaligned_sequences
         self.query = query_sequence
-        self.substitutions = parse_input.parse_subs(substitutions, self.mainlog)
+        self.output = None
         return
 
     #   A function to prepare the prank input file
@@ -41,18 +42,10 @@ class LRTPredict:
         prank_path = check_modules.check_executable('prank')
         #   Next create a temporary output file
         prank_out = tempfile.NamedTemporaryFile(mode='w+t', prefix='LRTPredict_PrankAlign_', suffix='_MSA')
+        self.mainlog.debug('Created temporary file with name ' + prank_out.name + ' for holding alignment.')
         #   Create the command line
-        cmd = ['bash', prank_script, prank_path, self.input_seq, prank_out]
+        cmd = ['bash', prank_script, prank_path, self.input_seq.name, prank_out.name]
         #   Then, we'll execute it
         p = subprocess.Popen(cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         out, err = p.communicate()
-        #   And return the temporary file
         return prank_out
-
-    #   A function to extract the amino acid states from the prank alignment
-    def get_aa_states(self):
-        pass
-
-    #   A function to get the LRT predictions
-    def predict_codons(self):
-        pass

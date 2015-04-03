@@ -135,10 +135,10 @@ class BlastSearch:
             self.mainlog.debug('Using ' + blastdbcmd_path)
             for database, seqID in self.homologues.iteritems():
                 fasta, error = sequence_fetch.blastdbcmd(blastdbcmd_path, database, seqID[0])
-                temp_output.write(fasta.strip())
+                temp_output.write(fasta)
         else:
             self.mainlog.debug('Using regex')
             for database, seqID in self.homologues.iteritems():
                 fasta = sequence_fetch.get_seq_by_regex(database, seqID[1])
-                temp_output.write(fasta.strip())
+                temp_output.write(fasta)
         return temp_output
