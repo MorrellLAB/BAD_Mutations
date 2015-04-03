@@ -141,4 +141,4 @@ class BlastSearch:
             for database, seqID in self.homologues.iteritems():
                 fasta = sequence_fetch.get_seq_by_regex(database, seqID[1])
                 temp_output.write(fasta.strip())
-        return temp_output.name
+        return temp_output

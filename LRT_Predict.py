@@ -96,7 +96,7 @@ def blast(arg, log):
     log.info('Creating a new instance to BLAST.')
     b = blast_search.BlastSearch(arg['base'], arg['fasta'], arg['evalue'], arg['verbose'])
     b.blast_all()
-    #   hom contains the filename that has the unaligned sequence in it.
+    #   hom contains the file object that has the unaligned sequence in it.
     hom = b.get_hit_seqs()
     return hom
 

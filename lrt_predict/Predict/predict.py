@@ -6,6 +6,9 @@
 import tempfile
 import subprocess
 
+#   And external libraries here
+from Bio import SeqIO
+
 #   Import our helper scripts here
 from ..General import parse_input
 from ..General import set_verbosity
@@ -20,7 +23,11 @@ class LRTPredict:
 
     #   A function to prepare the prank input file
     def add_query_to_seqlist(self):
-        pass
+        #   We essentially just write the query sequence into the bottom of the
+        #   unaligned sequence file
+        qseq = SeqIO.read(self.query, 'fasta')
+        self.input_seq.write('>' + qseq.name + '\n' + str(qseq.seq))
+        return
 
     #   A function to call the prank alignment
     def prank_align(self):
