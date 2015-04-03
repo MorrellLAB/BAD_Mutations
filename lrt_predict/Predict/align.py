@@ -48,4 +48,4 @@ class PrankAlign:
         #   Then, we'll execute it
         p = subprocess.Popen(cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         out, err = p.communicate()
-        return prank_out
+        return (out, err, prank_out)

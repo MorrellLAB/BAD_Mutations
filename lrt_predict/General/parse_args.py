@@ -96,12 +96,13 @@ def parse_args():
         )
     #   Add a switch for verbosity
     parser.add_argument(
-        '--verbose',
+        '--verbosity',
         '-v',
         required=False,
-        action='store_true',
-        default=False,
-        help='Verbose output.')
+        dest='loglevel',
+        choices = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
+        default='WARNING',
+        help='Minimum level of messages printed.')
     args = parser.parse_args()
     return args
 

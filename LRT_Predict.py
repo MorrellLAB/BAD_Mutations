@@ -52,9 +52,9 @@ def fetch(arg, log):
     #   the JGI Genomes Portal.
     log.info('Creating a new Phytozome instance to fetch data.')
     #   We give it username, password, base directory, whether or not we have to log in and 
-    p = phytozome.Phytozome(arg['user'], arg['password'], arg['base'], arg['convert_only'], arg['verbose'])
+    p = phytozome.Phytozome(arg['user'], arg['password'], arg['base'], arg['convert_only'], arg['loglevel'])
     log.info('Creating a new Ensembl instance to fetch data.')
-    ens = ensembl.EnsemblPlants(arg['base'], arg['convert_only'], arg['verbose'])
+    ens = ensembl.EnsemblPlants(arg['base'], arg['convert_only'], arg['loglevel'])
     if arg['convert_only']:
         log.info('Only converting files.')
         ens.convert()
@@ -94,7 +94,7 @@ def blast(arg, log):
     #   If all that checks out, import the BLAST class script
     from lrt_predict.Blast import blast_search
     log.info('Creating a new instance to BLAST.')
-    b = blast_search.BlastSearch(arg['base'], arg['fasta'], arg['evalue'], arg['verbose'])
+    b = blast_search.BlastSearch(arg['base'], arg['fasta'], arg['evalue'], arg['loglevel'])
     b.blast_all()
     #   hom contains the file object that has the unaligned sequence in it.
     hom = b.get_hit_seqs()
@@ -115,11 +115,13 @@ def align(arg, unaligned, log):
     #   Then we import the necessary modules
     from lrt_predict.Predict import align
     log.info('Creating a new instance of PrankAlign.')
-    a = align.PrankAlign(unaligned, arg['fasta'], arg['verbose'])
+    a = align.PrankAlign(unaligned, arg['fasta'], arg['loglevel'])
     #   Then align them
     a.add_query_to_seqlist()
-    output = a.prank_align()
-    return output
+    stdout, stderr, outfile = a.prank_align()
+    log.debug('stdout: \n' + stdout)
+    log.debug('stderr: \n' + stderr)
+    return outfile
 
 #   Main function
 def main():
@@ -137,28 +139,29 @@ def main():
         exit(1)
     arguments = parse_args.parse_args()
     #   Pull out the verbosity switch right away
-    verbose = set_verbosity.verbosity('LRT_Predict', arguments.verbose)
-    arguments_valid, msg = parse_args.validate_args(arguments, verbose)
+    loglevel = set_verbosity.verbosity('LRT_Predict', arguments.loglevel)
+    arguments_valid, msg = parse_args.validate_args(arguments, loglevel)
     #   If we got a return value that isn't False, then our arguments are good
     if arguments_valid:
-        verbose.debug(arguments_valid['action'] + ' subcommand was invoked')
+        loglevel.debug(arguments_valid['action'] + ' subcommand was invoked')
         #   Which command was invoked?
         if arguments_valid['action'] == 'fetch':
-            fetch(arguments_valid, verbose)
+            fetch(arguments_valid, loglevel)
         elif arguments_valid['action'] == 'predict':
             #   We will return the filename that contains the unaligned
             #   sequences, as we will use these as inputs for prank
-            unaligned_seqs = blast(arguments_valid, verbose)
+            unaligned_seqs = blast(arguments_valid, loglevel)
             #   Then add the query sequence and align them
-            alignment = align(arguments_valid, unaligned_seqs, verbose)
+            alignment = align(arguments_valid, unaligned_seqs, loglevel)
             #   prank creates files with a certain prefix
-            alignment_file = alignment.name + '.best.fas'
-            #   Let's read it and see
-            handle = open(alignment_file, 'r')
-            print handle.read()
-            handle.close()
+            alignment_nuc_file = alignment.name + '.best.nuc.fas'
+            alignment_pep_file = alignment.name + '.best.pep.fas'
+            alignment_tree_file = alignment.name + '.best.dnd'
+            loglevel.info('Nucleotide alignment in ' + alignment_nuc_file)
+            loglevel.info('Protein alignment in ' + alignment_pep_file)
+            loglevel.info('Tree in ' + alignment_tree_file)
     else:
-        verbose.error(msg)
+        loglevel.error(msg)
     return
 
 
