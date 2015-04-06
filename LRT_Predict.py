@@ -117,7 +117,6 @@ def align(arg, unaligned, log):
     log.info('Creating a new instance of PrankAlign.')
     a = align.PrankAlign(unaligned, arg['fasta'], arg['loglevel'])
     #   Then align them
-    a.add_query_to_seqlist()
     stdout, stderr, outfile = a.prank_align()
     log.debug('stdout: \n' + stdout)
     log.debug('stderr: \n' + stderr)

@@ -9,6 +9,7 @@ import tempfile
 #   Import the Biopython library
 from Bio.Blast.Applications import NcbitblastxCommandline
 from Bio.Blast import NCBIXML
+from Bio import SeqIO
 
 #   Import the script to give verbose messages
 from ..General import set_verbosity
@@ -129,16 +130,23 @@ class BlastSearch:
         self.mainlog.debug('Creating named temporary file for homologous sequences.')
         temp_output = tempfile.NamedTemporaryFile(mode='w+t', prefix='LRTPredict_BlastSearch_', suffix='_homologues.fasta')
         self.mainlog.debug('Created temporary file ' + temp_output.name)
+        qseq = SeqIO.read(self.query, 'fasta')
+        #    Start a new string to write the data into the file
+        towrite = '>' + qseq.name + '\n' + str(qseq.seq) + '\n'
         #   Check to see if the blastdbcmd command is avilable
         blastdbcmd_path = check_modules.check_executable('blastdbcmd')
         if blastdbcmd_path:
             self.mainlog.debug('Using ' + blastdbcmd_path)
             for database, seqID in self.homologues.iteritems():
                 fasta, error = sequence_fetch.blastdbcmd(blastdbcmd_path, database, seqID[0])
-                temp_output.write(fasta)
+                towrite += fasta
         else:
             self.mainlog.debug('Using regex')
             for database, seqID in self.homologues.iteritems():
                 fasta = sequence_fetch.get_seq_by_regex(database, seqID[1])
-                temp_output.write(fasta)
+                towrite += fasta
+        self.mainlog.debug('Writing sequences into ' + temp_output.name)
+        temp_output.write(towrite)
+        #   We flush() it so that there is no data left unwritten
+        temp_output.flush()
         return temp_output

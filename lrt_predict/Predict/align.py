@@ -24,14 +24,6 @@ class PrankAlign:
         self.output = None
         return
 
-    #   A function to prepare the prank input file
-    def add_query_to_seqlist(self):
-        #   We essentially just write the query sequence into the bottom of the
-        #   unaligned sequence file
-        qseq = SeqIO.read(self.query, 'fasta')
-        self.input_seq.write('>' + qseq.name + '\n' + str(qseq.seq))
-        return
-
     #   A function to call the prank alignment
     def prank_align(self):
         #   Get the base directory of the LRT package, based on where this file is
@@ -42,9 +34,12 @@ class PrankAlign:
         prank_path = check_modules.check_executable('prank')
         #   Next create a temporary output file
         prank_out = tempfile.NamedTemporaryFile(mode='w+t', prefix='LRTPredict_PrankAlign_', suffix='_MSA')
-        self.mainlog.debug('Created temporary file with name ' + prank_out.name + ' for holding alignment.')
+        #   This is a bit inefficient, maybe, but we only use the tempfile function to get a name
+        prank_out.close()
+        self.mainlog.debug('Created temporary file with prefix ' + prank_out.name + ' for holding prank outputs.')
         #   Create the command line
         cmd = ['bash', prank_script, prank_path, self.input_seq.name, prank_out.name]
+        self.mainlog.debug(' '.join(cmd))
         #   Then, we'll execute it
         p = subprocess.Popen(cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         out, err = p.communicate()
