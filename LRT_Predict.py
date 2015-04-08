@@ -137,7 +137,7 @@ def predict(arg, nuc, pep, tree, log):
     #   import the predict script
     from lrt_predict.Predict import predict
     #   Create a new instance of class LRTPredict
-    lrt = predict.LRTPredict(nuc, pep, tree, arg['fasta'], arg['substitutions'], log)
+    lrt = predict.LRTPredict(nuc, pep, tree, arg['fasta'], arg['substitutions'], arg['loglevel'])
     position = lrt.get_query_position()
     return position
 
