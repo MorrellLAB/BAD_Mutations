@@ -41,7 +41,7 @@ class LRTPredict:
         return a
 
     #   A function to extract the amino acid states from the prank alignment
-    def get_codon columns(self):
+    def get_codon_columns(self):
         pass
 
     #   A function to get the LRT predictions

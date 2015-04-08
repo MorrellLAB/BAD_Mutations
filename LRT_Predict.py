@@ -175,9 +175,9 @@ def main():
             nuc_file = alignment.name + '.best.nuc.fas'
             pep_file = alignment.name + '.best.pep.fas'
             tree_file = alignment.name + '.best.dnd'
-            loglevel.info('Nucleotide alignment in ' + alignment_nuc_file)
-            loglevel.info('Protein alignment in ' + alignment_pep_file)
-            loglevel.info('Tree in ' + alignment_tree_file)
+            loglevel.info('Nucleotide alignment in ' + nuc_file)
+            loglevel.info('Protein alignment in ' + pep_file)
+            loglevel.info('Tree in ' + tree_file)
             predict(arguments_valid, nuc_file, pep_file, tree_file, loglevel)
     else:
         loglevel.error(msg)
