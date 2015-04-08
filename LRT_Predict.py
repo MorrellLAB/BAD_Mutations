@@ -122,6 +122,25 @@ def align(arg, unaligned, log):
     log.debug('stderr: \n' + stderr)
     return outfile
 
+
+#   Define a function for predicting
+def predict(arg, nuc, pep, tree, log):
+    predictdeps = check_modules.check_modules(predict=True)
+    if predictdeps:
+        check_modules.mossing_mods(predictdeps)
+        exit(1)
+    #   Check for the required executables
+    missing_reqs = check_modules.missing_executables(['bash', 'HYPHYSP'])
+    if missing_reqs:
+        log.error('Some required executables were not found on your system: ' + '\n'.join(missing_reqs) + '\nPlease install them to continue.')
+        exit(1)
+    #   import the predict script
+    from lrt_predict.Predict import predict
+    #   Create a new instance of class LRTPredict
+    lrt = predict.LRTPredict(nuc, pep, tree, arg['fasta'], arg['substitutions'], log)
+    position = lrt.get_query_position()
+    return position
+
 #   Main function
 def main():
     #   The very first thing we do is do a base check to make sure that we can
@@ -153,12 +172,13 @@ def main():
             #   Then add the query sequence and align them
             alignment = align(arguments_valid, unaligned_seqs, loglevel)
             #   prank creates files with a certain prefix
-            alignment_nuc_file = alignment.name + '.best.nuc.fas'
-            alignment_pep_file = alignment.name + '.best.pep.fas'
-            alignment_tree_file = alignment.name + '.best.dnd'
+            nuc_file = alignment.name + '.best.nuc.fas'
+            pep_file = alignment.name + '.best.pep.fas'
+            tree_file = alignment.name + '.best.dnd'
             loglevel.info('Nucleotide alignment in ' + alignment_nuc_file)
             loglevel.info('Protein alignment in ' + alignment_pep_file)
             loglevel.info('Tree in ' + alignment_tree_file)
+            predict(arguments_valid, nuc_file, pep_file, tree_file, loglevel)
     else:
         loglevel.error(msg)
     return
