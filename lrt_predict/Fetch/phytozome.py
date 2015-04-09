@@ -23,6 +23,7 @@ class Phytozome:
     XML_URL = 'http://genome.jgi.doe.gov/ext-api/downloads/get-directory'
     XML_DATA = {'organism':'PhytozomeV10'}
     FAILED_LOGIN = 'Login and password do not match'
+    EXPIRED_ACCOUNT = 'Sorry, your password has expired'
     TO_FETCH = phytozome_species.phyto_fetch
     #   When creating a new Phytozome class, we have these following pieces of
     #   data created and attached to the class
@@ -58,6 +59,9 @@ class Phytozome:
         if self.FAILED_LOGIN in r.text:
             self.mainlog.critical('Could not log into JGI Genomes Portal. Check username and password')
             exit(1)
+        elif self.EXPIRED_ACCOUNT in r.text:
+            self.mainlog.critical('Your JGI Genomes Portal username and password have expired!')
+            exit(1)
         self.mainlog.debug('Successfully logged in')
         return s
 
@@ -70,6 +74,7 @@ class Phytozome:
         #   Use HTTP GET to fetch the XML from Phytozome's server
         #   This is also a response obkect
         xml = self.session.get(self.XML_URL, params=self.XML_DATA)
+        self.mainlog.debug('The XML I got was \n\n' + xml.text)
         #   Create an element tree out of it, so we can easily step
         #   through the data
         xml_tree = ElementTree.fromstring(xml.text)
