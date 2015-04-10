@@ -15,4 +15,4 @@ INPUT=$2
 #   Output name as an argumnet
 OUTPUT=$3
 
-$PRANK -d=$INPUT -o=$OUTPUT -translate +F -showtree
+$PRANK -d=$INPUT -o=$OUTPUT -codon +F -showtree
