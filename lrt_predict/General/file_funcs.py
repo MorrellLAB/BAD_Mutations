@@ -28,7 +28,10 @@ def local_name(url):
 def species_name(fname):
     #   Again, assume this time that the species name is the first field in
     #   the _-delimited filename
-    return fname.split('_')[0]
+    species = fname.split('_')[0]
+    #   Dots and underscores mess it up
+    species = species.replace('.', '_')
+    return species
 
 
 #   One for ensembl, too

@@ -124,7 +124,7 @@ def align(arg, unaligned, log):
 
 
 #   Define a function for predicting
-def predict(arg, nuc, pep, tree, log):
+def predict(arg, nuc, tree, log):
     predictdeps = check_modules.check_modules(predict=True)
     if predictdeps:
         check_modules.mossing_mods(predictdeps)
@@ -137,7 +137,7 @@ def predict(arg, nuc, pep, tree, log):
     #   import the predict script
     from lrt_predict.Predict import predict
     #   Create a new instance of class LRTPredict
-    lrt = predict.LRTPredict(nuc, pep, tree, arg['fasta'], arg['substitutions'], arg['loglevel'])
+    lrt = predict.LRTPredict(nuc, tree, arg['fasta'], arg['substitutions'], arg['loglevel'])
     position = lrt.get_query_position()
     return position
 
@@ -172,13 +172,11 @@ def main():
             #   Then add the query sequence and align them
             alignment = align(arguments_valid, unaligned_seqs, loglevel)
             #   prank creates files with a certain prefix
-            nuc_file = alignment.name + '.best.nuc.fas'
-            pep_file = alignment.name + '.best.pep.fas'
+            nuc_file = alignment.name + '.best.fas'
             tree_file = alignment.name + '.best.dnd'
             loglevel.info('Nucleotide alignment in ' + nuc_file)
-            loglevel.info('Protein alignment in ' + pep_file)
             loglevel.info('Tree in ' + tree_file)
-            predict(arguments_valid, nuc_file, pep_file, tree_file, loglevel)
+            predict(arguments_valid, nuc_file, tree_file, loglevel)
     else:
         loglevel.error(msg)
     return

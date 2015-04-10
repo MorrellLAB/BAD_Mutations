@@ -16,10 +16,9 @@ from ..General import set_verbosity
 from ..General import check_modules
 
 class LRTPredict:
-    def __init__(self, nuc_aln, pep_aln, treefile, query, substitutions, verbose):
+    def __init__(self, nuc_aln, treefile, query, substitutions, verbose):
         self.mainlog = set_verbosity.verbosity('LRT_Prediction', verbose)
         self.nmsa = nuc_aln
-        self.pmsa = pep_aln
         self.phylogenetic = treefile
         self.query = query
         self.substitutions = parse_input.parse_subs(substitutions, self.mainlog)

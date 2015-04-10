@@ -141,11 +141,10 @@ class BlastSearch:
             self.mainlog.debug('Using ' + blastdbcmd_path)
             for database, seqID in self.homologues.iteritems():
                 fasta, error = sequence_fetch.blastdbcmd(blastdbcmd_path, database, seqID[0])
-                #   We will replace the name of the sequence from the DB with the species name shorthand
-                #   We can get the species name by getting the directory name that the database resides in
-                dbdir = os.path.dirname(database)
-                #   Then split it on the directory separator and return the last element
-                spname = '>' + dbdir.split(os.sep)[-1]
+                #   We will use the name of the assembly as the species name
+                spname = os.path.basename(database)
+                #   Then split on . and take the first part
+                spname = '>' + spname.split('.')[0]
                 #   Then replace the weird ID with the species name
                 fasta = re.sub('>.+', spname, fasta)
                 towrite += fasta
@@ -153,16 +152,16 @@ class BlastSearch:
             self.mainlog.debug('Using regex')
             for database, seqID in self.homologues.iteritems():
                 fasta = sequence_fetch.get_seq_by_regex(database, seqID[1])                
-                #   We will replace the name of the sequence from the DB with the species name shorthand
-                #   We can get the species name by getting the directory name that the database resides in
-                dbdir = os.path.dirname(database)
-                #   Then split it on the directory separator and return the last element
-                spname = '>' + dbdir.split(os.sep)[-1]
+                #   We will use the name of the assembly as the species name
+                spname = os.path.basename(database)
+                #   Then split on . and take the first part
+                spname = '>' + spname.split('.')[0]
                 #   Then replace the weird ID with the species name
                 fasta = re.sub('>.+', spname, fasta)
                 towrite += fasta
+        self.mainlog.debug(towrite)
         self.mainlog.debug('Writing sequences into ' + temp_output.name)
-        temp_output.write(towrite)
+        temp_output.write('Sequences are: \n' + towrite)
         #   We flush() it so that there is no data left unwritten
         temp_output.flush()
         return temp_output
