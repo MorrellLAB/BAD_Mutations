@@ -151,7 +151,7 @@ class BlastSearch:
         else:
             self.mainlog.debug('Using regex')
             for database, seqID in self.homologues.iteritems():
-                fasta = sequence_fetch.get_seq_by_regex(database, seqID[1])                
+                fasta = sequence_fetch.get_seq_by_regex(database, seqID[1])
                 #   We will use the name of the assembly as the species name
                 spname = os.path.basename(database)
                 #   Then split on . and take the first part
@@ -159,9 +159,11 @@ class BlastSearch:
                 #   Then replace the weird ID with the species name
                 fasta = re.sub('>.+', spname, fasta)
                 towrite += fasta
-        self.mainlog.debug(towrite)
         self.mainlog.debug('Writing sequences into ' + temp_output.name)
-        temp_output.write('Sequences are: \n' + towrite)
+        temp_output.write(towrite)
         #   We flush() it so that there is no data left unwritten
         temp_output.flush()
+        #   Just as a test, try spitting the data back out
+        temp_output.seek(0)
+        self.mainlog.debug(temp_output.read())
         return temp_output
