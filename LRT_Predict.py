@@ -137,7 +137,7 @@ def predict(arg, nuc, tree, log):
     #   import the predict script
     from lrt_predict.Predict import predict
     #   Create a new instance of class LRTPredict
-    lrt = predict.LRTPredict(nuc, tree, arg['fasta'], arg['substitutions'], arg['loglevel'])
+    lrt = predict.LRTPredict(nuc, tree, arg['fasta'], arg['substitutions'], arg['codon'], arg['loglevel'])
     position = lrt.get_query_position()
     return position
 
@@ -172,8 +172,11 @@ def main():
             #   Then add the query sequence and align them
             alignment = align(arguments_valid, unaligned_seqs, loglevel)
             #   prank creates files with a certain prefix
-            nuc_file = alignment.name + '.best.fas'
-            tree_file = alignment.name + '.best.dnd'
+            if arguments.codon == '-codon':
+                nuc_file = alignment.name + '.best.fas'
+            elif arguments.codon == '-translate':
+                nuc_file = alignment.name + '.nuc.best.fas'
+            tree_file = alignment.name + 'best.dnd'
             loglevel.info('Nucleotide alignment in ' + nuc_file)
             loglevel.info('Tree in ' + tree_file)
             predict(arguments_valid, nuc_file, tree_file, loglevel)

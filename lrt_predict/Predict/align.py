@@ -16,11 +16,12 @@ from ..General import set_verbosity
 from ..General import check_modules
 
 class PrankAlign:
-    def __init__(self, unaligned_sequences, query_sequence, verbose):
+    def __init__(self, unaligned_sequences, query_sequence, model, verbose):
         self.mainlog = set_verbosity.verbosity('Prank_Align', verbose)
         #   This is file-like object
         self.input_seq = unaligned_sequences
         self.query = query_sequence
+        self.model = model
         self.output = None
         return
 
@@ -38,7 +39,7 @@ class PrankAlign:
         prank_out.close()
         self.mainlog.debug('Created temporary file with prefix ' + prank_out.name + ' for holding prank outputs.')
         #   Create the command line
-        cmd = ['bash', prank_script, prank_path, self.input_seq.name, prank_out.name]
+        cmd = ['bash', prank_script, prank_path, self.input_seq.name, self.model, prank_out.name]
         self.mainlog.debug(' '.join(cmd))
         #   Then, we'll execute it
         p = subprocess.Popen(cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)

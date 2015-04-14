@@ -14,5 +14,7 @@ PRANK=$1
 INPUT=$2
 #   Output name as an argumnet
 OUTPUT=$3
+#   Model type as argument
+MODEL=$4
 
-$PRANK -d=$INPUT -o=$OUTPUT -codon -F -showtree
+$PRANK -d=$INPUT -o=$OUTPUT $MODEL -F -showtree
