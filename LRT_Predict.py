@@ -32,6 +32,11 @@ from lrt_predict.General import set_verbosity
 from lrt_predict.General import parse_args
 
 
+#   Define a function to set up the environment
+def setup(arg, log):
+    pass
+
+
 #   Define a function for fetching
 def fetch(arg, log):
     fetchdeps = check_modules.check_modules(fetch=True)
