@@ -34,7 +34,12 @@ from lrt_predict.General import parse_args
 
 #   Define a function to set up the environment
 def setup(arg, log):
-    pass
+    #   Check for the required modules for setup
+    setupdeps = check_modules.check_modules(setup=True)
+    if setupdeps:
+        check_modules.missing_mods(setupdeps)
+        exit(1)
+    
 
 
 #   Define a function for fetching
