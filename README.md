@@ -63,7 +63,10 @@ necessary to allow the software to calculate synonymous substitution rates.
 
 TODO
 ----
-* 'fetch' subcommand
+* 'setup' subcommand
+    * ~~Write configuration file~~ **Done!**
+    * Read and parse configuration file
+* 'fetch' subcommand **Done!**
     * ~~Add fetching CDS sequences from Ensembl Plants~~ **Done!**
     * ~~Integreate creation of BLAST databases~~ **Done!**
     * ~~Add MD5 checking for CDS files to avoid unnecessary downloads~~ **Done!**
@@ -72,7 +75,9 @@ TODO
     * Write input parsing script **Deciding on Final Input Format**
     * ~~Write BLAST searching script~~ **Done!**
     * ~~Write BLAST output parsing script~~ **Done!**
-    * Write PRANK sequence alignment script
+    * ~~Write PRANK sequence alignment script~~ **Done!**
     * ~~Compute phylogentic tree of species in database~~ **Not necessary, build tree from MSA**
     * ~~Add option to "prune" species from the all-species phylogenetic tree~~ **Not necessary, build tree from MSA**
     * Implement the LRT itself
+    * Add support for parallel execution
+    * Add support for substitutions in nucleotide sequence as well as protein sequence
