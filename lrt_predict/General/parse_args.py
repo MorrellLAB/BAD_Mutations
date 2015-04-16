@@ -22,6 +22,49 @@ def parse_args():
         dest='action',
         title='Available actions',
         help='Sub-command help')
+
+    #   Create a parser for 'setup'
+    setup_args = subparser.add_parser(
+        'setup',
+        help='Set up the runtime environment of LRT_Predict')
+    setup_args.add_argument(
+        '--config',
+        '-c',
+        required=False,
+        help='Where to store the configuration file.',
+        default=os.path.join(os.getcwd(), 'LRTPredict_Config.txt')
+        )
+    setup_args.add_argument(
+        '--base',
+        '-b',
+        required=False,
+        help='Base directory for species databases. Defaults to .',
+        default=os.getcwd())
+    setup_args.add_argument(
+        '--evalue',
+        '-e',
+        required=False,
+        default=0.05,
+        type=float,
+        help='E-value threshold for accepting sequences into the alignment.'
+        )
+    setup_args.add_argument(
+        '-m',
+        '--missing_threshold',
+        required=False,
+        type=float,
+        default=0.25,
+        help='Skip predictions for sites with at least this much missing data (gaps) in the multiple sequence alignment.'
+        )
+    setup_args.add_argument(
+        '-codon',
+        required=False,
+        action='store_const',
+        const='-codon',
+        default='-translate',
+        help='Use the codon alignment model for prank-msa, may give more accurate branch lengths but is much slower.'
+        )
+
     #   Create a parser for 'fetch'
     fetch_args = subparser.add_parser(
         'fetch',
@@ -63,6 +106,7 @@ def parse_args():
         default=False,
         help='Do not fetch new CDS from databases, just convert to BLAST db.'
         )
+
     #   Create a parser for 'predict'
     predict_args = subparser.add_parser(
         'predict',
@@ -109,7 +153,7 @@ def parse_args():
         required=False,
         dest='loglevel',
         choices = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
-        default='WARNING',
+        default='INFO',
         help='Minimum level of messages printed.')
     args = parser.parse_args()
     return args
@@ -128,7 +172,12 @@ def validate_args(args, log):
     #   If we are fetching, we have to check the username and base
     #   argparse should have checked for missing arguments by now
     #   If the arguments do not check out, return a message
-    if dict_args['action'] == 'fetch':
+    if dict_args['action'] == 'setup':
+        if not check_args.valid_dir(os.path.dirname(dict_args['config'])):
+            return (False, 'You cannot create a configuration file in that directory.')
+        if not check_args.valid_dir(dict_args['base']):
+            return (False, 'Base directory is not readable/writable, or does not exist.')
+    elif dict_args['action'] == 'fetch':
         #   If username is supplied:
         if dict_args['user']:
             #   Check if it's valid

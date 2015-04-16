@@ -39,7 +39,16 @@ def setup(arg, log):
     if setupdeps:
         check_modules.missing_mods(setupdeps)
         exit(1)
-    
+    #   Import the setup script
+    import lrt_predict.Setup.setup_env as setup_env
+    #   Start a new instance of the configuration class
+    s = setup_env.SetupEnv(arg['loglevel'])
+    #   Then create the new configuration
+    s.set_user_vars(arg['base'], arg['evalue'],
+                 arg['codon'], arg['missing_threshold'], arg['config'])
+    s.get_exe_paths()
+    s.write_config()
+    return
 
 
 #   Define a function for fetching
@@ -173,7 +182,9 @@ def main():
     if arguments_valid:
         loglevel.debug(arguments_valid['action'] + ' subcommand was invoked')
         #   Which command was invoked?
-        if arguments_valid['action'] == 'fetch':
+        if arguments_valid['action'] == 'setup':
+            setup(arguments_valid, loglevel)
+        elif arguments_valid['action'] == 'fetch':
             fetch(arguments_valid, loglevel)
         elif arguments_valid['action'] == 'predict':
             #   We will return the filename that contains the unaligned
