@@ -1,5 +1,10 @@
 #!/bin/bash
-#	Written by Paul Hoffman
+
+#	Make directory for dependencies
+cd ..
+mkdir dependencies
+cd dependencies
+DEP=`pwd`
 
 #	Install BLAST
 	#	Pull BLAST from NCBI with wget
@@ -16,12 +21,7 @@ tar -xvzf ncbi*
 cd `find . -maxdepth 1 -type d -name "ncbi*"`/c++
 ./configure
 make
-BLAST=`pwd`
-cd ../../
-#export PATH=$PATH:<your additions seperated with colons>:
-
-#http://ssh-commands.blogspot.com/2013/01/the-ultimate-wget-download-guide-with.html
-
+cd $DEP
 #	Install PRANK
 	#	Pull PRANK from Wasabi
 	#	Designed to always pull latest version
@@ -36,8 +36,22 @@ tar -xvzf prank*
 	#	Install PRANK
 cd prank-msa/src
 make
-PRANK=`pwd`
-cd ../../
+cd $DEP
+
+#	Install Requests
+	#	Pull Requests from GitHub
+	#	Requires Git to be installed
+	#	Does not require a GitHub account
+git clone git://github.com/kennethreitz/requests.git
+	#	Install Requests
+cd requests
+REQ=`pwd`
+mkdir $REQ/modules
+MOD=$REQ/modules
+export PYTHONPATH="$PYTHONPATH:$REQ:$MOD"
+python setup.py build
+python setup.py install --install-base="." --install-lib='$base/modules' --install-scripts='$base/bin' --install-data='$base/data'/ --install-headers='$base/include/'
+cd $DEP
 
 #	Install HyPhy
 	#	Pull HyPhy from GitHub
@@ -48,8 +62,7 @@ git clone https://github.com/veg/hyphy.git
 cd hyphy
 cmake -DINSTALL_PREFIX=./ ./
 make install
-HYPHY=`pwd`
-cd ../
+cd $DEP
 
 #	Install BioPython
 	#	Pull BioPython with wget
@@ -68,12 +81,8 @@ rm -rf BioPython
 	#	unless BioPython changes their file naming scheme
 tar -xvzf biopython*
 	#	Install BioPython
-	#	Requires superuser access
 cd biopython*
 python setup.py build
 python setup.py test
 python setup.py install --home=./
-BIO=`pwd`
-cd ../
-
-export PATH=$PATH:$BLAST:$PRANK:$HYPHY:$BIO
+cd $DEP
