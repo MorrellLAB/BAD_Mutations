@@ -44,7 +44,7 @@ def setup(arg, log):
     #   Start a new instance of the configuration class
     s = setup_env.SetupEnv(arg['loglevel'])
     #   Then create the new configuration
-    s.set_user_vars(arg['base'], arg['evalue'],
+    s.set_user_vars(arg['base'], arg['target'], arg['evalue'],
                  arg['codon'], arg['missing_threshold'], arg['config'])
     s.get_exe_paths()
     s.write_config()
@@ -174,10 +174,31 @@ def main():
     if not sys.argv[1:]:
         parse_args.usage()
         exit(1)
-    arguments = parse_args.parse_args()
+    #   Import the config handling script
+    import lrt_predict.Setup.parse_config as config
+    #   vars() will convert from the weird Namespace type to a dictionary
+    arguments = vars(parse_args.parse_args())
     #   Pull out the verbosity switch right away
-    loglevel = set_verbosity.verbosity('LRT_Predict', arguments.loglevel)
-    arguments_valid, msg = parse_args.validate_args(arguments, loglevel)
+    loglevel = set_verbosity.verbosity('LRT_Predict', arguments['loglevel'])
+    #   If the config variable was passed
+    if arguments['config']:
+        #   We ask then if the setup command was not passed
+        #   If the user wants to setup, then don't bother trying to validate
+        #   the config.
+        if arguments['action'] != 'setup':
+            cfg = config.ConfigHandler(arguments['config'], arguments, arguments['loglevel'])
+            if cfg.is_valid():
+                cfg.read_vars()
+                config_opts = cfg.merge_options()
+            else:
+                log.error('Config file is not valid!')
+                exit(1)
+        #   Else, just set it to the options that were passed
+        else:
+            config_opts = arguments
+    else:
+        config_opts = arguments
+    arguments_valid, msg = parse_args.validate_args(config_opts, loglevel)
     #   If we got a return value that isn't False, then our arguments are good
     if arguments_valid:
         loglevel.debug(arguments_valid['action'] + ' subcommand was invoked')
