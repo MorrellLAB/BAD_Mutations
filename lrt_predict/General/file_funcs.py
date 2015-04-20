@@ -10,7 +10,7 @@ import re
 
 #   A simple wrapper around os.path.isfile(), since this name is easier to read
 def file_exists(fname, l):
-    l.info('Checking if ' + fname + ' exists.')
+    l.debug('Checking if ' + fname + ' exists.')
     if os.path.isfile(fname):
         return True
     else:
