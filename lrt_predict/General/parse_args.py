@@ -77,11 +77,11 @@ def parse_args():
         default=0.25,
         help='Skip predictions for sites with at least this much missing data (gaps) in the multiple sequence alignment.')
     setup_args.add_argument(
-        '-codon',
+        '--codon',
         required=False,
         action='store_const',
-        const='-codon',
-        default='-translate',
+        const='codon',
+        default='translate',
         help='Use the codon alignment model for prank-msa, may give more accurate branch lengths but is much slower.')
 
     #   Create a parser for 'fetch'
@@ -163,11 +163,11 @@ def parse_args():
         type=float,
         help='E-value threshold for accepting sequences into the alignment.')
     predict_args.add_argument(
-        '-codon',
+        '--codon',
         required=False,
         action='store_const',
-        const='-codon',
-        default='-translate',
+        const='codon',
+        default='translate',
         help='Use the codon alignment model for prank-msa, may give more accurate branch lengths but is much slower.')
     #   Add a switch for verbosity
     parser.add_argument(

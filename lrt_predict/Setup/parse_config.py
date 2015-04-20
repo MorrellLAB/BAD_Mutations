@@ -79,13 +79,16 @@ class ConfigHandler:
     #   set of options. Options specified on the command line will take
     #   precedence over the ones in the configuration file.
     def merge_options(self):
+        #   Here is a list of keys that we do not want to clobber if they are not
+        #   passed on the command line
+        do_not_clobber = ['base']
         #   This takes up a bit of extra memory, but it will preserve the two
         #   dictionaries as separate variables.
         configs = self.config_vars.copy()
         #   We will iterate through the user-supplied arguments dictionary,
         #   and update those that need to be updated
         for option, val in self.user_args.iteritems():
-            if val:
+            if option not in do_not_clobber:
                 configs.update({option: val})
         #   Return them
         return configs
