@@ -34,6 +34,7 @@ class BlastSearch:
         self.homologues = {}
         self.mainlog = set_verbosity.verbosity('BLAST_Search', verbose)
         self.basedir = base
+        return
 
     #   Define a special function to get the best hit out of a BlastRecord
     #   We need to do this because of the ugly nested nature of the data structure
@@ -41,6 +42,7 @@ class BlastSearch:
     def best_hit(self, br):
         for a in br.alignments:
             for hsp in a.hsps:
+                self.mainlog.debug(a.title + ' has e-value of ' + str(hsp.expect))
                 if hsp.expect <= self.evalue:
                     return a.title
         else:

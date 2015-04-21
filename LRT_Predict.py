@@ -134,7 +134,7 @@ def align(arg, unaligned, log):
     #   Then we import the necessary modules
     from lrt_predict.Predict import align
     log.info('Creating a new instance of PrankAlign.')
-    a = align.PrankAlign(unaligned, arg['fasta'], arg['loglevel'])
+    a = align.PrankAlign(unaligned, arg['fasta'], arg['codon'], arg['loglevel'])
     #   Then align them
     stdout, stderr, outfile = a.prank_align()
     log.debug('stdout: \n' + stdout)
@@ -156,7 +156,7 @@ def predict(arg, nuc, tree, log):
     #   import the predict script
     from lrt_predict.Predict import predict
     #   Create a new instance of class LRTPredict
-    lrt = predict.LRTPredict(nuc, tree, arg['fasta'], arg['substitutions'], arg['codon'], arg['loglevel'])
+    lrt = predict.LRTPredict(nuc, tree, arg['fasta'], arg['substitutions'], arg['loglevel'])
     position = lrt.get_query_position()
     return position
 
@@ -214,9 +214,9 @@ def main():
             #   Then add the query sequence and align them
             alignment = align(arguments_valid, unaligned_seqs, loglevel)
             #   prank creates files with a certain prefix
-            if arguments.codon == '-codon':
+            if arguments_valid['codon'] == 'codon':
                 nuc_file = alignment.name + '.best.fas'
-            elif arguments.codon == '-translate':
+            elif arguments_valid['codon'] == 'translate':
                 nuc_file = alignment.name + '.nuc.best.fas'
             tree_file = alignment.name + 'best.dnd'
             loglevel.info('Nucleotide alignment in ' + nuc_file)

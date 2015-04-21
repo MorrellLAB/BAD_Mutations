@@ -39,7 +39,7 @@ class PrankAlign:
         prank_out.close()
         self.mainlog.debug('Created temporary file with prefix ' + prank_out.name + ' for holding prank outputs.')
         #   Create the command line
-        cmd = ['bash', prank_script, prank_path, self.input_seq.name, self.model, prank_out.name]
+        cmd = ['bash', prank_script, prank_path, self.input_seq.name, prank_out.name, self.model]
         self.mainlog.debug(' '.join(cmd))
         #   Then, we'll execute it
         p = subprocess.Popen(cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)

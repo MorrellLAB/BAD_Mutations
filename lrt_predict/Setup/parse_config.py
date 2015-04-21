@@ -81,7 +81,7 @@ class ConfigHandler:
     def merge_options(self):
         #   Here is a list of keys that we do not want to clobber if they are not
         #   passed on the command line
-        do_not_clobber = ['base']
+        do_not_clobber = ['base', 'codon']
         #   This takes up a bit of extra memory, but it will preserve the two
         #   dictionaries as separate variables.
         configs = self.config_vars.copy()
