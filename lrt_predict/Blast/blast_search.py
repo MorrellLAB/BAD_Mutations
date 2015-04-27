@@ -24,6 +24,7 @@ from ..General import check_modules
 #   For fetching sequences from the BLAST databases
 import sequence_fetch
 
+
 #   A class to handle our BLAST searches
 #   Borrowing heavily from script written by Paul Hoffman
 class BlastSearch:
@@ -42,7 +43,17 @@ class BlastSearch:
     def best_hit(self, br):
         for a in br.alignments:
             for hsp in a.hsps:
-                self.mainlog.debug(a.title + ' has e-value of ' + str(hsp.expect))
+                frames = [str(f) for f in hsp.frame]
+                debug_msg = a.title + ' Stats:\n' +\
+                    'Bit Score: ' + str(hsp.bits) + '\n'\
+                    'E-value: ' + str(hsp.expect) + '\n'\
+                    'Identities ' + str(hsp.identities) + '\n'\
+                    'N. Gaps: ' + str(hsp.gaps) + '\n'\
+                    'Aln. Length: ' + str(hsp.align_length) + '\n'\
+                    'Hit Start: ' + str(hsp.sbjct_start) + '\n'\
+                    'Hit End: ' + str(hsp.sbjct_end) + '\n'\
+                    'Frames: ' + ', '.join(frames)
+                self.mainlog.debug(debug_msg)
                 if hsp.expect <= self.evalue:
                     return a.title
         else:
