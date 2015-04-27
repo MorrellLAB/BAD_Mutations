@@ -1,0 +1,370 @@
+===2015-04-27 11:49:10,802 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|40293 Aquca_025_00074.1 pacid=22063424 polypeptide=Aquca_025_00074.1 locus=Aquca_025_00074 ID=Aquca_025_00074.1.v1.1 annot-version=v1.1 Stats:
+Bit Score :823.093
+E-value: 0.0
+Identities 338
+N. Gaps: 0
+Aln. Length: 372
+Hit Start: 10
+Hit End: 1125
+Frames: 1, 1
+===2015-04-27 11:49:13,204 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|13621 494606 pacid=16047368 polypeptide=494606 locus=494606 ID=494606.v1.107 annot-version=v1.0 Stats:
+Bit Score :810.264
+E-value: 0.0
+Identities 333
+N. Gaps: 0
+Aln. Length: 374
+Hit Start: 4
+Hit End: 1125
+Frames: 1, 1
+===2015-04-27 11:49:16,204 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|31675 AT5G43940.1 pacid=19669622 polypeptide=AT5G43940.1 locus=AT5G43940 ID=AT5G43940.1.TAIR10 annot-version=TAIR10 Stats:
+Bit Score :816.22
+E-value: 0.0
+Identities 338
+N. Gaps: 0
+Aln. Length: 374
+Hit Start: 4
+Hit End: 1125
+Frames: 1, 1
+===2015-04-27 11:49:20,554 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|35214 Bradi3g55220.1 pacid=31150729 polypeptide=Bradi3g55220.1.p locus=Bradi3g55220 ID=Bradi3g55220.1.v2.1 annot-version=v2.1 Stats:
+Bit Score :881.286
+E-value: 0.0
+Identities 367
+N. Gaps: 0
+Aln. Length: 381
+Hit Start: 1
+Hit End: 1143
+Frames: 1, 1
+===2015-04-27 11:49:24,217 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|21134 Brara.F03778.1 pacid=30627881 polypeptide=Brara.F03778.1.p locus=Brara.F03778 ID=Brara.F03778.1.v1.3 annot-version=v1.3 Stats:
+Bit Score :818.97
+E-value: 0.0
+Identities 339
+N. Gaps: 0
+Aln. Length: 375
+Hit Start: 4
+Hit End: 1128
+Frames: 1, 1
+===2015-04-27 11:49:26,737 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|4942 Bostr.3148s0068.1 pacid=30655352 polypeptide=Bostr.3148s0068.1.p locus=Bostr.3148s0068 ID=Bostr.3148s0068.1.v1.2 annot-version=v1.2 Stats:
+Bit Score :817.137
+E-value: 0.0
+Identities 338
+N. Gaps: 0
+Aln. Length: 374
+Hit Start: 4
+Hit End: 1125
+Frames: 1, 1
+===2015-04-27 11:49:29,759 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|25734 Ciclev10020620m pacid=20811150 polypeptide=Ciclev10020620m locus=Ciclev10020620m.g ID=Ciclev10020620m.v1.0 annot-version=v1.0 Stats:
+Bit Score :821.719
+E-value: 0.0
+Identities 340
+N. Gaps: 0
+Aln. Length: 377
+Hit Start: 4
+Hit End: 1134
+Frames: 1, 1
+===2015-04-27 11:49:32,102 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|6116 Cagra.5198s0003.1 pacid=28899636 polypeptide=Cagra.5198s0003.1.p locus=Cagra.5198s0003 ID=Cagra.5198s0003.1.v1.1 annot-version=v1.1 Stats:
+Bit Score :811.18
+E-value: 0.0
+Identities 336
+N. Gaps: 0
+Aln. Length: 374
+Hit Start: 4
+Hit End: 1125
+Frames: 1, 1
+===2015-04-27 11:49:33,934 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|23366 evm.model.supercontig_87.56 pacid=16427725 polypeptide=evm.model.supercontig_87.56 locus=evm.TU.supercontig_87.56 annot-version=ASGPBv0.4 Stats:
+Bit Score :814.846
+E-value: 0.0
+Identities 337
+N. Gaps: 0
+Aln. Length: 376
+Hit Start: 4
+Hit End: 1131
+Frames: 1, 1
+===2015-04-27 11:49:36,408 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|26533 Carubv10026595m pacid=20912374 polypeptide=Carubv10026595m locus=Carubv10026595m.g ID=Carubv10026595m.v1.0 annot-version=v1.0 Stats:
+Bit Score :811.18
+E-value: 0.0
+Identities 336
+N. Gaps: 0
+Aln. Length: 374
+Hit Start: 4
+Hit End: 1125
+Frames: 1, 1
+===2015-04-27 11:49:38,944 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|26723 Cucsa.348790.1 pacid=16979660 polypeptide=Cucsa.348790.1 locus=Cucsa.348790 ID=Cucsa.348790.1.v1.122 annot-version=v1.0 Stats:
+Bit Score :812.096
+E-value: 0.0
+Identities 334
+N. Gaps: 0
+Aln. Length: 375
+Hit Start: 4
+Hit End: 1128
+Frames: 1, 1
+===2015-04-27 11:49:42,836 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|38481 orange1.1g017000m pacid=18131824 polypeptide=orange1.1g017000m locus=orange1.1g016978m.g ID=orange1.1g017000m.v1.1 annot-version=v1.1 Stats:
+Bit Score :821.719
+E-value: 0.0
+Identities 340
+N. Gaps: 0
+Aln. Length: 377
+Hit Start: 4
+Hit End: 1134
+Frames: 1, 1
+===2015-04-27 11:49:46,928 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|41199 Eucgr.K01401.1 pacid=23602920 polypeptide=Eucgr.K01401.1 locus=Eucgr.K01401 ID=Eucgr.K01401.1.v1.1 annot-version=v1.1 Stats:
+Bit Score :813.471
+E-value: 0.0
+Identities 337
+N. Gaps: 0
+Aln. Length: 378
+Hit Start: 4
+Hit End: 1137
+Frames: 1, 1
+===2015-04-27 11:49:50,922 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|40372 Eucgr.K01401.1 pacid=32067887 polypeptide=Eucgr.K01401.1.p locus=Eucgr.K01401 ID=Eucgr.K01401.1.v2.0 annot-version=v2.0 Stats:
+Bit Score :813.471
+E-value: 0.0
+Identities 337
+N. Gaps: 0
+Aln. Length: 378
+Hit Start: 4
+Hit End: 1137
+Frames: 1, 1
+===2015-04-27 11:49:53,334 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|28292 Thhalv10003230m pacid=20207985 polypeptide=Thhalv10003230m locus=Thhalv10003230m.g ID=Thhalv10003230m.v1.0 annot-version=v1.0 Stats:
+Bit Score :821.719
+E-value: 0.0
+Identities 341
+N. Gaps: 0
+Aln. Length: 375
+Hit Start: 4
+Hit End: 1128
+Frames: 1, 1
+===2015-04-27 11:49:56,109 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|20886 mrna08364.1-v1.0-hybrid pacid=27264733 polypeptide=mrna08364.1-v1.0-hybrid locus=gene08364-v1.0-hybrid ID=mrna08364.1-v1.0-hybrid.v1.1 annot-version=v1.1 Stats:
+Bit Score :823.552
+E-value: 0.0
+Identities 338
+N. Gaps: 0
+Aln. Length: 377
+Hit Start: 4
+Hit End: 1134
+Frames: 1, 1
+===2015-04-27 11:50:03,885 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|38627 Glyma.19G170100.1 pacid=30512288 polypeptide=Glyma.19G170100.1.p locus=Glyma.19G170100 ID=Glyma.19G170100.1.Wm82.a2.v1 annot-version=Wm82.a2.v1 Stats:
+Bit Score :808.889
+E-value: 0.0
+Identities 329
+N. Gaps: 0
+Aln. Length: 377
+Hit Start: 4
+Hit End: 1134
+Frames: 1, 1
+===2015-04-27 11:50:10,479 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|63273 Gorai.001G236500.1 pacid=26820692 polypeptide=Gorai.001G236500.1 locus=Gorai.001G236500 ID=Gorai.001G236500.1.v2.1 annot-version=v2.1 Stats:
+Bit Score :833.632
+E-value: 0.0
+Identities 342
+N. Gaps: 0
+Aln. Length: 376
+Hit Start: 4
+Hit End: 1131
+Frames: 1, 1
+===2015-04-27 11:50:14,290 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|20819 Lus10022853 pacid=23159999 polypeptide=Lus10022853 locus=Lus10022853.g ID=Lus10022853.BGIv1.0 annot-version=v1.0 Stats:
+Bit Score :518.385
+E-value: 0.0
+Identities 211
+N. Gaps: 0
+Aln. Length: 232
+Hit Start: 4
+Hit End: 699
+Frames: 1, 1
+===2015-04-27 11:50:19,418 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|48657 MDP0000156866 pacid=22668642 polypeptide=MDP0000156866 locus=MDP0000156866 ID=MDP0000156866.GDRv1.0.196 annot-version=v1.0 Stats:
+Bit Score :702.585
+E-value: 0.0
+Identities 292
+N. Gaps: 0
+Aln. Length: 324
+Hit Start: 256
+Hit End: 1227
+Frames: 1, 1
+===2015-04-27 11:50:22,267 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|4633 cassava4.1_009729m pacid=17964394 polypeptide=cassava4.1_009729m locus=cassava4.1_009729m.g ID=cassava4.1_009729m.v4.1 annot-version=v4.1 Stats:
+Bit Score :829.967
+E-value: 0.0
+Identities 339
+N. Gaps: 0
+Aln. Length: 376
+Hit Start: 4
+Hit End: 1131
+Frames: 1, 1
+===2015-04-27 11:50:25,143 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|5847 Migut.N02236.1 pacid=28926098 polypeptide=Migut.N02236.1.p locus=Migut.N02236 ID=Migut.N02236.1.v2.0 annot-version=v2.0 Stats:
+Bit Score :817.137
+E-value: 0.0
+Identities 337
+N. Gaps: 0
+Aln. Length: 376
+Hit Start: 4
+Hit End: 1131
+Frames: 1, 1
+===2015-04-27 11:50:29,477 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|42629 Medtr1g069430.1 pacid=31095788 polypeptide=Medtr1g069430.1 locus=Medtr1g069430 ID=Medtr1g069430.1.JCVIMt4.0v1 annot-version=Mt4.0v1 Stats:
+Bit Score :818.97
+E-value: 0.0
+Identities 338
+N. Gaps: 0
+Aln. Length: 376
+Hit Start: 4
+Hit End: 1131
+Frames: 1, 1
+===2015-04-27 11:50:33,848 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|29744 LOC_Os02g57040.1 pacid=24132486 polypeptide=LOC_Os02g57040.1 locus=LOC_Os02g57040 ID=LOC_Os02g57040.1.MSUR7 annot-version=v7.0 Stats:
+Bit Score :857.917
+E-value: 0.0
+Identities 352
+N. Gaps: 0
+Aln. Length: 380
+Hit Start: 1
+Hit End: 1140
+Frames: 1, 1
+===2015-04-27 11:50:36,361 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|2349 ppa006317m pacid=17642675 polypeptide=ppa006317m locus=ppa006317m.g ID=ppa006317m.v1.0 annot-version=v1.0 Stats:
+Bit Score :826.301
+E-value: 0.0
+Identities 341
+N. Gaps: 0
+Aln. Length: 382
+Hit Start: 103
+Hit End: 1248
+Frames: 1, 1
+===2015-04-27 11:50:40,804 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|6855 Prupe.8G212700.1 pacid=32080650 polypeptide=Prupe.8G212700.1.p locus=Prupe.8G212700 ID=Prupe.8G212700.1.v2.1 annot-version=v2.1 Stats:
+Bit Score :824.926
+E-value: 0.0
+Identities 340
+N. Gaps: 0
+Aln. Length: 377
+Hit Start: 4
+Hit End: 1134
+Frames: 1, 1
+===2015-04-27 11:50:46,968 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|44517 Potri.002G254900.6 pacid=27022927 polypeptide=Potri.002G254900.6 locus=Potri.002G254900 ID=Potri.002G254900.6.v3.0 annot-version=v3.0 Stats:
+Bit Score :815.304
+E-value: 0.0
+Identities 335
+N. Gaps: 0
+Aln. Length: 377
+Hit Start: 4
+Hit End: 1134
+Frames: 1, 1
+===2015-04-27 11:50:56,661 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|13897 Pavir.J25352.1 pacid=30199901 polypeptide=Pavir.J25352.1.p locus=Pavir.J25352 ID=Pavir.J25352.1.v1.1 annot-version=v1.1 Stats:
+Bit Score :852.877
+E-value: 0.0
+Identities 353
+N. Gaps: 0
+Aln. Length: 380
+Hit Start: 1
+Hit End: 1140
+Frames: 1, 1
+===2015-04-27 11:50:59,565 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|24305 Phvul.001G167100.2 pacid=27164088 polypeptide=Phvul.001G167100.2 locus=Phvul.001G167100 ID=Phvul.001G167100.2.v1.0 annot-version=v1.0 Stats:
+Bit Score :797.434
+E-value: 0.0
+Identities 326
+N. Gaps: 0
+Aln. Length: 377
+Hit Start: 4
+Hit End: 1134
+Frames: 1, 1
+===2015-04-27 11:51:01,802 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|13983 29885.m000144 pacid=16812148 polypeptide=29885.m000144 locus=29885.t000008 ID=29885.m000144.TIGRR0.1 annot-version=v0.1 Stats:
+Bit Score :823.093
+E-value: 0.0
+Identities 338
+N. Gaps: 0
+Aln. Length: 376
+Hit Start: 4
+Hit End: 1131
+Frames: 1, 1
+===2015-04-27 11:51:05,728 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|10314 Sobic.004G343200.1 pacid=28375405 polypeptide=Sobic.004G343200.1.p locus=Sobic.004G343200 ID=Sobic.004G343200.1.v2.1 annot-version=v2.1 Stats:
+Bit Score :853.793
+E-value: 0.0
+Identities 354
+N. Gaps: 0
+Aln. Length: 380
+Hit Start: 1
+Hit End: 1140
+Frames: 1, 1
+===2015-04-27 11:51:09,547 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|12626 Si017508m pacid=19686043 polypeptide=Si017508m locus=Si017508m.g ID=Si017508m.version2.1 annot-version=v2.1 Stats:
+Bit Score :856.543
+E-value: 0.0
+Identities 355
+N. Gaps: 0
+Aln. Length: 380
+Hit Start: 1
+Hit End: 1140
+Frames: 1, 1
+===2015-04-27 11:51:11,917 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|33326 Solyc09g064370.2.1 pacid=27310004 polypeptide=Solyc09g064370.2.1 locus=Solyc09g064370.2 ID=Solyc09g064370.2.1.iTAGv2.3 annot-version=iTAGv2.3 Stats:
+Bit Score :645.767
+E-value: 0.0
+Identities 269
+N. Gaps: 0
+Aln. Length: 304
+Hit Start: 229
+Hit End: 1140
+Frames: 1, 1
+===2015-04-27 11:51:15,088 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|21149 PGSC0003DMT400019942 pacid=24398962 polypeptide=PGSC0003DMP400013623 locus=PGSC0003DMG400007717 ID=PGSC0003DMT400019942.v3.4 annot-version=v3.4 Stats:
+Bit Score :807.973
+E-value: 0.0
+Identities 332
+N. Gaps: 0
+Aln. Length: 376
+Hit Start: 4
+Hit End: 1131
+Frames: 1, 1
+===2015-04-27 11:51:19,051 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|12781 Thecc1EG003851t1 pacid=27433451 polypeptide=Thecc1EG003851t1 locus=Thecc1EG003851 ID=Thecc1EG003851t1.CGDv1.1 annot-version=v1.1 Stats:
+Bit Score :820.802
+E-value: 0.0
+Identities 336
+N. Gaps: 0
+Aln. Length: 376
+Hit Start: 4
+Hit End: 1131
+Frames: 1, 1
+===2015-04-27 11:51:21,293 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|17572 GSVIVT01026507001 pacid=17834197 polypeptide=GSVIVT01026507001 locus=GSVIVG01026507001 ID=GSVIVT01026507001.Genoscope12X annot-version=Genoscope.12X Stats:
+Bit Score :576.119
+E-value: 2.83538e-164
+Identities 238
+N. Gaps: 0
+Aln. Length: 377
+Hit Start: 4
+Hit End: 1134
+Frames: 1, 1
+===2015-04-27 11:51:27,353 - BLAST_Search===
+DEBUG	gnl|BL_ORD_ID|26080 GRMZM5G824600_T03 pacid=30990479 polypeptide=GRMZM5G824600_P03 locus=GRMZM5G824600 ID=GRMZM5G824600_T03.v6a annot-version=6a Stats:
+Bit Score :847.837
+E-value: 0.0
+Identities 352
+N. Gaps: 0
+Aln. Length: 380
+Hit Start: 1
+Hit End: 1140
+Frames: 1, 1
