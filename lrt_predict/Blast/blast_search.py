@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 """A script to perform BLAST searching and sequence fetching."""
 
-
 #   Import standard library modules here
 import tempfile
 import os
@@ -56,14 +55,16 @@ class BlastSearch(object):
         Using the output from blast_all(), get the FASTA sequence of each of
         the homologous sequences and write them into a temporary file.
     """
-    #   Initialize the class
+
     def __init__(self, base, query, evalue, verbose):
+        """Initialize the class with base directory, query sequence, e-value
+        threshold and verbosity level."""
         self.query = query
         self.evalue = evalue
         self.homologues = {}
         self.mainlog = set_verbosity.verbosity('BLAST_Search', verbose)
         self.basedir = base
-        return
+        returnq
 
     def best_hit(self, brecord):
         """Define a special function to get the best hit out of a BlastRecord
