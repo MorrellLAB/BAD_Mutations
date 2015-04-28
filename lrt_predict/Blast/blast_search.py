@@ -64,7 +64,7 @@ class BlastSearch(object):
         self.homologues = {}
         self.mainlog = set_verbosity.verbosity('BLAST_Search', verbose)
         self.basedir = base
-        returnq
+        return
 
     def best_hit(self, brecord):
         """Define a special function to get the best hit out of a BlastRecord
