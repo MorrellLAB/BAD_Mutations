@@ -27,7 +27,7 @@ def verbose(v):
 
 
 #   A function to create a base directory for the species
-def makebase(basedir,l):
+def makebase(basedir, l):
     l.debug('Base directory is ' + basedir)
     #   Get the dirname of the LRT base
     base_parent = os.path.dirname(basedir)

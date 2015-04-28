@@ -17,11 +17,11 @@ Author: Thomas Kono
 import sys
 
 #   Import the dependency checking script
-from lrt_predict.General import check_modules
+import lrt_predict.General.check_modules as check_modules
 #   Import the verbosity script
-from lrt_predict.General import set_verbosity
+import lrt_predict.General.set_verbosity as set_verbosity
 #   Import our argument parsing script
-from lrt_predict.General import parse_args
+import lrt_predict.General.parse_args as parse_args
 
 
 def setup(arg):
@@ -36,8 +36,13 @@ def setup(arg):
     #   Start a new instance of the configuration class
     s_env = setup_env.SetupEnv(arg['loglevel'])
     #   Then create the new configuration
-    s_env.set_user_vars(arg['base'], arg['target'], arg['evalue'],
-                        arg['codon'], arg['missing_threshold'], arg['config'])
+    s_env.set_user_vars(
+        arg['base'],
+        arg['target'],
+        arg['evalue'],
+        arg['codon'],
+        arg['missing_threshold'],
+        arg['config'])
     s_env.get_exe_paths()
     s_env.write_config()
     return
@@ -52,13 +57,15 @@ def fetch(arg, log):
         exit(1)
     #   Next we check for the presence of the utilities we need to
     #   do the fetching
-    missing_reqs = check_modules.missing_executables(['bash',
-                                                      'makeblastdb',
-                                                      'gzip',
-                                                      'sum'])
+    missing_reqs = check_modules.missing_executables(
+        ['bash',
+         'makeblastdb',
+         'gzip',
+         'sum'])
     if missing_reqs:
-        log.error('Some required executables were not found on your system: ' +
-                  '\n'.join(missing_reqs)+'\nPlease install them to continue.')
+        log.error(
+            'Some required executables were not found on your system: ' +
+            '\n'.join(missing_reqs) + '\nPlease install them to continue.')
         exit(1)
     #   Import the main fetching script
     #   We do it here, since we only want to import this if we are fetching
@@ -67,11 +74,18 @@ def fetch(arg, log):
     #   Create a new Phytozome instance that will handle our work with
     #   the JGI Genomes Portal.
     log.debug('Creating a new Phytozome instance to fetch data.')
-    phy = phytozome.Phytozome(arg['user'], arg['password'], arg['base'],
-                              arg['convert_only'], arg['loglevel'])
+    phy = phytozome.Phytozome(
+        arg['user'],
+        arg['password'],
+        arg['base'],
+        arg['convert_only'],
+        arg['loglevel'])
     log.debug('Creating a new Ensembl instance to fetch data.')
-    ens = ensembl.EnsemblPlants(arg['base'], arg['convert_only'],
-                                arg['loglevel'])
+    ens = ensembl.EnsemblPlants(
+        arg['base'],
+        arg['convert_only'],
+        arg['loglevel'])
+
     if arg['convert_only']:
         log.debug('Only converting files.')
         ens.convert()
@@ -107,14 +121,18 @@ def blast(arg, log):
     missing_reqs = check_modules.missing_executables(['bash', 'tblastx'])
     #   And then check the executable dependencies
     if missing_reqs:
-        log.error('Some required executables were not found on your system: ' +
-                  '\n'.join(missing_reqs)+'\nPlease install them to continue.')
+        log.error(
+            'Some required executables were not found on your system: ' +
+            '\n'.join(missing_reqs) + '\nPlease install them to continue.')
         exit(1)
     #   If all that checks out, import the BLAST class script
-    from lrt_predict.Blast import blast_search
+    import lrt_predict.Blast.blast_search as blast_search
     log.info('Creating a new instance to BLAST.')
-    b_search = blast_search.BlastSearch(arg['base'], arg['fasta'],
-                                        arg['evalue'], arg['loglevel'])
+    b_search = blast_search.BlastSearch(
+        arg['base'],
+        arg['fasta'],
+        arg['evalue'],
+        arg['loglevel'])
     b_search.blast_all()
     #   hom contains the file object that has the unaligned sequence in it.
     hom = b_search.get_hit_seqs()
@@ -131,14 +149,18 @@ def align(arg, unaligned, log):
     #   Check for the required executables
     missing_reqs = check_modules.missing_executables(['bash', 'prank'])
     if missing_reqs:
-        log.error('Some required executables were not found on your system: ' +
-                  '\n'.join(missing_reqs)+'\nPlease install them to continue.')
+        log.error(
+            'Some required executables were not found on your system: ' +
+            '\n'.join(missing_reqs) + '\nPlease install them to continue.')
         exit(1)
     #   Then we import the necessary modules
-    from lrt_predict.Predict import align as aligner
+    import lrt_predict.Predict.align as aligner
     log.info('Creating a new instance of PrankAlign.')
-    aln = aligner.PrankAlign(unaligned, arg['fasta'], arg['codon'],
-                             arg['loglevel'])
+    aln = aligner.PrankAlign(
+        unaligned,
+        arg['fasta'],
+        arg['codon'],
+        arg['loglevel'])
     #   Then align them
     stdout, stderr, outfile = aln.prank_align()
     log.debug('stdout: \n' + stdout)
@@ -156,14 +178,19 @@ def predict(arg, nuc, tree, log):
     #   Check for the required executables
     missing_reqs = check_modules.missing_executables(['bash', 'HYPHYSP'])
     if missing_reqs:
-        log.error('Some required executables were not found on your system: ' +
-                  '\n'.join(missing_reqs)+'\nPlease install them to continue.')
+        log.error(
+            'Some required executables were not found on your system: ' +
+            '\n'.join(missing_reqs) + '\nPlease install them to continue.')
         exit(1)
     #   import the predict script
-    from lrt_predict.Predict import predict as predictor
+    import lrt_predict.Predict.predict as predictor
     #   Create a new instance of class LRTPredict
-    lrt = predictor.LRTPredict(nuc, tree, arg['fasta'], arg['substitutions'],
-                               arg['loglevel'])
+    lrt = predictor.LRTPredict(
+        nuc,
+        tree,
+        arg['fasta'],
+        arg['substitutions'],
+        arg['loglevel'])
     position = lrt.get_query_position()
     return position
 
@@ -194,8 +221,10 @@ def main():
         #   If the user wants to setup, then don't bother trying to validate
         #   the config.
         if arguments['action'] != 'setup':
-            cfg = config.ConfigHandler(arguments['config'], arguments,
-                                       arguments['loglevel'])
+            cfg = config.ConfigHandler(
+                arguments['config'],
+                arguments,
+                arguments['loglevel'])
             if cfg.is_valid():
                 cfg.read_vars()
                 config_opts = cfg.merge_options()
@@ -234,7 +263,6 @@ def main():
     else:
         loglevel.error(msg)
     return
-
 
 #   Do the work here
 main()

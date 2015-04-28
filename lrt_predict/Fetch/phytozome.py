@@ -7,16 +7,13 @@ from xml.etree import ElementTree
 import os
 
 #   Import our helper scripts here
-from lrt_predict.General import dir_funcs
-from lrt_predict.General import file_funcs
-from lrt_predict.Fetch import format_blast
-from lrt_predict.Fetch import phytozome_species
-from lrt_predict.General import set_verbosity
-from lrt_predict.General import check_modules
+import lrt_predict.Fetch.phytozome_species as phytozome_species
+import lrt_predict.Fetch.fetch as fetch
+import lrt_predict.General.file_funcs as file_funcs
 
 
 #   A new class to handle the requests to and responses from JGI
-class Phytozome(object):
+class Phytozome(fetch.Fetcher):
     """A class to handle fetching data from Phytozome 10, hosted by the Joint
     Genome Institute of the US Department of Energy.
     URL: http://phytozome.jgi.doe.gov
@@ -35,12 +32,15 @@ class Phytozome(object):
     Contains the following instance attributes:
         username (str)        User name for logging into JGI Genomes Portal
         password (str)        Password for the same
-        mainlog (logger)      Logging messages formatter and handler
         session (Session)     HTTP Requests session for logging into JGI
         urls (list)           URLs to files to download
         md5s (list)           MD5 hashes of files for integrity checks
+
+    Inherits the following attributes and methods from fetch.Fetcher:
+        mainlog (logger)      Logging messages formatter and handler
         base (str)            Base directory for the data
-        to_covert (list)      Files to convert from FASTA to BLAST databases
+        make_species_dir()    Create a directory for a species' data
+        convert()             Convert the FASTA files to BLAST databases
 
     Contains the following methods:
         __init__(self, u, p, base, convertonly, verbose):
@@ -65,10 +65,6 @@ class Phytozome(object):
             downloads the appropriate files. Checks the local MD5 against the
             remote MD5 and downloads the remote file if they differ. Appends
             the filenames of each updated file to the `to_convert' attribute.
-
-        convert(self):
-            Iterates through the `to_convert' attribute and converts each file
-            from a gzipped FASTA file to a BLAST database.
     """
     #   These are common variables for every new Phytozome class
     #   They should not change from instance to instance
@@ -80,12 +76,13 @@ class Phytozome(object):
     EXPIRED_ACCOUNT = 'Sorry, your password has expired'
     TO_FETCH = phytozome_species.phyto_fetch
 
-    def __init__(self, u, p, base, convertonly, verbose):
+    def __init__(self, user, passwd, base,
+                 convertonly, verbose):
         """Initialize the class with the username, password, base directory,
            whether or not to only convert to databases, and verbosity level."""
-        self.username = u
-        self.password = p
-        self.mainlog = set_verbosity.verbosity(__name__, verbose)
+        fetch.Fetcher.__init__(self, base, verbose)
+        self.username = user
+        self.password = passwd
         self.mainlog.debug('Creating new instance of Phytozome')
         #   If we are only converting, then we don't have to sign on
         if convertonly:
@@ -94,9 +91,6 @@ class Phytozome(object):
             self.session = self.sign_on()
         self.urls = []
         self.md5s = []
-        self.base = base
-        self.to_convert = []
-        dir_funcs.makebase(base, self.mainlog)
         return
 
     def sign_on(self):
@@ -184,14 +178,7 @@ class Phytozome(object):
         for u, m in zip(self.urls, self.md5s):
             #   Get a local name of the CDS
             lname = file_funcs.local_name(u)
-            #   Get the species name from the filename
-            species_name = file_funcs.species_name(lname)
-            #   Create the species directory
-            target_dir = dir_funcs.make_species_dir(
-                self.base,
-                species_name,
-                self.mainlog)
-            #   cd into it
+            target_dir = self.make_species_dir(u)
             os.chdir(target_dir)
             #   check to see if the file already exists
             if file_funcs.file_exists(lname, self.mainlog):
@@ -242,25 +229,4 @@ class Phytozome(object):
                         target_dir,
                         lname))
         self.mainlog.info('Done downloading CDS files from Phytozome.')
-        return
-
-    def convert(self):
-        """Iterates through the `to_convert' attribute and converts each file
-            from a gzipped FASTA file to a BLAST database."""
-        #   What is the path to the makeblastdb executable?
-        makeblastdb_path = check_modules.check_executable('makeblastdb')
-        #   Check if the list of updated CDS files is empty or not
-        if not self.to_convert:
-            #   If it is empty, then populate it with all of them
-            fname_list = file_funcs.get_file_by_ext(
-                self.base,
-                '.cds.fa.gz',
-                self.mainlog)
-        else:
-            fname_list = self.to_convert
-        #   for each one
-        for f in fname_list:
-            out, error = format_blast.format_blast(makeblastdb_path, f)
-            self.mainlog.info('stdout: \n' + out)
-            self.mainlog.info('stderr: \n' + error)
         return
