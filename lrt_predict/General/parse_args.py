@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+"""Script to parse and validate arguments passed to LRT_Predict.py"""
 #   Helper script for Phytozome.py
 #   Contains argument parsing code
 
@@ -7,25 +8,33 @@ import os
 import getpass
 
 #   Import the helper script to validate arguments
-import check_args
+import lrt_predict.General.check_args as check_args
 #   And the script to check the input files
-import parse_input
+import lrt_predict.General.parse_input as parse_input
 #   And the script to operate on files
-import file_funcs
+import lrt_predict.General.file_funcs as file_funcs
 #   And the script to check the configuration file
-from ..Setup import parse_config
+import lrt_predict.Setup.parse_config as parse_config
 #   And the species lists
-from ..Fetch import ensembl_species
-from ..Fetch import phytozome_species
+import lrt_predict.Fetch.ensembl_species as ensembl_species
+import lrt_predict.Fetch.phytozome_species as phytozome_species
 
 #   Create the list of allowable species by the combination of both
 #   Phytozome and Ensembl. Currently this is restricted to angiosperms
-allowable_species = ensembl_species.ensembl_fetch + phytozome_species.phyto_fetch
+SPECIES_LIST = ensembl_species.ensembl_fetch + phytozome_species.phyto_fetch
+
 
 #   A function to actually parse the arguments
 def parse_args():
+    """Parse the arguments. We set up three subcommands here:
+        setup:   Generate config file and download dependencies
+        fetch:   Download CDS files from Phytozome and Ensembl
+        predict: Align homologous sequences and predict deleterious subs
+
+    See the manual or help message for detailed descriptions of all the
+    arguments presented here."""
     parser = argparse.ArgumentParser(
-        description = 'LRT for deleterious SNP prediction in plants.',
+        description='LRT for deleterious SNP prediction in plants.',
         add_help=True)
     #   Define a sub-parser to handle the different actions we can perform
     #   we can either 'fetch' or 'predict'
@@ -57,10 +66,17 @@ def parse_args():
         help='Base directory for species databases. Defaults to .',
         default=os.getcwd())
     setup_args.add_argument(
+        '--deps-dir',
+        '-d',
+        required=False,
+        help='Directory to house downloaded software. Defaults to .',
+        default=os.getcwd())
+    setup_args.add_argument(
         '--target',
         '-t',
         required=False,
-        help='Which species are you predicting in (case sensitive)? Pass --list-species to see a full list of allowable species names.',
+        help=('Which species are you predicting in (case sensitive)? Pass '
+              '--list-species to see a full list of allowable species names.'),
         default=None)
     setup_args.add_argument(
         '--evalue',
@@ -75,14 +91,16 @@ def parse_args():
         required=False,
         type=float,
         default=0.25,
-        help='Skip predictions for sites with at least this much missing data (gaps) in the multiple sequence alignment.')
+        help=('Skip predictions for sites with at least this much missing '
+              ' data (gaps) in the multiple sequence alignment.'))
     setup_args.add_argument(
         '--codon',
         required=False,
         action='store_const',
         const='codon',
         default='translate',
-        help='Use the codon alignment model for prank-msa, may give more accurate branch lengths but is much slower.')
+        help=('Use the codon alignment model for prank-msa, may give more '
+              'accurate branch lengths but is much slower.'))
 
     #   Create a parser for 'fetch'
     fetch_args = subparser.add_parser(
@@ -168,14 +186,15 @@ def parse_args():
         action='store_const',
         const='codon',
         default='translate',
-        help='Use the codon alignment model for prank-msa, may give more accurate branch lengths but is much slower.')
+        help=('Use the codon alignment model for prank-msa, may give more '
+              'accurate branch lengths but is much slower.'))
     #   Add a switch for verbosity
     parser.add_argument(
         '--verbosity',
         '-v',
         required=False,
         dest='loglevel',
-        choices = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
+        choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
         default='INFO',
         help='Minimum verbosity level of messages printed.')
     args = parser.parse_args()
@@ -184,6 +203,11 @@ def parse_args():
 
 #   Here we validate the arguments
 def validate_args(args, log):
+    """A function that validates the arguments. For arguments that are
+    filenames, it checks that they are readable. For directories, it checks
+    that they are read/write. For usernames, it checks that they are valid
+    email addresses. Prompts for username/password if they are not supplied
+    on the command line. Validate input files for prediction."""
     #   Check the base argument. If it starts with something other than a /
     #   then it is a relative path, and we should fix it
     if not args['base'].startswith('/'):
@@ -195,23 +219,37 @@ def validate_args(args, log):
     #   If the arguments do not check out, return a message
     if args['action'] == 'setup':
         if args['list_species']:
-            return (False, 'The list of allowable species names is \n' + '\n'.join(allowable_species))
-        if args['target'] not in allowable_species:
-            return (False, 'The species name you provided is not in the list of allowable species.')
+            return (
+                False,
+                'The list of allowable species names is \n' +
+                '\n'.join(SPECIES_LIST))
+        if args['target'] not in SPECIES_LIST:
+            return (
+                False,
+                ('The species name you provided is not in the list of '
+                 'allowable species.'))
         if not check_args.valid_dir(os.path.dirname(args['config'])):
-            return (False, 'You cannot create a configuration file in that directory.')
+            return (
+                False,
+                'You cannot create a configuration file in that directory.')
         if not check_args.valid_dir(args['base']):
-            return (False, 'Base directory is not readable/writable, or does not exist.')
+            return (
+                False,
+                'Base directory is not readable/writable, or does not exist.')
     elif args['action'] == 'fetch':
         #   If config is suppled:
         if args['config']:
             if not file_funcs.file_exists(args['config'], log):
-                return (False, 'The specified configuration file does not exist!')
+                return (
+                    False,
+                    'The specified configuration file does not exist!')
         #   If username is supplied:
         if args['user']:
             #   Check if it's valid
             if not check_args.valid_email(args['user']):
-                return (False, 'Username is not a valid e-mail address.')
+                return (
+                    False,
+                    'Username is not a valid e-mail address.')
         #   Username not supplied, and we need to access JGI
         elif not args['convert_only']:
             args['user'] = raw_input('Username for JGI Genomes Portal: ')
@@ -222,11 +260,14 @@ def validate_args(args, log):
         if args['password']:
             pass
         elif not args['convert_only']:
-            args['password'] = getpass.getpass('Password for JGI Genomes Portal: ')
+            args['password'] = getpass.getpass(
+                'Password for JGI Genomes Portal: ')
         else:
             pass
         if not check_args.valid_dir(args['base']):
-            return (False, 'Base directory is not readable/writable, or does not exist.')
+            return (
+                False,
+                'Base directory is not readable/writable, or does not exist.')
         else:
             pass
     #   Check arguments to predict
@@ -234,13 +275,17 @@ def validate_args(args, log):
         #   If config is suppled:
         if args['config']:
             if not file_funcs.file_exists(args['config'], log):
-                return (False, 'The specified configuration file does not exist!')
+                return (
+                    False,
+                    'The specified configuration file does not exist!')
         if not parse_input.valid_fasta(args['fasta'], log):
-            return (False, 'The input FASTA file provided is not valid.')
-            exit(1)
+            return (
+                False,
+                'The input FASTA file provided is not valid.')
         if not parse_input.parse_subs(args['substitutions'], log):
-            return (False, 'The input substitutions file provided is not valid.')
-            exit(1)
+            return (
+                False,
+                'The input substitutions file provided is not valid.')
     return (args, None)
 
 
@@ -248,11 +293,12 @@ def validate_args(args, log):
 #   any arguments. This is an issue with Python 2.*, and has been "fixed" in
 #   Python 3+.
 def usage():
+    """Print a usage message."""
     print '''Usage: LRT_Predict.py <subcommand> <arguments>
 
 where <subcommand> is one of 'setup', 'fetch', or 'predict.' This script will
 download the necessary data to perform the likelihood ratio test (LRT) for
-deleterious SNP prediction as described in Chun and Fay (2009) in Genome 
+deleterious SNP prediction as described in Chun and Fay (2009) in Genome
 Research. Because of the data sources used, this implementation is specific to
 SNP annotation in plants.
 
@@ -260,10 +306,11 @@ The 'setup' subcommand will create a configuration file that contains paths to
 requried executables and parameters for alignment. This is optional, but
 recommended, as it makes batches of analysis much easier to standardize.
 
-The 'fetch' subcommand will download gzipped CDS FASTA files from Phytozome, 
-unzip them, and convert them into BLAST databases. It requires a (free) username
-and password for the JGI Genomes Portal. Check with Phytozome for their data
-release and usage policies. Use 'LRT_Predict.py fetch -h' for more information.
+The 'fetch' subcommand will download gzipped CDS FASTA files from Phytozome,
+unzip them, and convert them into BLAST databases. It requires a (free)
+username and password for the JGI Genomes Portal. Check with Phytozome for
+their data release and usage policies. Use 'LRT_Predict.py fetch -h' for more
+information.
 
 The 'predict' subcommand will run the LRT with a given query sequence and a
 list of affected codons. This feature has not yet been implemented.
