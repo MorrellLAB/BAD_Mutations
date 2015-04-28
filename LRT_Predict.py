@@ -38,6 +38,7 @@ def setup(arg):
     #   Then create the new configuration
     s_env.set_user_vars(
         arg['base'],
+        arg['deps_dir'],
         arg['target'],
         arg['evalue'],
         arg['codon'],

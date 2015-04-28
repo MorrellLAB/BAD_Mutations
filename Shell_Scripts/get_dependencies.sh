@@ -1,88 +1,120 @@
 #!/bin/bash
+#	A shell script to download dependencies
+#	for LRT_Predict
+#	Author: Paul Hoffman
+
+#	This script requires Git, Wget, and CMake v3.0
+#	or higher to run.
 
 #	Make directory for dependencies
-cd ..
-mkdir dependencies
-cd dependencies
-DEP=`pwd`
 
-#	Install BLAST
-	#	Pull BLAST from NCBI with wget
-	#	Designed to always pull latest version 
-	#	unless NCBI changes their ftp heirarchy
-wget --no-directories --progress=bar -r -A.tar.gz ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/
-	#	Get rid of all OS-specifc installers
-find . -maxdepth 1 -not -name "*src.tar.gz" -name "*.tar.gz" -delete
-	#	Extract the source file
-	#	Designed to always install the latest verion of BLAST
-	#	unless NCBI changes their file naming scheme
-tar -xvzf ncbi*
-	#	Install BLAST
-cd `find . -maxdepth 1 -type d -name "ncbi*"`/c++
-./configure
-make
-cd $DEP
-#	Install PRANK
-	#	Pull PRANK from Wasabi
-	#	Designed to always pull latest version
-	#	unless Wasabi changes their downloads page
-wget --no-directories --progress=bar -r -np -l 1 -A.tgz http://wasabiapp.org/download/prank
-	#	Get rid of all OS-specific installers
-find . -maxdepth 1 -not -name "prank.source*" -name "*.tgz" -delete
-	#	Extract the source file
-	#	Designed to always install the lastest version of PRANK
-	#	unless Wasabi changes their file naming scheme
-tar -xvzf prank*
-	#	Install PRANK
-cd prank-msa/src
-make
-cd $DEP
+set -e
+set -u
+set -o pipefail
 
-#	Install Requests
-	#	Pull Requests from GitHub
-	#	Requires Git to be installed
-	#	Does not require a GitHub account
-git clone git://github.com/kennethreitz/requests.git
-	#	Install Requests
-cd requests
-REQ=`pwd`
-mkdir $REQ/modules
-MOD=$REQ/modules
-export PYTHONPATH="$PYTHONPATH:$REQ:$MOD"
-python setup.py build
-python setup.py install --install-base="." --install-lib='$base/modules' --install-scripts='$base/bin' --install-data='$base/data'/ --install-headers='$base/include/'
-cd $DEP
+#	Set our variables from input
+#	The first variable is the dependencies diretory, and everything else
+#	are the dependencies that need to be downloaded
+DEPSDIR=$1
+MISSING=${@:1}
 
-#	Install HyPhy
-	#	Pull HyPhy from GitHub
-	#	Requires Git to be installed
-	#	Does not require a GitHub account
-git clone https://github.com/veg/hyphy.git
-	#	Installing HyPhy requires CMake 3.0 or higher to be installed
-cd hyphy
-cmake -DINSTALL_PREFIX=./ ./
-make install
-cd $DEP
+#	Make the dependencies directory and cd into it
+mkdir -p $DEPSDIR
+cd $DEPSDIR
 
-#	Install BioPython
-	#	Pull BioPython with wget
-	#	Designed to always pull latest version 
-	#	unless BioPython changes their downloads page
-mkdir BioPython
-cd BioPython
-wget --no-directories --progress=bar --timestamping -r -np -l 1 -A.tar.gz http://biopython.org/DIST
-	#	Get rid of all files that aren't latest
-find . -maxdepth 1 -not -name "biopython*" -name "*.tar.gz" -delete
-mv `ls -t *.tar.gz | head -n 1` ../
-cd ../
-rm -rf BioPython
-	#	Extract the source file
-	#	Designed to always install the latest version of BioPython
-	#	unless BioPython changes their file naming scheme
-tar -xvzf biopython*
-	#	Install BioPython
-cd biopython*
-python setup.py build
-python setup.py test
-python setup.py install --home=./
-cd $DEP
+for x in $MISSING
+do
+	case $x in
+		"tBLASTx" )
+			cd $DEP
+			#	Install BLAST
+				#	Pull BLAST from NCBI with wget
+				#	Designed to always pull latest version 
+				#	unless NCBI changes their ftp heirarchy
+			wget --no-directories --progress=bar -r -A.tar.gz ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/
+				#	Get rid of all OS-specifc installers
+			find . -maxdepth 1 -not -name "*src.tar.gz" -name "*.tar.gz" -delete
+				#	Extract the source file
+				#	Designed to always install the latest verion of BLAST
+				#	unless NCBI changes their file naming scheme
+			tar -xvzf ncbi*
+				#	Install BLAST
+			cd `find . -maxdepth 1 -type d -name "ncbi*"`/c++
+			./configure
+			make
+			cd $ROOT
+			;;
+		"PRANK" )
+			cd $DEP
+			#	Install PRANK
+				#	Pull PRANK from Wasabi
+				#	Designed to always pull latest version
+				#	unless Wasabi changes their downloads page
+			wget --no-directories --progress=bar -r -np -l 1 -A.tgz http://wasabiapp.org/download/prank
+				#	Get rid of all OS-specific installers
+				find . -maxdepth 1 -not -name "prank.source*" -name "*.tgz" -delete
+				#	Extract the source file
+				#	Designed to always install the lastest version of PRANK
+				#	unless Wasabi changes their file naming scheme
+			tar -xvzf prank*
+				#	Install PRANK
+			cd prank-msa/src
+			make
+			cd $ROOT
+			;;
+		"requests" )
+			cd $DEP
+			#	Install Requests
+				#	Pull Requests from GitHub
+				#	Requires Git to be installed
+				#	Does not require a GitHub account
+			git clone git://github.com/kennethreitz/requests.git
+				#	Install Requests
+			cd requests
+			REQ=`pwd`
+			mkdir $REQ/modules
+			MOD=$REQ/modules
+			export PYTHONPATH="$PYTHONPATH:$REQ:$MOD"
+			python setup.py build
+			python setup.py install --install-base="." --install-lib='$base/modules' --install-scripts='$base/bin' --install-data='$base/data'/ --install-headers='$base/include/'
+			cd $ROOT
+			;;
+		"HyPhy" )
+			cd $DEP
+			#	Install HyPhy
+				#	Pull HyPhy from GitHub
+				#	Requires Git to be installed
+				#	Does not require a GitHub account
+			git clone https://github.com/veg/hyphy.git
+				#	Installing HyPhy requires CMake 3.0 or higher to be installed
+			cd hyphy
+			cmake -DINSTALL_PREFIX=./ ./
+			make install
+			cd $ROOT
+			;;
+		"Bio" )
+			cd $DEP
+			#	Install BioPython
+				#	Pull BioPython with wget
+				#	Designed to always pull latest version 
+				#	unless BioPython changes their downloads page
+			wget -O - http://biopython.org/DIST > biopython.txt
+			BIO=`grep -E -o 'biopython-[0-9]\.[0-9a-b\.]*tar\.gz' biopython.txt | tail -1`
+			wget --no-directories --progress=bar --timestamping -r http://biopython.org/DIST/$BIO
+				#	Extract the source file
+				#	Designed to always install the latest version of BioPython
+				#	unless BioPython changes their file naming scheme
+			tar -xvzf $BIO
+				#	Install BioPython
+			cd biopython*
+			python setup.py build
+			python setup.py test
+			python setup.py install --home=./
+			cd $ROOT
+			;;
+		* )
+			echo "Nothing missing"
+			break
+			;;
+	esac
+done
