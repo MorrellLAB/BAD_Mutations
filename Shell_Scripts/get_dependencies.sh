@@ -26,7 +26,7 @@ for x in $MISSING
 do
 	case $x in
 		"tBLASTx" )
-			cd $DEP
+			cd $DEPSDIR
 			#	Install BLAST
 				#	Pull BLAST from NCBI with wget
 				#	Designed to always pull latest version 
@@ -42,10 +42,12 @@ do
 			cd `find . -maxdepth 1 -type d -name "ncbi*"`/c++
 			./configure
 			make
-			cd $ROOT
+				#	Cleanup tarball
+			cd $DEPSDIR
+			rm ncbi*tar.gz
 			;;
 		"PRANK" )
-			cd $DEP
+			cd $DEPSDIR
 			#	Install PRANK
 				#	Pull PRANK from Wasabi
 				#	Designed to always pull latest version
@@ -60,10 +62,12 @@ do
 				#	Install PRANK
 			cd prank-msa/src
 			make
-			cd $ROOT
+				#	Cleanup tarball and robots.txt
+			cd $DEPSDIR
+			rm prank*.tgz robots.txt
 			;;
 		"requests" )
-			cd $DEP
+			cd $DEPSDIR
 			#	Install Requests
 				#	Pull Requests from GitHub
 				#	Requires Git to be installed
@@ -77,10 +81,10 @@ do
 			export PYTHONPATH="$PYTHONPATH:$REQ:$MOD"
 			python setup.py build
 			python setup.py install --install-base="." --install-lib='$base/modules' --install-scripts='$base/bin' --install-data='$base/data'/ --install-headers='$base/include/'
-			cd $ROOT
+			cd $DEPSDIR
 			;;
 		"HyPhy" )
-			cd $DEP
+			cd $DEPSDIR
 			#	Install HyPhy
 				#	Pull HyPhy from GitHub
 				#	Requires Git to be installed
@@ -90,10 +94,10 @@ do
 			cd hyphy
 			cmake -DINSTALL_PREFIX=./ ./
 			make install
-			cd $ROOT
+			cd $DEPSDIR
 			;;
 		"Bio" )
-			cd $DEP
+			cd $DEPSDIR
 			#	Install BioPython
 				#	Pull BioPython with wget
 				#	Designed to always pull latest version 
@@ -110,7 +114,9 @@ do
 			python setup.py build
 			python setup.py test
 			python setup.py install --home=./
-			cd $ROOT
+				#	Cleanup tarball and biopython.txt
+			cd $DEPSDIR
+			rm biopython*.tar.gz biopython.txt
 			;;
 		* )
 			echo "Nothing missing"
