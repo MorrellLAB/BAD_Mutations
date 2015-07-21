@@ -46,7 +46,7 @@ def get_seq_by_regex(db, seqID):
     s = '>' + seqID
     #   Then, we have to escape any dots in the name, since . is a special
     #   regex character
-    s = s.replace('.', '\.')
+    s = s.replace('.', r'\.')
     #   Then build the full regex
     #   Match the start of the FASTA record, followed by any number of
     #   characters, followed by a newline, then ATCGN, across multiple lines

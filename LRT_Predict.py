@@ -15,6 +15,9 @@ Author: Thomas Kono
 
 #   to check arguments
 import sys
+#   To handle file copy
+import shutil
+import os
 
 #   Import the dependency checking script
 import lrt_predict.General.check_modules as check_modules
@@ -34,17 +37,15 @@ def setup(arg):
     #   Import the setup script
     import lrt_predict.Setup.setup_env as setup_env
     #   Start a new instance of the configuration class
-    s_env = setup_env.SetupEnv(arg['loglevel'])
-    #   Then create the new configuration
-    s_env.set_user_vars(
+    s_env = setup_env.SetupEnv(
         arg['base'],
         arg['deps_dir'],
         arg['target'],
         arg['evalue'],
         arg['codon'],
         arg['missing_threshold'],
-        arg['config'])
-    s_env.get_exe_paths()
+        arg['config'],
+        arg['loglevel'])
     s_env.write_config()
     return
 
@@ -257,10 +258,19 @@ def main():
                 nuc_file = alignment.name + '.best.fas'
             elif arguments_valid['codon'] == 'translate':
                 nuc_file = alignment.name + '.nuc.best.fas'
-            tree_file = alignment.name + 'best.dnd'
+            tree_file = alignment.name + '.best.dnd'
             loglevel.info('Nucleotide alignment in ' + nuc_file)
             loglevel.info('Tree in ' + tree_file)
-            predict(arguments_valid, nuc_file, tree_file, loglevel)
+            #   Copy the file to a temporary directory for saving later.
+            new_nuc = os.path.basename(arguments_valid['fasta'].replace('.fasta', '_MSA.fasta'))
+            new_tree = os.path.basename(arguments_valid['fasta'].replace('.fasta', '_Tree.newick'))
+            new_nuc = '/Users/tomkono/DataDisk/tmp/Barley_LRT_Alignments/Final/' + new_nuc
+            new_tree = '/Users/tomkono/DataDisk/tmp/Barley_LRT_Alignments/Final/' + new_tree
+            open(new_nuc, 'w').close()
+            open(new_tree, 'w').close()
+            shutil.copy2(nuc_file, new_nuc)
+            shutil.copy2(tree_file, new_tree)
+#            predict(arguments_valid, nuc_file, tree_file, loglevel)
     else:
         loglevel.error(msg)
     return
