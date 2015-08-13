@@ -262,15 +262,16 @@ def main():
             loglevel.info('Nucleotide alignment in ' + nuc_file)
             loglevel.info('Tree in ' + tree_file)
             #   Copy the file to a temporary directory for saving later.
-            new_nuc = os.path.basename(arguments_valid['fasta'].replace('.fasta', '_MSA.fasta'))
+            new_nuc = os.path.basename(arguments_valid['fasta'].replace('.fasta', '_Unaligned.fasta'))
             new_tree = os.path.basename(arguments_valid['fasta'].replace('.fasta', '_Tree.newick'))
-            new_nuc = '/Users/tomkono/DataDisk/tmp/Barley_LRT_Alignments/Final/' + new_nuc
-            new_tree = '/Users/tomkono/DataDisk/tmp/Barley_LRT_Alignments/Final/' + new_tree
+            new_nuc = '/Users/tomkono/DataDisk/tmp/JCF_Barley_CSV_Testing/Aligner_Tests/Data/' + new_nuc
+            new_nuc = '/Users/tomkono/DataDisk/Projects/Deleterious_Mutations/JCF_Barley_CSV_Testing/New_Alignments/' + new_nuc
+            new_tree = '/Users/tomkono/DataDisk/tmp/JCF_Barley_CSV_Testing/Aligner_Tests/Data/' + new_tree
             open(new_nuc, 'w').close()
             open(new_tree, 'w').close()
-            shutil.copy2(nuc_file, new_nuc)
+            shutil.copy2(unaligned_seqs.name, new_nuc)
             shutil.copy2(tree_file, new_tree)
-#            predict(arguments_valid, nuc_file, tree_file, loglevel)
+            predict(arguments_valid, nuc_file, tree_file, loglevel)
     else:
         loglevel.error(msg)
     return
