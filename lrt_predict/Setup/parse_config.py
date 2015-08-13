@@ -4,6 +4,7 @@
 #   Import the verbosity script
 from ..General import set_verbosity
 
+
 class ConfigHandler:
     #   Here are the keywords that we are accepting
     #   We define it as a dictionary with the config keywords as keys
@@ -13,13 +14,12 @@ class ConfigHandler:
     KEYWORDS = {'BASE': 'base',
                 'EVAL_THRESHOLD': 'evalue',
                 'MISSING_THRESHOLD': 'missing_threshold',
-                'PRANK_MODEL': 'codon',
                 'TARGET_SPECIES': 'target',
                 'BASH': 'bash_path',
                 'GZIP': 'gzip_path',
                 'SUM': 'sum_path',
                 'TBLASTX': 'tblastx_path',
-                'PRANK': 'prank_path',
+                'PASTA': 'pasta_path',
                 'HYPHY': 'hyphy_path'
                 }
     #   Here is the string that prefixes a variable delcaration
@@ -45,13 +45,13 @@ class ConfigHandler:
                     tmp = line.strip().split(None, 2)
                     #   If we don't have three elements, then the line is malformed
                     if len(tmp) != 3:
-                        log.error('Line ' + str(index+1) + ': Expected three fields, got ' + str(len(tmp)))
+                        self.mainlog.error('Line ' + str(index+1) + ': Expected three fields, got ' + str(len(tmp)))
                         return False
                     #   Then we get the keyword
                     k = tmp[1]
                     #   Check if the keyword is in the list of accepted keywords
                     if k not in self.KEYWORDS:
-                        log.warning('Line ' + str(index+1) + ': Unknown variable ' + k)
+                        self.mainlog.warning('Line ' + str(index+1) + ': Unknown variable ' + k)
                 else:
                     continue
         return True
@@ -81,7 +81,7 @@ class ConfigHandler:
     def merge_options(self):
         #   Here is a list of keys that we do not want to clobber if they are not
         #   passed on the command line
-        do_not_clobber = ['base', 'codon']
+        do_not_clobber = ['base']
         #   This takes up a bit of extra memory, but it will preserve the two
         #   dictionaries as separate variables.
         configs = self.config_vars.copy()

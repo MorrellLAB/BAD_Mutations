@@ -142,14 +142,14 @@ def blast(arg, log):
 
 
 def align(arg, unaligned, log):
-    """A function to align the homologous sequences with prank-msa, and return
+    """A function to align the homologous sequences with pasta, and return
     the aligned sequences and the phylogenetic tree."""
     aligndeps = check_modules.check_modules(predict=True)
     if aligndeps:
         check_modules.missing_mods(aligndeps)
         exit(1)
     #   Check for the required executables
-    missing_reqs = check_modules.missing_executables(['bash', 'prank'])
+    missing_reqs = check_modules.missing_executables(['bash', 'run_pasta.py'])
     if missing_reqs:
         log.error(
             'Some required executables were not found on your system: ' +
@@ -157,17 +157,16 @@ def align(arg, unaligned, log):
         exit(1)
     #   Then we import the necessary modules
     import lrt_predict.Predict.align as aligner
-    log.info('Creating a new instance of PrankAlign.')
-    aln = aligner.PrankAlign(
+    log.info('Creating a new instance of PastaAlign.')
+    aln = aligner.PastaAlign(
         unaligned,
         arg['fasta'],
-        arg['codon'],
         arg['loglevel'])
     #   Then align them
-    stdout, stderr, outfile = aln.prank_align()
+    stdout, stderr, alignment, tree = aln.pasta_align()
     log.debug('stdout: \n' + stdout)
     log.debug('stderr: \n' + stderr)
-    return outfile
+    return (alignment, tree)
 
 
 def predict(arg, nuc, tree, log):
@@ -252,26 +251,16 @@ def main():
             #   sequences, as we will use these as inputs for prank
             unaligned_seqs = blast(arguments_valid, loglevel)
             #   Then add the query sequence and align them
-            alignment = align(arguments_valid, unaligned_seqs, loglevel)
-            #   prank creates files with a certain prefix
-            if arguments_valid['codon'] == 'codon':
-                nuc_file = alignment.name + '.best.fas'
-            elif arguments_valid['codon'] == 'translate':
-                nuc_file = alignment.name + '.nuc.best.fas'
-            tree_file = alignment.name + '.best.dnd'
-            loglevel.info('Nucleotide alignment in ' + nuc_file)
+            alignment, tree_file = align(arguments_valid, unaligned_seqs, loglevel)
+            loglevel.info('Nucleotide alignment in ' + alignment)
             loglevel.info('Tree in ' + tree_file)
-            #   Copy the file to a temporary directory for saving later.
-            new_nuc = os.path.basename(arguments_valid['fasta'].replace('.fasta', '_Unaligned.fasta'))
-            new_tree = os.path.basename(arguments_valid['fasta'].replace('.fasta', '_Tree.newick'))
-            new_nuc = '/Users/tomkono/DataDisk/tmp/JCF_Barley_CSV_Testing/Aligner_Tests/Data/' + new_nuc
-            new_nuc = '/Users/tomkono/DataDisk/Projects/Deleterious_Mutations/JCF_Barley_CSV_Testing/New_Alignments/' + new_nuc
-            new_tree = '/Users/tomkono/DataDisk/tmp/JCF_Barley_CSV_Testing/Aligner_Tests/Data/' + new_tree
+            new_nuc = '/Users/tomkono/DataDisk/tmp/JCF_Barley_CSV_Testing/Pasta_Tests/' + file_funcs.local_name(alignment)
+            new_tree = '/Users/tomkono/DataDisk/tmp/JCF_Barley_CSV_Testing/Pasta_Tests/' + file_funcs.local_name(tree_file)
             open(new_nuc, 'w').close()
             open(new_tree, 'w').close()
-            shutil.copy2(unaligned_seqs.name, new_nuc)
+            shutil.copy2(alignment, new_nuc)
             shutil.copy2(tree_file, new_tree)
-            predict(arguments_valid, nuc_file, tree_file, loglevel)
+            #predict(arguments_valid, nuc_file, tree_file, loglevel)
     else:
         loglevel.error(msg)
     return

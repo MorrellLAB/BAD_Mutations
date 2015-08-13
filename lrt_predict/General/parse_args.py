@@ -180,14 +180,6 @@ def parse_args():
         default=0.05,
         type=float,
         help='E-value threshold for accepting sequences into the alignment.')
-    predict_args.add_argument(
-        '--codon',
-        required=False,
-        action='store_const',
-        const='codon',
-        default='translate',
-        help=('Use the codon alignment model for prank-msa, may give more '
-              'accurate branch lengths but is much slower.'))
     #   Add a switch for verbosity
     parser.add_argument(
         '--verbosity',
