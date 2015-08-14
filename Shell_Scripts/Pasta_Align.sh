@@ -6,6 +6,10 @@ set -e
 set -u
 set -o pipefail
 
+#   We have to set this environment variable to increase the java heap space,
+#   else it runs out of memory someitmes and fails to finish an alignment.
+export _JAVA_OPTIONS="-Xmx2g"
+
 #   Path to the Pasta executable as an argument
 PASTA=$1
 #   Input sequence as an argument
