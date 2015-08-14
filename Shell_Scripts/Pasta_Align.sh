@@ -15,9 +15,6 @@ TEMP_DIR=$3
 #   Job name
 JOBNAME=$4
 
-#   We create a variable to give the job a unique name
-JOBNAME=$(date +%Y%m%d_%H%M%S%N)
-
 $PASTA \
     -d dna\
     --no-return-final-tree-and-alignment\

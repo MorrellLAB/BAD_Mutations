@@ -25,6 +25,8 @@ import lrt_predict.General.check_modules as check_modules
 import lrt_predict.General.set_verbosity as set_verbosity
 #   Import our argument parsing script
 import lrt_predict.General.parse_args as parse_args
+#   Import our file handling script
+import lrt_predict.General.file_funcs as file_funcs
 
 
 def setup(arg):
@@ -254,8 +256,8 @@ def main():
             alignment, tree_file = align(arguments_valid, unaligned_seqs, loglevel)
             loglevel.info('Nucleotide alignment in ' + alignment)
             loglevel.info('Tree in ' + tree_file)
-            new_nuc = '/Users/tomkono/DataDisk/tmp/JCF_Barley_CSV_Testing/Pasta_Tests/' + file_funcs.local_name(alignment)
-            new_tree = '/Users/tomkono/DataDisk/tmp/JCF_Barley_CSV_Testing/Pasta_Tests/' + file_funcs.local_name(tree_file)
+            new_nuc = '/Users/tomkono/DataDisk/tmp/JCF_Barley_CSV_Testing/Pasta_Tests/' + file_funcs.local_name(arguments_valid['fasta'])
+            new_tree = '/Users/tomkono/DataDisk/tmp/JCF_Barley_CSV_Testing/Pasta_Tests/' + file_funcs.local_name(arguments_valid['fasta'].replace('.fasta', ',tree'))
             open(new_nuc, 'w').close()
             open(new_tree, 'w').close()
             shutil.copy2(alignment, new_nuc)

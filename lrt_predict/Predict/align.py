@@ -53,6 +53,6 @@ class PastaAlign:
         #   The structure of the Pasta output files is
         #       Jobname.marker001.Unaligned_name.aln
         #       Jobname.tre
-        aln_out = pasta_out + '/' + pasta_job + '.marker001.' + self.input_seq.name.split('/')[-1] + '.aln'
+        aln_out = pasta_out + '/' + pasta_job + '.marker001.' + self.input_seq.name.split('/')[-1].replace('.fasta', '') + '.aln'
         tree_out = pasta_out + '/' + pasta_job + '.tre'
         return (out, err, aln_out, tree_out)
