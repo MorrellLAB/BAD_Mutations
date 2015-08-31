@@ -81,7 +81,32 @@ class PastaAlign:
         character in the amino acid alignment will be faithfully represented
         by a triplet in the source sequence, and will not check identity of
         translated codons."""
-        pass
+        #   Iterate through the aligned protein file, and start rebuilding the
+        #   original nucleotide sequence.
+        aln_prot = SeqIO.parse(self.aln_out, 'fasta')
+        bt_seqs = []
+        for rec in aln_prot:
+            #   Check if we have name mismatch. This *shouldn't* happen, but
+            #   this should stop some errors
+            if rec.id in self.input_dict:
+                in_seq = self.input_dict[rec.id]
+                rebuilt_seq = ''
+                pos = 0
+                #   Now, iterate through the amino acid sequence and rebuild
+                #   the nucleotide sequence.
+                for aa in rec.seq:
+                    #   If we have a gap, put in three gaps
+                    if aa == '-':
+                        rebuilt_seq += '---'
+                    else:
+                        rebuilt_seq += in_seq[pos:pos+3]
+                    pos += 3
+            #   Then, put in a new SeqRecord with the sequence and the name, so
+            #   we can write a fasta file.
+            bt_seqs.append(SeqRecord.SeqRecord(
+                Seq.Seq(rebuilt_seq),
+                id=rec.id))
+        return bt_seqs
 
     def pasta_align(self):
         """Align the amino acid sequences with Pasta."""
@@ -104,7 +129,7 @@ class PastaAlign:
             'bash',
             pasta_script,
             pasta_path,
-            self.input_seq.name,
+            self.protein_input.name,
             pasta_out,
             pasta_job]
         self.mainlog.debug(' '.join(cmd))
@@ -124,11 +149,14 @@ class PastaAlign:
             os.path.sep,
             pasta_job,
             '.marker001.',
-            self.input_seq.name.split('/')[-1].replace('.fasta', ''),
+            self.protein_input.name.split(os.path.sep)[-1].replace('.fasta', ''),
             '.aln'])
         tree_out = ''.join([
             pasta_out,
             os.path.sep,
             pasta_job,
             '.tre'])
-        return (out, err, aln_out, tree_out)
+        #   And save the paths to these files as class variables
+        self.aln_out = aln_out
+        self.tree_out = tree_out
+        return (out, err)

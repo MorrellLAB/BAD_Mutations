@@ -164,10 +164,18 @@ def align(arg, unaligned, log):
         unaligned,
         arg['fasta'],
         arg['loglevel'])
+    #   Prepare the sequences for alignment:
+    #       Check length is multiple of 3
+    #       Translate to protein
+    #       Remove STOP codons
+    aln.prepare_sequences()
     #   Then align them
-    stdout, stderr, alignment, tree = aln.pasta_align()
+    stdout, stderr = aln.pasta_align()
     log.debug('stdout: \n' + stdout)
     log.debug('stderr: \n' + stderr)
+    #   Get the output aligment and the tree
+    alignment = aln.back_translate()
+    tree = aln.tree_out
     return (alignment, tree)
 
 

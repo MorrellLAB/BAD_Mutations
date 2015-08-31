@@ -20,7 +20,7 @@ TEMP_DIR=$3
 JOBNAME=$4
 
 $PASTA \
-    -d dna\
+    -d protein\
     --no-return-final-tree-and-alignment\
     --num-cpus=1\
     --job=$JOBNAME\
