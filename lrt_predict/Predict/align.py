@@ -8,10 +8,15 @@ import subprocess
 import os
 import time
 
+#   Import Biopython modules here for sequence handling
+from Bio import SeqIO
+from Bio import SeqRecord
+from Bio.Seq import Seq
+
 #   Import our helper scripts here
-from ..General import parse_input
-from ..General import set_verbosity
-from ..General import check_modules
+from lrt_predict.General import parse_input
+from lrt_predict.General import set_verbosity
+from lrt_predict.General import check_modules
 
 
 class PastaAlign:
@@ -29,7 +34,46 @@ class PastaAlign:
         sequences are not multiples of 3, and appends N if not. Translates
         the nucleotide sequences to amino acids for protein alignment with
         Pasta, then removes the trailing stop codon, if it is present."""
-        pass
+        #   First, read in the sequences and check their length
+        input_seqs = list(SeqIO.parse(self.input_seq, 'fasta'))
+        #   Start accumulating translated sequences to write into the
+        #   alignment input file.
+        tl_seqs = []
+        for i in input_seqs:
+            #   If the length is not a multiple of 3, then we have to add Ns to
+            #   make it so.
+            if len(i) % 3 != 0:
+                to_add = 3 - (len(i) % 3)
+                #   Tack on the original sequence, with some appended Ns so we
+                #   can recreate the nucleotide alignment later.
+                self.input_dict[i.id] = str(i.seq) + to_add*'N'
+                new_seq = SeqRecord.SeqRecord(
+                    Seq(str(i.seq) + to_add*'N').translate(),
+                    id=i.id)
+            else:
+                self.input_dict[i.id] = str(i.seq)
+                new_seq = SeqRecord.SeqRecord(
+                    i.seq.translate(),
+                    id=i.id)
+            tl_seqs.append(new_seq)
+        #   Then, we have to iterate through the translated sequences and
+        #   check for sequences ending in stop codons. Pasta hates these, so
+        #   we will prune them.
+        fixed_tl_seqs = []
+        for i in tl_seqs:
+            if i.seq.endswith('*'):
+                fixed_tl_seqs.append(SeqRecord.SeqRecord(i.seq[:-1], id=i.id))
+            else:
+                fixed_tl_seqs.append(i)
+        #   Then, we open another temporary file to hold our amino acid
+        #   sequences.
+        self.protein_input = tempfile.NamedTemporaryFile(
+            mode='w+t',
+            prefix='LRTPredict_PastaInput_',
+            suffix='.fasta')
+        #   And write the protein sequences into it
+        SeqIO.write(fixed_tl_seqs, self.protein_input, 'fasta')
+        return
 
     def back_translate(self):
         """Back-translates from amino acid to nucleotide, using the original
