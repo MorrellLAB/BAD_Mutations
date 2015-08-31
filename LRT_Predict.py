@@ -262,13 +262,13 @@ def main():
             unaligned_seqs = blast(arguments_valid, loglevel)
             #   Then add the query sequence and align them
             alignment, tree_file = align(arguments_valid, unaligned_seqs, loglevel)
-            loglevel.info('Nucleotide alignment in ' + alignment)
+            loglevel.info('Nucleotide alignment in ' + alignment.name)
             loglevel.info('Tree in ' + tree_file)
             new_nuc = '/Users/tomkono/DataDisk/tmp/JCF_Barley_CSV_Testing/Pasta_Tests/' + file_funcs.local_name(arguments_valid['fasta'])
             new_tree = '/Users/tomkono/DataDisk/tmp/JCF_Barley_CSV_Testing/Pasta_Tests/' + file_funcs.local_name(arguments_valid['fasta'].replace('.fasta', '.tree'))
             open(new_nuc, 'w').close()
             open(new_tree, 'w').close()
-            shutil.copy2(alignment, new_nuc)
+            shutil.copy2(alignment.name, new_nuc)
             shutil.copy2(tree_file, new_tree)
             #predict(arguments_valid, nuc_file, tree_file, loglevel)
     else:

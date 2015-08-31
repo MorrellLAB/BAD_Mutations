@@ -35,7 +35,7 @@ class PastaAlign:
         the nucleotide sequences to amino acids for protein alignment with
         Pasta, then removes the trailing stop codon, if it is present."""
         #   First, read in the sequences and check their length
-        input_seqs = list(SeqIO.parse(self.input_seq, 'fasta'))
+        input_seqs = list(SeqIO.parse(self.input_seq.name, 'fasta'))
         #   Start accumulating translated sequences to write into the
         #   alignment input file.
         tl_seqs = []
@@ -55,7 +55,9 @@ class PastaAlign:
                 new_seq = SeqRecord.SeqRecord(
                     i.seq.translate(),
                     id=i.id)
+            self.mainlog.debug(str(new_seq.seq))
             tl_seqs.append(new_seq)
+        self.mainlog.debug(len(tl_seqs))
         #   Then, we have to iterate through the translated sequences and
         #   check for sequences ending in stop codons. Pasta hates these, so
         #   we will prune them.
@@ -100,13 +102,19 @@ class PastaAlign:
                         rebuilt_seq += '---'
                     else:
                         rebuilt_seq += in_seq[pos:pos+3]
-                    pos += 3
+                        pos += 3
             #   Then, put in a new SeqRecord with the sequence and the name, so
             #   we can write a fasta file.
             bt_seqs.append(SeqRecord.SeqRecord(
-                Seq.Seq(rebuilt_seq),
+                Seq(rebuilt_seq),
                 id=rec.id))
-        return bt_seqs
+        #   And create a new temporary file for them
+        final_seqs = tempfile.NamedTemporaryFile(
+            mode='w+t',
+            prefix='LRTPredict_BackTranslated_',
+            suffix='.fasta')
+        SeqIO.write(bt_seqs, final_seqs, 'fasta')
+        return final_seqs
 
     def pasta_align(self):
         """Align the amino acid sequences with Pasta."""
