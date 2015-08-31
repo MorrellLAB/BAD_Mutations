@@ -61,7 +61,7 @@ class BlastSearch(object):
         threshold and verbosity level."""
         self.query = query
         self.evalue = evalue
-        self.homologues = {}
+        self.orthologues = {}
         self.mainlog = set_verbosity.verbosity('BLAST_Search', verbose)
         self.basedir = base
         return
@@ -175,8 +175,8 @@ class BlastSearch(object):
                 seq_id = fasta_info[0]
                 #   We need this part if we want to search by regex
                 gb_id = fasta_info[1]
-                #   And then tack it onto the list of homologues
-                self.homologues[blast_db] = (seq_id, gb_id)
+                #   And then tack it onto the list of orthologues
+                self.orthologues[blast_db] = (seq_id, gb_id)
         return
 
     def get_hit_seqs(self):
@@ -187,7 +187,7 @@ class BlastSearch(object):
         temp_output = tempfile.NamedTemporaryFile(
             mode='w+t',
             prefix='LRTPredict_BlastSearch_',
-            suffix='_homologues.fasta')
+            suffix='_orthologues.fasta')
         self.mainlog.debug('Created temporary file ' + temp_output.name)
         qseq = SeqIO.read(self.query, 'fasta')
         #    Start a new string to write the data into the file
@@ -196,7 +196,7 @@ class BlastSearch(object):
         blastdbcmd_path = check_modules.check_executable('blastdbcmd')
         if blastdbcmd_path:
             self.mainlog.debug('Using ' + blastdbcmd_path)
-            for database, seqid in self.homologues.iteritems():
+            for database, seqid in self.orthologues.iteritems():
                 fasta, error = sequence_fetch.blastdbcmd(
                     blastdbcmd_path,
                     database,
@@ -212,7 +212,7 @@ class BlastSearch(object):
                 towrite += fasta
         else:
             self.mainlog.debug('Using regex')
-            for database, seqid in self.homologues.iteritems():
+            for database, seqid in self.orthologues.iteritems():
                 fasta = sequence_fetch.get_seq_by_regex(database, seqid[1])
                 #   We will use the name of the assembly as the species name
                 spname = os.path.basename(database)

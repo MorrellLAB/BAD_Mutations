@@ -16,6 +16,7 @@ LRT_PATH = os.path.realpath(__file__).rsplit(os.path.sep, 3)[0]
 #   The directory that contains shell scripts
 SEQ_FETCH_SCRIPT = os.path.join(LRT_PATH, 'Shell_Scripts', 'Seq_From_BLASTdb.sh')
 
+
 #   Easier way: just use the packaged blastdbcmd from NCBI
 def blastdbcmd(path, db, seqID):
     #   The script is written in shell, so this function just calls it and
@@ -31,6 +32,7 @@ def blastdbcmd(path, db, seqID):
     out, err = p.communicate()
     #   return the output, which is just the fasta file.
     return (out, err)
+
 
 #   Failing that, we can use a regular expression to get it
 #   Regular expression written by Paul Hoffman.
@@ -56,4 +58,4 @@ def get_seq_by_regex(db, seqID):
     target_seq = pattern.search(fasta)
     #   Close this file handle
     handle.close()
-    return fasta
+    return target_seq
