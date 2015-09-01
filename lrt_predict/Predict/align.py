@@ -55,7 +55,7 @@ class PastaAlign:
                 new_seq = SeqRecord.SeqRecord(
                     i.seq.translate(),
                     id=i.id)
-            self.mainlog.debug(str(new_seq.seq))
+            self.mainlog.debug(new_seq.id + '\t' + str(new_seq.seq))
             tl_seqs.append(new_seq)
         self.mainlog.debug(len(tl_seqs))
         #   Then, we have to iterate through the translated sequences and
