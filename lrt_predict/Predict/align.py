@@ -75,6 +75,7 @@ class PastaAlign:
             suffix='.fasta')
         #   And write the protein sequences into it
         SeqIO.write(fixed_tl_seqs, self.protein_input, 'fasta')
+        self.protein_input.flush()
         return
 
     def back_translate(self):
@@ -114,6 +115,7 @@ class PastaAlign:
             prefix='LRTPredict_BackTranslated_',
             suffix='.fasta')
         SeqIO.write(bt_seqs, final_seqs, 'fasta')
+        final_seqs.flush()
         return final_seqs
 
     def pasta_align(self):
