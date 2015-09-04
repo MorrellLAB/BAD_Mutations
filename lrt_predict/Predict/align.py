@@ -7,6 +7,7 @@ import tempfile
 import subprocess
 import os
 import time
+import re
 
 #   Import Biopython modules here for sequence handling
 from Bio import SeqIO
@@ -47,13 +48,28 @@ class PastaAlign:
                 #   Tack on the original sequence, with some appended Ns so we
                 #   can recreate the nucleotide alignment later.
                 self.input_dict[i.id] = str(i.seq) + to_add*'N'
+                #   Create the new sequence. Pasta chokes on ambiguous
+                #   amino acids that aren't X, so we replace them all with X.
+                fixed_seq = Seq(str(i.seq) + to_add*'N').translate()
+                sub_seq = Seq(
+                    re.sub(
+                        'B|Z|J|O|U',
+                        'X',
+                        str(fixed_seq),
+                        re.I))
                 new_seq = SeqRecord.SeqRecord(
-                    Seq(str(i.seq) + to_add*'N').translate(),
+                    sub_seq,
                     id=i.id)
             else:
                 self.input_dict[i.id] = str(i.seq)
+                sub_seq = Seq(
+                    re.sub(
+                        'B|Z|J|O|U',
+                        'X',
+                        str(i.seq.translate()),
+                        re.I))
                 new_seq = SeqRecord.SeqRecord(
-                    i.seq.translate(),
+                    sub_seq,
                     id=i.id)
             self.mainlog.debug(new_seq.id + '\t' + str(new_seq.seq))
             tl_seqs.append(new_seq)
