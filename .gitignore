@@ -1,3 +1,5 @@
-
+*.aux
+*.log
+*.tex
 *.pyc
 .DS_Store
