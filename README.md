@@ -13,7 +13,8 @@ Data Sources
 The package downloads all CDS FASTA files from
 [Phytozome 10](http://phytozome.jgi.doe.gov/) and 
 [Ensembl Plants](http://plants.ensembl.org). In order to run the script, you
-will need a JGI Genomes account. BAD_Muatations is configured to fetch all
+will need a JGI Genomes account. As of October 2015, BAD_Muations sources data
+from 37 genome sequences. BAD_Muatations is configured to fetch all
 Angiosperm CDS sequences, but it is possible to modify the fetching scripts
 to retrieve other data sets.
 
@@ -62,6 +63,25 @@ residue number 4, 10, 25, and 100 in the CDS translation), and have the IDs
 the FASTA file contains **nucleotide** sequence, the missense variant
 information is given in terms of **protein** sequence, or codon number. This is
 necessary to allow the software to calculate synonymous substitution rates.
+
+Runtimes and Benchmarks
+-----------------------
+By far, the slowest part of BAD_Mutations is fetching CDS sequences and
+converting them to BLAST databases. This may take up to several hours,
+depending on your network and disk speeds. The databases and FASTA files take
+up approximately 4GB, as of October 2015. As more genomes are sequnced and
+annotated, this figure will increase.
+
+For a typical barley gene (~3000bp), BAD_Mutations can generate a phylogenetic
+tree and multiple sequence alignment in approximately 5-10 minutes on a dekstop
+computer (Intel i7 2.8GHz). Note, however, that this figure can vary depending
+on the gene you are using. Rapidly evolving genes will be much more difficult
+to align and estimate phylogenies from, and will take longer. Also note that
+not every gene will have an ortholog with enough sequence similarity, so not
+every gene will have every species represented in the alignment and tree. This
+is not a problem for BAD_Mutations.
+
+Predictions are much slower, and are currently being benchmarked.
 
 TODO
 ----
