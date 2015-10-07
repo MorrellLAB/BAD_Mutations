@@ -1,29 +1,31 @@
-LRT Pipeline
+BAD_Mutations
 ============
 
 Overview
 --------
-A package to perform a likelihood ratio test (LRT) for the prediction of
-deleterious variants, as described in 
+BAD_Mutations (**B**LAST-**A**lign-**D**eleterious?) performs a likelihood
+ratio test (LRT) for the prediction of deleterious variants, as described in 
 [Chun and Fay (2009)](http://genome.cshlp.org/content/19/9/1553.abstract). The
 package is designed to identify deleterious mutations in plant species.
 
 Data Sources
 ------------
 The package downloads all CDS FASTA files from
-[Phytozome 10](http://phytozome.jgi.doe.gov/). In order to run the script, you
-will need a JGI Genomes account. Fetching data from [Ensembl](http://plants.ensembl.org)
-is not yet implemented, but is planned.
+[Phytozome 10](http://phytozome.jgi.doe.gov/) and 
+[Ensembl Plants](http://plants.ensembl.org). In order to run the script, you
+will need a JGI Genomes account. BAD_Muatations is configured to fetch all
+Angiosperm CDS sequences, but it is possible to modify the fetching scripts
+to retrieve other data sets.
 
 Method
 ------
 The package will predict deleterious variants in a user-supplied sequence by
-using [tblastx](http://blast.ncbi.nlm.nih.gov/Blast.cgi) to identify likely
-homologues in other plant species. The nucleotide sequences from homologues
-will then be aligned using [PRANK](http://wasabiapp.org/software/prank/)
-and a precomputed phylogenetic tree of the species. The model from 
-[Chun and Fay (2009)](http://genome.cshlp.org/content/19/9/1553.abstract) will then
-be applied for each specified codon, and a prediction as to whether the query
+using [tblastx](http://blast.ncbi.nlm.nih.gov/Blast.cgi) to identify
+orthologues in other plant species. The nucleotide sequences from orthologues
+are then aligned using [PASTA](http://www.cs.utexas.edu/~phylo/software/pasta/)
+and a phylogenetic tree estimated from the alignment. The model from 
+[Chun and Fay (2009)](http://genome.cshlp.org/content/19/9/1553.abstract) is then
+applied for each specified codon, and a prediction as to whether the query
 variant is deleterious will be returned.
 
 Input
