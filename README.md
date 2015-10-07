@@ -27,9 +27,10 @@ using [tblastx](http://blast.ncbi.nlm.nih.gov/Blast.cgi) to identify
 orthologues in other plant species. The nucleotide sequences from orthologues
 are then aligned using [PASTA](http://www.cs.utexas.edu/~phylo/software/pasta/)
 and a phylogenetic tree estimated from the alignment. The model from 
-[Chun and Fay (2009)](http://genome.cshlp.org/content/19/9/1553.abstract) is then
-applied for each specified codon, and a prediction as to whether the query
-variant is deleterious will be returned.
+[Chun and Fay (2009)](http://genome.cshlp.org/content/19/9/1553.abstract) is
+then applied for each specified codon, and a prediction as to whether the query
+variant is deleterious will be returned. Since the model predicts conservation
+of codons, it can only predict coding SNPs.
 
 Input
 -----
