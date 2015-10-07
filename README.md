@@ -6,7 +6,7 @@ Overview
 BAD_Mutations (**B**LAST-**A**lign-**D**eleterious?) performs a likelihood
 ratio test (LRT) for the prediction of deleterious variants, as described in 
 [Chun and Fay (2009)](http://genome.cshlp.org/content/19/9/1553.abstract). The
-package is designed to identify deleterious mutations in plant species.
+package is designed to identify deleterious variants in plant species.
 
 Data Sources
 ------------
@@ -87,7 +87,7 @@ TODO
 ----
 * 'setup' subcommand
     * ~~Write configuration file~~ **Done!**
-    * Read and parse configuration file
+    * ~~Read and parse configuration file~~ **Done!**
 * 'fetch' subcommand **Done!**
     * ~~Add fetching CDS sequences from Ensembl Plants~~ **Done!**
     * ~~Integreate creation of BLAST databases~~ **Done!**
@@ -101,5 +101,5 @@ TODO
     * ~~Compute phylogentic tree of species in database~~ **Not necessary, build tree from MSA**
     * ~~Add option to "prune" species from the all-species phylogenetic tree~~ **Not necessary, build tree from MSA**
     * Implement the LRT itself
-    * Add support for parallel execution
+    * ~~Add support for parallel execution~~ **Parallelize at the process level, not within the package**
     * Add support for substitutions in nucleotide sequence as well as protein sequence
