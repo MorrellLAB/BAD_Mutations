@@ -30,11 +30,11 @@
 \section*{Overview}
 \par \BM (\textbf{\underline{B}}LAST-\textbf{\underline{A}}ligned-\textbf{\underline{D}}eleterious?)
 performs a likelihood ratio test (LRT) for the prediction of deleterious
-variants. The package is comprised of Python and Bourne Again Shell scripts.
+variants. The package is comprised of Python and Bourne Again Shell (BASH) scripts.
 The LRT is handled by a HYPHY script. \BM was written with Python 2 syntax, but
 conversion to Python 3 is planned. \BM is designed to be run from the command
-line, as if it were a typical UNIX application. Running from an interactive
-Python environment is not recommended nor supported.
+line. Running from an interactive Python environment is not recommended nor
+supported.
 
 \par \BM contains three major subcommands: \texttt{setup}, \texttt{fetch}, and
 \texttt{predict}. Both \texttt{setup} and \texttt{fetch} are meant to be run
@@ -66,7 +66,7 @@ archive from GitHub.
 
 \section*{Dependencies}
 \par \BM is written to run in a UNIX-like environment. It has been successfully
-run on both Apple OSX and GNU/Linux. It is not supported on Microsoft Windows.
+run on both Apple OS X and GNU/Linux. It is not supported on Microsoft Windows.
 It has not been tested on other variants of commercial UNIX.
 
 \par \BM requires that the following software is installed and
@@ -139,9 +139,9 @@ site is constrained across the evolutionary history of the species in the tree.
 \par \textit{More on this later...}
 \section*{Usage}
 \subsection*{Basic Invocation}
-\par \BM can be called from command line as if it were a UNIX program. You must
-either set the executable flag on the script \texttt{BAD\_Mutations.py}, or
-pass the script to the Python interpreter.
+\par \BM can be called from command line in a manner similar to UNIX programs.
+You must either set the executable flag on the script \texttt{BAD\_Mutations.py},
+or pass the script to the Python interpreter.
 \begin{Verbatim}[frame=single, fontsize=\small, rulecolor=\color{gray}]
 $ chmod +x BAD_Mutations.py
 $ ./BAD_Mutations.py [Options] [Subcommand] [More Options ... ]
@@ -176,7 +176,7 @@ paths to required executables, paths to data storage directories, BLAST search
 parameters, alignment parameters, and prediction parameters. Running
 \texttt{setup} is optional, but recommended as it makes standardizing across
 genes and analyses much simpler. This subcommand can also download and compile
-the dependencies that are required for \BM.
+dependencies for \BM.
 
 \par The \texttt{setup} subcommand takes the following options:
 \begin{table}[H]
@@ -197,7 +197,7 @@ the dependencies that are required for \BM.
     \midrule
     \texttt{-e/--evalue} & [FLOAT] & E-value threshold for accepting TBLASTX hits as putative orthologues. Defaults to 0.05.\\
     \midrule
-    \texttt{-m/--missing} & [FLOAT] & Proportion of gapped (missing) sites in the MSA to be excluded from prediction.\\
+    \texttt{-m/--missing} & [FLOAT] & Proportion of gapped (missing) sites in the multiple species alignment (MSA) to be excluded from prediction.\\
     \bottomrule
     \end{tabular}
 \end{table}
@@ -206,7 +206,7 @@ the dependencies that are required for \BM.
 \par The \texttt{fetch} subcommand creates the necessary BLAST databases for
 identifying orthologues. It will fetch gzipped CDS FASTA files from both
 Phytozome 10 and Ensembl Plants, unzip them, and convert them into BLAST
-databases. For fetching data from Phytozome, it requires a (free) account with
+databases. Fetching data from Phytozome requires a (free) account with
 the \href{http://genome.jgi.doe.gov/}{JGI Genome Portal}. Note that not every
 genome sequence in Phytozome is available to be used for this analysis. Check
 the species info page on Phytozome for specific data usage policies.
@@ -237,7 +237,7 @@ the value set in the configuration file.
 
 \subsection*{The \texttt{predict} Subcommand}
 \par The \texttt{predict} subcommand will generate predictions for a list of
-affected codons. It will BLAST the query sequence against each CDS sequence
+affected codons. It will run a BLAST search of the query sequence against each CDS sequence
 that was downloaded with the \texttt{fetch} subcommand, pick the likely
 orthologous sequences, align them, and then use HyPhy to predict each query
 codon.
