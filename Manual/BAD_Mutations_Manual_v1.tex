@@ -1,0 +1,418 @@
+\documentclass[12pt]{article}
+%   We will be using this term throughout, so we define a macro to make it easy
+\newcommand{\BM}{\texttt{BAD\_Mutations} }
+%   Load up packages here
+\usepackage[right=1in, left=1in, top=1in, bottom=1in]{geometry}
+\usepackage{palatino}
+\usepackage{amsmath}
+\usepackage{titlesec}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{fancyvrb}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{multirow}
+\usepackage[colorlinks=true, urlcolor=blue]{hyperref}
+\pagestyle{fancy}
+\fancyhead[RO]{\BM Documentation}
+\fancyhead[LO]{Version 1 \\ October 7, 2015}
+%   Set some lengths. No ident on new paragraphs, extra space after paragraph.
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{\baselineskip}
+%   For section headers, we want spacing above, but not below
+\titlespacing\section{0pt}{12pt plus 2pt minus 2pt}{-5pt plus 2pt minus 2pt}
+%   The header needs a few lines' worth of space to hold the text we want
+\setlength{\headheight}{30pt}
+\begin{document}
+
+\section*{Overview}
+\par \BM (\textbf{\underline{B}}LAST-\textbf{\underline{A}}ligned-\textbf{\underline{D}}eleterious?)
+performs a likelihood ratio test (LRT) for the prediction of deleterious
+variants. The package is comprised of Python and Bourne Again Shell scripts.
+The LRT is handled by a HYPHY script. \BM was written with Python 2 syntax, but
+conversion to Python 3 is planned. \BM is designed to be run from the command
+line, as if it were a typical UNIX application. Running from an interactive
+Python environment is not recommended nor supported.
+
+\par \BM contains three major subcommands: \texttt{setup}, \texttt{fetch}, and
+\texttt{predict}. Both \texttt{setup} and \texttt{fetch} are meant to be run
+once, or very rarely. The \texttt{predict} subcommand does most of the actual
+work in predicting variants. More information about how to run \BM is available
+in the ``Usage'' section.
+
+\par Briefly, \BM predicts deleterious variants using a sequence constraint
+approach. For a given query gene sequence and list of nonsynonmyous SNPs, a
+multiple sequence alignment among orthologues is produced, and the given codons
+are tested for conservation. Variants that alter a codon with a high degree of
+conservation are inferred to be deleterious. More details on the procedure in
+\BM is available in the ``Methods'' section.
+
+\section*{Citation}
+\par The model used to estimate codon conservation and predict which variants
+are deleterious is reported in Chun and Fay (2009). The actual software package
+is first used in Kono \textit{et al.} (In Prep.). \BM will have a formal
+publication after the Kono \textit{et al.} manuscript is published.
+
+\par \BM was primarily written by Thomas JY Kono and Paul J Hoffman. The HYPHY
+script for estimating codon conservation was written by Justin C Fay.
+
+\section*{Downloading}
+\par \BM is distributed through a
+\href{https://github.com/MorrellLAB/BAD_Mutations}{GitHub repository}. You can
+use \href{https://git-scm.com/}{Git} to clone the repository, or download a ZIP
+archive from GitHub.
+
+\section*{Dependencies}
+\par \BM is written to run in a UNIX-like environment. It has been successfully
+run on both Apple OSX and GNU/Linux. It is not supported on Microsoft Windows.
+It has not been tested on other variants of commercial UNIX.
+
+\par \BM requires that the following software is installed and
+available in your \texttt{\$PATH} or \texttt{sys.path} in Python:
+\begin{itemize}[noitemsep]
+    \item \href{https://www.gnu.org/software/bash/}{GNU Bash} $\geq$ 3.2
+    \item \href{https://www.python.org/}{Python} $\geq$ 2.6.x
+    \item \href{http://biopython.org/}{Biopython} 1.6x
+    \item \href{https://code.google.com/p/argparse/}{argparse} (Python library) If using Python 2.6
+    \item \href{http://docs.python-requests.org/en/latest/}{requests} (Python library) 2.x
+    \item \href{https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download}{BLAST+} $\geq$ 2.2.29
+    \item \href{http://www.cs.utexas.edu/~phylo/software/pasta/}{PASTA}
+    \item \href{http://hyphy.org/}{HyPhy} 2.2.x
+\end{itemize}
+
+\par We offer a script (\texttt{Shell\_Scripts/get\_dependencies.sh}) that will
+fetch, compile, and install most of the dependencies for you. It will not
+install GNU Bash or Python, as it assumes you have those available. The
+dependencies will be installed locally, and so you must direct \BM to the paths
+of the install programs in the configuration file.
+
+\section*{Input}
+\par Input files should be plain text with UNIX line endings (LF). \BM takes a
+FASTA file containing the query coding sequence, and a text file with the list
+of codons to predict. The coding sequence does not have to start with ATG, but
+it should be supplied in the 5$^{\prime}$ to 3$^{\prime}$ direction, and its
+length should be a multiple of 3. The codons should be supplied as numerical
+offsets with respect to the provided FASTA file, with counting starting from 1
+and one codon per line. The substitutions file may optionally have a second
+field with a SNP identifier.
+
+\par There is no programmatic means of enforcing the consistency of
+directionality between the FASTA file and the substitutions file. This means it
+is possible to submit them in the reverse order, but keep in mind that the
+coordinates must match in order for the predictions to be valid.
+
+\par The FASTA input should look like this:
+\begin{Verbatim}[frame=single, fontsize=\small, rulecolor=\color{gray}]
+>Gene_1
+ATGCCAGTGCAG...
+...
+\end{Verbatim}
+\newpage
+And the substitutions file should look like this:
+\begin{Verbatim}[frame=single, fontsize=\small, rulecolor=\color{gray}]
+4   SNP_1
+10  SNP_2
+25  SNP_3
+100 SNP_4
+\end{Verbatim}
+
+\par This pair of files would describe four nonsynonymous variants to predict
+in a single coding sequence. The variants occur at residue numbers 4, 10, 25,
+and 100 in the \textbf{amino acid} sequence, with the first residue being
+treated as position 1. Their identifiers are \texttt{SNP\_1}, \texttt{SNP\_2},
+\texttt{SNP\_3}, and \texttt{SNP\_4}, respectively. These may be any
+non-whitespace text, and may be internal identifiers for bookkeeping, or
+rs numbers, or some other SNP identification system.
+
+\par Note that while the FASTA file contains \textbf{nucleotide} sequence, the
+substitutions file contains positions in the \textbf{amino acid} sequence.
+Support for nucleotide offsets is planned for a future version.
+
+\section*{Output}
+\par \BM will return a report on each queried position. Information returned
+includes the number of species in the alignment, the orthologous amino acid
+state in each of the species, a constraint score, and the $p$-value that the
+site is constrained across the evolutionary history of the species in the tree.
+
+\par \textit{More on this later...}
+\section*{Usage}
+\subsection*{Basic Invocation}
+\par \BM can be called from command line as if it were a UNIX program. You must
+either set the executable flag on the script \texttt{BAD\_Mutations.py}, or
+pass the script to the Python interpreter.
+\begin{Verbatim}[frame=single, fontsize=\small, rulecolor=\color{gray}]
+$ chmod +x BAD_Mutations.py
+$ ./BAD_Mutations.py [Options] [Subcommand] [More Options ... ]
+--OR--
+$ python BAD_Mutations.py [Options] [Subcommand] [More Options ... ]
+\end{Verbatim}
+\par \BM offers three subcommands, \texttt{setup}, \texttt{fetch}, and
+\texttt{predict}. They are summarized below.
+
+\subsection*{Subcommands, Options, and Switches}
+\subsection*{General Options}
+\par \BM takes the following general options:
+\begin{table}[h]
+    \centering
+    \begin{tabular}{p{105pt} l p{260pt}}
+    \toprule
+    Option & Value & Description \\
+    \midrule
+    \texttt{-h} & NA & Show help message and exit. \\
+    \midrule
+    & 'DEBUG' & Be very verbose. Print all messages.\\ \cmidrule{2-3}
+    & 'INFO' & Just print info, warning, and error messages. Useful for progress checking.\\ \cmidrule{2-3}
+    \texttt{-v/--verbose} & 'WARNING' & Print warnings and errors. Default setting. \\ \cmidrule{2-3}
+    & 'ERROR' & Only print error messages. \\ \cmidrule{2-3}
+    & 'CRITICAL' & Print almost nothing. Critical failures only. \\
+    \bottomrule
+    \end{tabular}
+\end{table}
+\subsection*{The \texttt{setup} Subcommand}
+\par The \texttt{setup} subcommand creates a configuration file that contains
+paths to required executables, paths to data storage directories, BLAST search
+parameters, alignment parameters, and prediction parameters. Running
+\texttt{setup} is optional, but recommended as it makes standardizing across
+genes and analyses much simpler. This subcommand can also download and compile
+the dependencies that are required for \BM.
+
+\par The \texttt{setup} subcommand takes the following options:
+\begin{table}[H]
+    \centering
+    \begin{tabular}{p{105pt} l p{260pt}}
+    \toprule
+    Option & Value & Description \\
+    \midrule
+    \texttt{--list-species} & NA & Show all species databases available. \\
+    \midrule
+    \texttt{-c/--config} & [FILE] & Where to store the configuration file. Defaults to \texttt{LRTPredict\_Config.txt}. \\
+    \midrule
+    \texttt{-b/--base} & [DIR] & Directory to store the BLAST databases. Defaults to the current directory.\\
+    \midrule
+    \texttt{-d/--deps-dir} & [DIR] & Directory to download and store the dependencies. Defaults to current directory.\\
+    \midrule
+    \texttt{-t/--target} & [SP\_NAME] & Target species name. Must be one of the species (case sensitive) given by \texttt{--list-species}. This species will be excluded from the prediction pipeline to avoid reference bias. No default.\\
+    \midrule
+    \texttt{-e/--evalue} & [FLOAT] & E-value threshold for accepting TBLASTX hits as putative orthologues. Defaults to 0.05.\\
+    \midrule
+    \texttt{-m/--missing} & [FLOAT] & Proportion of gapped (missing) sites in the MSA to be excluded from prediction.\\
+    \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsection*{The \texttt{fetch} Subcommand}
+\par The \texttt{fetch} subcommand creates the necessary BLAST databases for
+identifying orthologues. It will fetch gzipped CDS FASTA files from both
+Phytozome 10 and Ensembl Plants, unzip them, and convert them into BLAST
+databases. For fetching data from Phytozome, it requires a (free) account with
+the \href{http://genome.jgi.doe.gov/}{JGI Genome Portal}. Note that not every
+genome sequence in Phytozome is available to be used for this analysis. Check
+the species info page on Phytozome for specific data usage policies.
+
+\par The \texttt{fetch} subcommand accepts the following options:
+\begin{table}[H]
+    \centering
+    \begin{tabular}{p{105pt} l p{260pt}}
+    \toprule
+    Option & Value & Description \\
+    \midrule
+    \texttt{-c/--config} & [FILE] & Path to configuration file. Defaults to \texttt{LRTPredict\_Config.txt}. \\
+    \midrule
+    \texttt{-b/--base}* & [DIR] & Directory to store the BLAST databases. Defaults to the current directory.\\
+    \midrule
+    \texttt{-u/--user} & [STR] & Username for JGI Genome Portal. Required.\\
+    \midrule
+    \texttt{-p/--password} & [STR] & Password for JGI Genome Portal. If not supplied on command line, will prompt user for the password.\\
+    \midrule
+    \texttt{--fetch-only} & NA & If supplied, do not convert CDS FASTA files into BLAST databases.\\
+    \midrule
+    \texttt{--convert-only} & NA & If supplied, only unzip and convert FASTA files into BLAST databases. Do not download.\\
+    \bottomrule
+    \end{tabular}
+\end{table}
+\par $^*$: If this value is supplied on the command line, it will override
+the value set in the configuration file.
+
+\subsection*{The \texttt{predict} Subcommand}
+\par The \texttt{predict} subcommand will generate predictions for a list of
+affected codons. It will BLAST the query sequence against each CDS sequence
+that was downloaded with the \texttt{fetch} subcommand, pick the likely
+orthologous sequences, align them, and then use HyPhy to predict each query
+codon.
+
+\par The \texttt{predict} subcommand accepts the following options:
+\begin{table}[H]
+    \centering
+    \begin{tabular}{p{105pt} l p{260pt}}
+    \toprule
+    Option & Value & Description \\
+    \midrule
+    \texttt{-c/--config} & [FILE] & Path to configuration file. Defaults to \texttt{LRTPredict\_Config.txt}. \\
+    \midrule
+    \texttt{-b/--base}* & [DIR] & Directory to store the BLAST databases. Defaults to the current directory.\\
+    \midrule
+    \texttt{-f/--fasta} & [FILE] & Path to FASTA file with query sequence. Required.\\
+    \midrule
+    \texttt{-s/--subs} & [FILE] & Path to substitutions file. Required\\
+    \midrule
+    \texttt{-e/--evalue}* & [FLOAT] & E-value threshold for accepting TBLASTX hits as putative orthologues. Defaults to 0.05.\\
+    \bottomrule
+    \end{tabular}
+\end{table}
+\par $^*$: If this value is supplied on the command line, it will override
+the value set in the configuration file.
+
+\subsection*{Example Command Lines}
+\par The following command line demonstrates the typical usage of \BM.
+
+\par This command will set up the environment for predicting in barley
+(\textit{Hordeum vulgare}), with very verbose output:
+\begin{Verbatim}[frame=single, fontsize=\small, rulecolor=\color{gray}]
+$ ./BAD_Mutations.py -v DEBUG \
+                     setup \
+                     -b /scratch/BAD_Mutations_Data \
+                     -d /scratch/BAD_Mutations_Deps \
+                     -t 'Hordeum_vulgare' \
+                     -e 0.05 \
+                     -m 0.2 \
+                     -c BAD_Mutations_Config.txt 2> Setup.log
+\end{Verbatim}
+
+\par This command will download all of the necessary CDS sequences from both
+Phytozome and Ensembl Plants and convert them into BLAST databases:
+\begin{Verbatim}[frame=single, fontsize=\small, rulecolor=\color{gray}]
+$ ./BAD_Mutations.py -v DEBUG \
+                     fetch \
+                     -c BAD_Mutations_Config.txt \
+                     -u 'user@domain.com' \
+                     -p 'ReallyGoodPassword123' 2> Fetch.log
+\end{Verbatim}
+
+\par And this command will predict the functional impact of variants listed in
+\texttt{subs.txt} using \texttt{CoolGene.fasta} as a query:
+\begin{Verbatim}[frame=single, fontsize=\small, rulecolor=\color{gray}]
+$ ./BAD_Mutations.py -v DEBUG \
+                     predict \
+                     -c BAD_Mutations_Config.txt \
+                     -f CoolGene.fasta \
+                     -s subs.txt 2> CoolGene_Predictions.log
+\end{Verbatim}
+
+\section*{Configuration File Format}
+\par The configuration file is modeled after the configuration file of
+STRUCTURE [Pritchard \textit{et al.}, (2000)]. A sample configuration file is
+shown below:
+\begin{Verbatim}[frame=single, fontsize=\small, rulecolor=\color{gray}]
+// Generated by 'setup' at 2015-10-07 19:09:09.622228
+#define BASE /scratch/BAD_Mutations_Data
+#define EVAL_THRESHOLD 0.05
+#define MISSING_THRESHOLD 0.2
+
+// Program paths
+#define BASH /usr/local/bin/bash
+#define GZIP /usr/bin/gzip
+#define SUM /usr/bin/sum
+#define TBLASTX /usr/local/bin/tblastx
+#define PASTA /usr/local/bin/run_pasta.py
+#define HYPHY /usr/local/bin/HYPHYSP
+\end{Verbatim}
+
+\section*{Runtimes and Benchmarks}
+\par By far, the slowest part of \BM is fetching CDS sequences and converting
+them to BLAST databases. This may take up to several hours, depending on your
+network and disk speeds. The databases and FASTA files take up approximately
+4GB, as of October 2015. As more genomes are sequenced and annotated, this
+figure will increase.
+
+\par For a typical barley gene ($\approx$3000bp), \BM can generate a
+phylogenetic tree and multiple sequence alignment in approximately 5-10 minutes
+on a desktop computer (Intel i7 2.8GHz). Note, however, that this figure can
+vary depending on the gene you are using. Rapidly evolving genes will be much
+more difficult to align and estimate phylogenies from, and will take longer.
+Also note that not every gene will have an orthologue with enough sequence
+similarity, so not every gene will have every species represented in the
+alignment and tree. This is not a problem for \BM.
+
+\par Predictions are much slower, and are currently being benchmarked.
+\section*{Methods}
+\par \BM uses TBLASTX to identify genes that are orthologous to the query
+sequence based on translated similarity. Hits that are above the user-supplied
+E-value threshold are excluded. Once a list of orthlogues is identified,
+\BM translates the sequences into amino acids, and aligns them with PASTA. A
+phylogenetic tree of the species is also estimated from the alignment. The
+alignment is then back-translated using the original nucleotide sequence hits
+from their respective BLAST databases. This alignment is then supplied to the
+prediction script, where the query codons are evaluated using HyPhy.
+
+\par Evaluation of codons...
+
+\par \BM makes several assumptions in its prediction pipeline. First, putative
+orthologues identified with BLAST are assumed to have conserved function across
+all of the species represented in the alignment. For some gene families,
+particularly those involved in pathogen recognition and defense, this assumption
+may not be true. Next, \BM assumes that the sequences identified as orthologous
+through sequence similarity are \textit{homologous}. This assumption is
+manifest in the multiple sequence alignment, as each site in the alignment is
+then assumed to be homologous. For gene families that are highly duplicated
+(either proliferating, or due to a whole genome duplication event), this
+assumption may also be violated.
+
+\par As such, exercise caution when interpreting results from \BM.
+
+\section*{Data Sources}
+\par As of October 2015, the following Angiosperm genomes (41) are available
+for use in Ensembl and Phytozome:
+\begin{table}[H]
+\scriptsize
+    \centering
+    \begin{tabular}{l l l l l}
+    \toprule
+    Species & Common Name & Assembly Version & Annotation Version & Source\\
+    \midrule
+    \textit{Aegilops tauschii} & Goatgrass & ASM34733v1 & 1 & Ensembl Plants\\
+    \textit{Aquilegia coerulea} & Columbine & 1.1 & 1.1 & Phytozome 10\\
+    \textit{Arabidopsis lyrata} & Lyrate rockcress & 1.0 & 1.0 & Phytozome 10\\
+    \textit{Arabidopsis thaliana} & Thale cress & TAIR10 & TAIR10 & Phytozome 10\\
+    \textit{Boechera stricta} & Drummond's rockcress & 1.2 & 1.2 & Phytozome 10\\
+    \textit{Brachypodium distachyon} & Purple false brome & 2.1 & 2.1 & Phytozome 10\\
+    \textit{Brassica oleracea} & Cabbage & 2.1 & 2.1 & Ensembl Plants\\
+    \textit{Brassica rapa} & Turnip mustard & FPsc 1.3 & 1 & Phytozome 10\\
+    \textit{Capsella grandiflora}& -- & 1.1 & 1.1 & Phytozome 10\\
+    \textit{Capsella rubella} & Red shepherd's purse & 1.0 & 1.0 & Phytozome 10\\
+    \textit{Carica papaya} & Papaya & ASGPBv0.4 & ASGPBv0.4 & Phytozome 10\\
+    \textit{Citrus clementina} & Clementine & 1.0 & clementine1.0 & Phytozome 10\\
+    \textit{Citrus sinensis} & Sweet orange & 1.0 & orange1.1 & Phytozome 10\\
+    \textit{Cucumis sativus} & Cucumber & 1.0 & 1.0 & Phytozome 10\\
+    \textit{Eucalyptus grandis} & Eucalyptus & 2.0 & 2.0 & Phytozome 10\\
+    \textit{Eutrema salsugineum} & Salt cress & 1.0 & 1.0 & Phytozome 10\\
+    \textit{Fragaria vesca} & Strawberry & 1.1 & 1.1 & Phytozome 10\\
+    \textit{Glycine max} & Soybean & a2 & a2.v1 & Phytozome 10\\
+    \textit{Gossypium raimondii} & Cotton & 2.1 & 2.1 & Phytozome 10\\
+    \textit{Hordeum vulgare} & Barley & 082214v1 & 1.0 & Ensembl Plants\\
+    \textit{Leersia perrieri} & Cutgrass & 1.4 & 1.0 & Ensembl Plants\\
+    \textit{Linum usitatissimum} & Flax & 1.0 & 1.0 & Phytozome 10\\
+    \textit{Malus domestica} & Apple & 1.0 & 1.0 & Phytozome 10\\
+    \textit{Manihot esculenta} & Cassava & 6.0 & 6.1 & Phytozome 10\\
+    \textit{Medicago truncatula} & Barrel medic & Mt4.0 & Mt4.0v1 & Phytozome 10\\
+    \textit{Mimulus guttatus} & Monkey flower & 2.0 & 2.0 & Phytozome 10\\
+    \textit{Musa acuminata} & Banana & MA1 & MA1 & Ensembl Plants\\
+    \textit{Oryza sativa} & Asian rice & IRGSP-1.0 & 7.0 & Phytozome 10\\
+    \textit{Panicum virgatum} & Switchgrass & 1.0 & 1.1 & Phytozome 10\\
+    \textit{Phaseolus vulgaris} & Common bean & 1.0 & 1.0 & Phytozome 10\\
+    \textit{Populus trichocarpa} & Western poplar & 3.0 & 3.0 & Phytozome 10\\
+    \textit{Prunus persica} & Peach & 2.0 & 2.1 & Phytozome 10\\
+    \textit{Ricinus communis} & Castor bean & 0.1 & 0.1 & Phytozome 10\\
+    \textit{Setaria italica} & Foxtail millet & 2.0 & 2.1 & Phytozome 10\\
+    \textit{Solanum lycopersicum} & Tomato & SL2.50 & iTAG2.3 & Phytozome 10\\
+    \textit{Solanum tuberosum} & Potato & 3\_2.1.10 & 3.4 & Phytozome 10\\
+    \textit{Sorghum bicolor} & Cereal grass & 2.0 & 2.1 & Phytozome 10\\
+    \textit{Theobroma cacao} & Cacao & 1.0 & 1.0 & Phytozome 10\\
+    \textit{Triticum urartu} & Red wild einkorn & ASM34745v1 & 1 & Ensembl Plants\\
+    \textit{Vitis vinifera} & Grape & Genoscope.12X & Genoscope.12X & Phytozome 10\\
+    \textit{Zea mays} & Maize & 6a & 6a & Phytozome 10\\
+    \bottomrule
+    \end{tabular}
+\end{table}
+\end{document}
