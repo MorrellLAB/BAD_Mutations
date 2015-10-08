@@ -3,12 +3,12 @@ BAD_Mutations
 
 Overview
 --------
-BAD_Mutations (**B**LAST-**A**lign-**D**eleterious?) performs a likelihood
+BAD_Mutations (**B**LAST-**A**ligned-**D**eleterious?) performs a likelihood
 ratio test (LRT) for the prediction of deleterious variants, as described in 
 [Chun and Fay (2009)](http://genome.cshlp.org/content/19/9/1553.abstract). The
 package is designed to identify deleterious variants in plant species.
-BAD_Mutations is first used in *Kono et al. (In Prep.)*, and will have a formal
-publication to follow.
+BAD_Mutations is first used in *Kono et al. (In Prep.)*, with publication detailing
+features of the software to follow.
 
 Data Sources
 ------------
@@ -16,9 +16,9 @@ The package downloads all CDS FASTA files from
 [Phytozome 10](http://phytozome.jgi.doe.gov/) and 
 [Ensembl Plants](http://plants.ensembl.org). In order to run the script, you
 will need a JGI Genomes account. As of October 2015, BAD_Muations sources data
-from 37 genome sequences. BAD_Muatations is configured to fetch all
+from 37 genome sequences. BAD_Mutations is configured to fetch all
 Angiosperm CDS sequences, but it is possible to modify the fetching scripts
-to retrieve other data sets.
+to retrieve other data sets or data from other sources.
 
 Method
 ------
@@ -30,7 +30,7 @@ and a phylogenetic tree estimated from the alignment. The model from
 [Chun and Fay (2009)](http://genome.cshlp.org/content/19/9/1553.abstract) is
 then applied for each specified codon, and a prediction as to whether the query
 variant is deleterious will be returned. Since the model predicts conservation
-of codons, it can only predict coding SNPs.
+of codons, it makes predictions only for coding SNPs.
 
 Input
 -----
@@ -72,11 +72,11 @@ Runtimes and Benchmarks
 By far, the slowest part of BAD_Mutations is fetching CDS sequences and
 converting them to BLAST databases. This may take up to several hours,
 depending on your network and disk speeds. The databases and FASTA files take
-up approximately 4GB, as of October 2015. As more genomes are sequnced and
+up approximately 4GB, as of October 2015. As more genomes are sequenced and
 annotated, this figure will increase.
 
-For a typical barley gene (~3000bp), BAD_Mutations can generate a phylogenetic
-tree and multiple sequence alignment in approximately 5-10 minutes on a dekstop
+For a typical barley gene (~3000 bp), BAD_Mutations can generate a phylogenetic
+tree and multiple sequence alignment in approximately 5-10 minutes on a desktop
 computer (Intel i7 2.8GHz). Note, however, that this figure can vary depending
 on the gene you are using. Rapidly evolving genes will be much more difficult
 to align and estimate phylogenies from, and will take longer. Also note that
