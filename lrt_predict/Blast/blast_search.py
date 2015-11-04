@@ -149,7 +149,7 @@ class BlastSearch(object):
     def blast_all(self):
         """Define a function to BLAST against every database."""
         databases = file_funcs.get_file_by_ext(self.basedir,
-                                               '.cds.fa',
+                                               '.fa',
                                                self.mainlog)
         self.mainlog.info('Running BLAST on ' +
                           str(len(databases)) +

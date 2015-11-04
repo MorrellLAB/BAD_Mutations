@@ -42,7 +42,7 @@ def ensembl_species_name(fname):
     #   Ensembl filenames are like
     #   Genus_species.blahlblah.blahblah ... .fa.gz
     #   We want to match the genus_species part
-    binomial = re.match('^[a-zA-Z]+_[a-zA-Z]+', lfile)
+    binomial = re.match('^[a-zA-Z]+(_[a-zA-Z]+)?', lfile)
     return binomial.group()
 
 
@@ -94,7 +94,7 @@ def checksum_is_same(local_sum, remote_sum, l):
 
 #   A function to find all files with a given suffix in a certain directory
 #   This is essentially a wrapper around the unix find command. This probably
-#   will not work on windows, but this shouldn't be running on Windows 
+#   will not work on windows, but this shouldn't be running on Windows
 #   anyway......
 def get_file_by_ext(basedir, suffix, l):
     l.info('Finding all files with suffix ' + suffix + ' in ' + basedir)

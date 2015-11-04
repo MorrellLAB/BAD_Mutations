@@ -5,6 +5,7 @@
 import requests
 from xml.etree import ElementTree
 import os
+import re
 
 #   Import our helper scripts here
 import lrt_predict.Fetch.phytozome_species as phytozome_species
@@ -68,7 +69,7 @@ class Phytozome(fetch.Fetcher):
     """
     #   These are common variables for every new Phytozome class
     #   They should not change from instance to instance
-    JGI_LOGIN = 'https://signon.jgi.doe.gov/'
+    JGI_LOGIN = 'https://signon.jgi.doe.gov/signon/create'
     DL_BASE = 'http://genome.jgi.doe.gov'
     XML_URL = 'http://genome.jgi.doe.gov/ext-api/downloads/get-directory'
     XML_DATA = {'organism': 'PhytozomeV10'}
@@ -101,8 +102,25 @@ class Phytozome(fetch.Fetcher):
                            self.username)
         #   Start a new session, this will store our login information
         session = requests.Session()
+        #   We have to get the HTML form that the page sends, so that we can
+        #   try to send the correct authentication tokens. We are looking for
+        #   The specific piece of text that is "authenticity_token" in the
+        #   input form.
+        login_text = requests.get(self.JGI_LOGIN).text
+        for line in login_text.split('\n'):
+            if 'authenticity_token' in line:
+                #   There are two value="..." bits in the line. We want the
+                #   second one.
+                auth_token = re.findall('value=".+?"', line)[1]
+                #   we have to pull off the value=" and the final "
+                auth_token = auth_token[7:-1]
+                #   We're done here
+                break
         #   This is the data we will send to phytozome
-        login_creds = {'login': self.username, 'password': self.password}
+        login_creds = {
+            'login': self.username,
+            'password': self.password,
+            'authenticity_token': auth_token}
         #   Get the response data back - the results of our login attempt
         resp = session.post(self.JGI_LOGIN, data=login_creds)
         if self.FAILED_LOGIN in resp.text:

@@ -62,7 +62,7 @@ class EnsemblPlants(fetch.Fetcher):
     ENSEMBL_TO_FETCH = ensembl_species.ensembl_fetch
 
     def __init__(self, base, convertonly, verbose):
-        fetch.Fetcher.__init__(base, verbose)
+        fetch.Fetcher.__init__(self, base, verbose)
         self.mainlog.debug('Creating new instance of EnsemblPlants')
         #   If we are only converting, then we don't have to sign on
         if convertonly:
