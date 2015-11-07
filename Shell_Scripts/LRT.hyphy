@@ -1,0 +1,1778 @@
+ModelMatrixDimension = 0;
+_DO_TREE_REBALANCE_ = 0; /*Not in SelectionLRT.bf but is in TestBranchDNDS.bf*/
+
+/*----------------------------------------------------------------------------------*/
+
+function BuildCodonFrequencies (obsF)
+{
+	PIStop = 1.0;
+	result = {ModelMatrixDimension,1};
+	hshift = 0;
+
+	for (h=0; h<64; h=h+1)
+	{
+		first = h$16;
+		second = h%16$4;
+		third = h%4;
+		if (_Genetic_Code[h]==10) 
+		{
+			hshift = hshift+1;
+			PIStop = PIStop-obsF[first][0]*obsF[second][1]*obsF[third][2];
+			continue; 
+		}
+		result[h-hshift][0]=obsF[first][0]*obsF[second][1]*obsF[third][2];
+	}
+	return result*(1.0/PIStop);
+}
+
+/*---------------------------------------------------------------------------------*/
+ModelMatrixDimension = 0;
+function PopulateModelMatrix (ModelMatrixName&, EFV)
+{
+	if (!ModelMatrixDimension)
+	{
+		ModelMatrixDimension = 64;
+		for (h = 0 ;h<64; h=h+1)
+		{
+			if (_Genetic_Code[h]==10)
+			{
+				ModelMatrixDimension = ModelMatrixDimension-1;
+			}
+		}
+	}
+	
+	ModelMatrixName = {ModelMatrixDimension,ModelMatrixDimension}; 
+
+	hshift = 0;
+	
+	modelDefString = "";
+	modelDefString*16384;
+	
+	if (modelType > 0)
+	{
+		catCounterAL = {};
+	}
+	
+	for (h=0; h<64; h=h+1)
+	{
+		if (_Genetic_Code[h]==10) 
+		{
+			hshift = hshift+1;
+			continue; 
+		}
+		vshift = hshift;
+		for (v = h+1; v<64; v=v+1)
+		{
+			diff = v-h;
+			if (_Genetic_Code[v]==10) 
+			{
+				vshift = vshift+1;
+				continue; 
+			}
+			nucPosInCodon = 2;
+			if ((h$4==v$4)||((diff%4==0)&&(h$16==v$16))||(diff%16==0))
+			{
+				if (h$4==v$4)
+				{
+					transition = v%4;
+					transition2= h%4;
+				}
+				else
+				{
+					if(diff%16==0)
+					{
+						transition = v$16;
+						transition2= h$16;
+						nucPosInCodon = 0;
+					}
+					else
+					{
+						transition = v%16$4;
+						transition2= h%16$4;
+						nucPosInCodon = 1;
+					}
+				}
+				hs = Format(h-hshift,0,0);
+				vs = Format(v-vshift,0,0);
+				ts = Format(transition,0,0);
+				ts2= Format(transition2,0,0);
+				ps = Format(nucPosInCodon,0,0);
+				aa1 = _Genetic_Code[0][h];
+				aa2 = _Genetic_Code[0][v];
+				if (aa1==aa2) 
+				{
+					modelDefString*("ModelMatrixName["+hs+"]["+vs+"] := "+_nucBiasTerms[transition][transition2]+"synRate*EFV__["+ts+"]["+ps+"];\n"+
+					"ModelMatrixName["+vs+"]["+hs+"] := "+_nucBiasTerms[transition][transition2]+"synRate*EFV__["+ts2+"]["+ps+"];\n");
+				}
+				else
+				{
+					bt = "nsClass"+aaRateMultipliers[aa1][aa2]; /*Not in SelectionLRT.bf*/
+					modelDefString*("ModelMatrixName["+hs+"]["+vs+"] := "+_nucBiasTerms2[transition][transition2]+bt+"*synRate*EFV__["+ts+"]["+ps+"];\n"+
+					"ModelMatrixName["+vs+"]["+hs+"] := "+_nucBiasTerms2[transition][transition2]+bt+"*synRate*EFV__["+ts2+"]["+ps+"];\n");						
+				}
+			}
+	    }
+    }		
+	modelDefString*0;
+	ExecuteCommands (modelDefString);
+	return 0;
+}
+
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+_Genetic_Code = {
+		
+		{14,/*AAA*/ 13,/*AAC*/ 14,/*AAG*/  13,/*AAT*/
+		  7, /*ACA*/ 7, /*ACC*/ 7, /*ACG*/  7, /*ACT*/
+		 19, /*AGA*/ 5, /*AGC*/19, /*AGG*/  5, /*AGT*/
+		  2, /*ATA*/ 2, /*ATC*/	3, /*ATG*/  2, /*ATT*/
+		 12,/*CAA*/ 11,/*CAC*/ 12,/*CAG*/  11,/*CAT*/
+		  6, /*CCA*/ 6, /*CCC*/ 6, /*CCG*/  6, /*CCT*/
+		 19,/*CGA*/ 19,/*CGC*/ 19,/*CGG*/  19,/*CGT*/
+		  1, /*CTA*/ 1, /*CTG*/ 1, /*CTC*/  1, /*CTT*/
+		 16,/*GAA*/ 15,/*GAC*/ 16,/*GAG*/  15,/*GAT*/
+		  8, /*GCA*/ 8, /*GCC*/ 8, /*GCG*/  8, /*GCT*/
+		 20,/*GGA*/ 20,/*GGC*/ 20,/*GGG*/  20,/*GGT*/
+		  4, /*GTA*/ 4, /*GTC*/ 4, /*GTG*/  4, /*GTT*/
+		 10,/*TAA*/  9, /*TAC*/10,/*TAG*/   9, /*TAT*/
+		  5, /*TCA*/ 5, /*TCC*/ 5, /*TCG*/  5, /*TCT*/
+		 10,/*TGA*/ 17,/*TGC*/ 18,/*TGG*/  17,/*TGT*/
+		  1, /*TTA*/ 0, /*TTC*/ 1, /*TTG*/  0  /*TTT*/ }
+	};
+					
+GeneticCodeExclusions = "TAA,TAG,TGA";	
+
+_AA_RM_NUMERIC = 0;
+
+allowedAACharacters = "FLIMVSPTAYHQNKDECWRG";
+mapString =           "GASCDPNTEVQHMLIKRFYW";
+aaRateMatrix = 
+{
+{*,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+{1,*,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+{1,1,*,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+{1,1,1,*,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+{1,1,1,1,*,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+{1,1,1,1,1,*,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+{1,1,1,1,1,1,*,1,1,1,1,1,1,1,1,1,1,1,1,1}
+{1,1,1,1,1,1,1,*,1,1,1,1,1,1,1,1,1,1,1,1}
+{1,1,1,1,1,1,1,1,*,1,1,1,1,1,1,1,1,1,1,1}
+{1,1,1,1,1,1,1,1,1,*,1,1,1,1,1,1,1,1,1,1}
+{1,1,1,1,1,1,1,1,1,1,*,1,1,1,1,1,1,1,1,1}
+{1,1,1,1,1,1,1,1,1,1,1,*,1,1,1,1,1,1,1,1}
+{1,1,1,1,1,1,1,1,1,1,1,1,*,1,1,1,1,1,1,1}
+{1,1,1,1,1,1,1,1,1,1,1,1,1,*,1,1,1,1,1,1}
+{1,1,1,1,1,1,1,1,1,1,1,1,1,1,*,1,1,1,1,1}
+{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,*,1,1,1,1}
+{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,*,1,1,1}
+{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,*,1,1}
+{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,*,1}
+{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,*}
+};
+
+
+
+if (Abs(mapString) == 20 && Rows(aaRateMatrix) == 20 && Columns(aaRateMatrix) == 20)
+{
+	/* check to see that all characters have been mapped */
+	checkAAMap   = {}; /* associative array */
+	for (aaIndex = 0; aaIndex < 20; aaIndex = aaIndex+1)
+	{
+		aChar = allowedAACharacters[aaIndex];
+		checkAAMap[aChar] = aaIndex+1;
+	
+	}
+
+	AAMap = {};
+	for (aaIndex = 0; aaIndex < 20; aaIndex = aaIndex+1)
+	{
+		aChar = mapString[aaIndex];
+		daIndex = checkAAMap[aChar];
+		if (daIndex==0)
+		{
+			fprintf (stdout, "\nAmino-acid ordering provided in the file is invalid - could be duplicate or missing characters\n");
+			return 0;
+		}
+		else
+		{
+			if (daIndex>10)
+			{
+				AAMap[aaIndex] = daIndex;
+			}
+			else
+			{
+				AAMap[aaIndex] = daIndex-1;			
+			}
+			checkAAMap[aChar] = 0;
+		}
+	}
+	
+	/*symmetrize the matrix*/
+	
+	for (aaIndex = 0; aaIndex < 19; aaIndex = aaIndex+1)
+	{
+		for (aaIndex2 = aaIndex+1; aaIndex2 < 20; aaIndex2 = aaIndex2+1)
+		{
+			aaRateMatrix[aaIndex2][aaIndex] = aaRateMatrix[aaIndex][aaIndex2];
+		}
+	}
+	
+	/* reindex the matrix */
+	
+	aaRateMultipliers = {21,21};
+	
+	aaRateClassIDs = {};
+	
+	for (aaIndex = 0; aaIndex < 19; aaIndex = aaIndex+1)
+	{
+		mappedIndex = AAMap[aaIndex];
+		for (aaIndex2 = aaIndex+1; aaIndex2 < 20; aaIndex2 = aaIndex2+1)
+		{
+			mappedIndex2 								 = AAMap[aaIndex2];
+			if (_AA_RM_NUMERIC < 1)
+			{
+				rateLabel 									 = aaRateMatrix[aaIndex][aaIndex2]$1;
+			}
+			else
+			{
+				rateLabel 									 = aaRateMatrix[aaIndex][aaIndex2];			
+			}
+			aaRateMultipliers[mappedIndex][mappedIndex2] = rateLabel;
+			aaRateMultipliers[mappedIndex2][mappedIndex] = rateLabel;
+			
+			if (aaRateClassIDs[rateLabel] == 0)
+			{
+				aaRateClassIDs[rateLabel] = 1;
+			}
+		}
+	}
+	
+	aaRateMatrix = 0;
+	
+}
+
+/*-----------------------------------TreeTools.ibf-----------------------------------*/
+/*************************************************************************************/
+
+function PostOrderAVL2StringDL (theAVL, doLengths)
+{
+	return PostOrderAVL2StringAnnotate (theAVL, doLengths, "");
+}
+
+/*************************************************************************************/
+
+function PostOrderAVL2StringAnnotate (theAVL, doLengths,label)
+{
+	return PostOrderAVL2StringAnnotateAux (theAVL, doLengths, label, "[]");
+}
+
+/*************************************************************************************/
+
+function PostOrderAVL2StringAnnotateAux (theAVL, doLengths, label, chars)
+{
+	_ost = "";
+	_ost * 256;
+	
+	lastLevel = 0;
+	treeSize  = Abs(theAVL);
+	treeInfo  = theAVL[0];
+	rootIndex = theAVL["Root"];
+	
+	for (nodeIndex = 1; nodeIndex < treeSize; nodeIndex = nodeIndex + 1)
+	{
+		if (nodeIndex != rootIndex)
+		{
+			nodeInfo = theAVL[nodeIndex];
+			myDepth = nodeInfo["Depth"];
+			if (lastDepth < myDepth)
+			{
+				if (lastDepth)
+				{
+					_ost * ",";
+				}
+				for (pidx = lastDepth; pidx < myDepth; pidx = pidx + 1)
+				{
+					_ost * "(";
+				}
+			}
+			else
+			{
+				if (lastDepth > myDepth)
+				{
+					for (pidx = myDepth; pidx < lastDepth; pidx = pidx + 1)
+					{
+						_ost * ")";
+					}				
+				}
+				else
+				{
+					_ost * ",";
+				}
+			}
+			
+			_ost * nodeInfo["Name"];
+			
+			if (Abs (label))
+			{
+				if (Abs(nodeInfo[label]))
+				{
+					_ost * (chars[0] + nodeInfo[label] + chars[1]);
+				}
+			}
+
+			if (doLengths)
+			{
+				if (nodeIndex < treeSize - 1)
+				{
+					_ost * ":";
+					_ost * (""+nodeInfo ["Length"]); 
+				}
+			}
+			lastDepth = myDepth;
+		}
+	}
+	
+	_ost * 0;
+	return _ost;
+}
+
+
+/*************************************************************************************/
+
+function PostOrderAVL2String (theAVL)
+{
+	return PostOrderAVL2StringDL(theAVL, 0);
+}
+
+/*************************************************************************************/
+
+function PostOrderAVL2StringDistances (theAVL, distAVL)
+{
+	_ost = "";
+	_ost * 256;
+	
+	lastLevel = 0;
+	treeSize  = Abs(theAVL);
+	treeInfo  = theAVL[0];
+	
+	for (nodeIndex = 1; nodeIndex < treeSize; nodeIndex = nodeIndex + 1)
+	{
+		if (nodeIndex != rootIndex)
+		{
+			nodeInfo = theAVL[nodeIndex];
+			myDepth = nodeInfo["Depth"];
+			myName 	= nodeInfo["Name"];
+			
+			if (lastDepth < myDepth)
+			{
+				if (lastDepth)
+				{
+					_ost * ",";
+				}
+				for (pidx = lastDepth; pidx < myDepth; pidx = pidx + 1)
+				{
+					_ost * "(";
+				}
+			}
+			else
+			{
+				if (lastDepth > myDepth)
+				{
+					for (pidx = myDepth; pidx < lastDepth; pidx = pidx + 1)
+					{
+						_ost * ")";
+					}				
+				}
+				else
+				{
+					_ost * ",";
+				}
+			}
+			if (Abs(nodeInfo["Children"])==0)
+			{
+				_ost * myName;
+			}
+			if (nodeIndex < treeSize - 1)
+			{
+				_ost * ":";
+				_ost * (""+distAVL [myName]); 
+			}
+			lastDepth = myDepth;
+		}
+	}
+	
+	_ost * 0;
+	return _ost;
+}
+
+/*************************************************************************************/
+
+function KillInternalZeroBranchLengths (treeAVL)
+{
+	treeSize   = Abs(treeAVL);
+	if (treeSize == 3)
+	{
+		return "(" + (treeAVL[0])["Name"] + "," + (treeAVL[1])["Name"] + ")";
+	}
+	newTreeAVL = {};
+	oldIndexMap= {treeSize,1};
+	index2	   = {treeSize,1};
+	newDAVL	   = {};
+	newTreeAVL [0] = treeAVL[0];
+	allDeleted = 0;
+	for (nodeIndex = 1; nodeIndex < treeSize; nodeIndex = nodeIndex + 1)
+	{
+		newDAVL [(treeAVL[nodeIndex])["Name"]] = (treeAVL[nodeIndex])["Length"];
+		
+		if (Abs((treeAVL[nodeIndex])["Children"]) && Abs((treeAVL[nodeIndex])["Length"]) < 1e-10 && (treeAVL[nodeIndex])["Parent"]) 
+			/* zero internal branch */
+		{
+			oldIndexMap[nodeIndex] = -(treeAVL[nodeIndex])["Parent"];
+			allDeleted			 = allDeleted + 1;
+		}
+		else
+		{
+			newTreeAVL [nodeIndex-allDeleted] = treeAVL[nodeIndex];
+			oldIndexMap[nodeIndex]   			= nodeIndex-allDeleted;
+			index2 [nodeIndex-allDeleted]		= nodeIndex;
+		}
+	}
+	
+	if (allDeleted)
+	{
+		markedIndices = {};
+		for (nodeIndex = treeSize-1; nodeIndex>0; nodeIndex = nodeIndex - 1)
+		{
+			if (oldIndexMap [nodeIndex]<0)
+			{
+				markedIndices[nodeIndex] = 1;
+				oldIndexMap[nodeIndex] = oldIndexMap[-oldIndexMap[nodeIndex]]; 
+			}
+		}
+		treeSize = Abs (newTreeAVL);
+		for (nodeIndex = 1; nodeIndex<treeSize; nodeIndex = nodeIndex + 1)
+		{
+			meParent = (newTreeAVL[nodeIndex])["Parent"];
+			_cc		 = Abs((newTreeAVL[nodeIndex])["Children"]);
+			if (_cc > 0)
+			{
+				newChildrenMap = {};
+				for (_cci = 0; _cci < _cc; _cci = _cci+1)
+				/* map children to new indices */
+				{				
+					_cn = ((newTreeAVL[nodeIndex])["Children"])[_cci];
+					if (markedIndices[_cn] == 0)
+					{
+						newChildrenMap[Abs(newChildrenMap)] = oldIndexMap[_cn];
+					}
+				}
+				((newTreeAVL[nodeIndex])["Children"]) = newChildrenMap;
+			}
+					
+			if (meParent > 0)
+			{
+				meParentOI = meParent;
+				meParent = oldIndexMap[meParent];
+				(newTreeAVL[nodeIndex])["Parent"] = meParent;
+				if (markedIndices[meParentOI])
+				{
+					/*
+					fprintf (stdout, "Insert ", (newTreeAVL[nodeIndex])["Name"], " as a child of ", (newTreeAVL[meParent])["Name"], " index ", index2[nodeIndex], "(", oldIndexMap[index2[nodeIndex]], ",", nodeIndex,")\n");
+					*/
+					((newTreeAVL[meParent])["Children"])[Abs((newTreeAVL[meParent])["Children"])] = index2[nodeIndex];
+				}
+			}
+
+		}
+		
+		
+		for (nodeIndex = treeSize-1; nodeIndex>0; nodeIndex = nodeIndex - 1)
+		{
+			_cc		 = Abs((newTreeAVL[nodeIndex])["Children"]);
+			if (_cc > 0)
+			{
+				_cd = (newTreeAVL[nodeIndex])["Depth"] + 1;
+				for (_cci = 0; _cci < _cc; _cci = _cci+1)
+				{				
+					_cn =  ((newTreeAVL[nodeIndex])["Children"])[_cci];
+					/*fprintf (stdout, (newTreeAVL[_cn])["Name"], ":", (newTreeAVL[_cn])["Depth"], "=>", _cd, "\n");*/
+					(newTreeAVL[_cn])["Depth"] = _cd;
+				}
+			}
+		}
+
+		(newTreeAVL[0])["Root"] = treeSize-1;
+	}
+	
+	return PostOrderAVL2StringDistances (newTreeAVL, newDAVL);
+}
+
+
+/*************************************************************************************/
+
+function TreeAVL2String (treeAVL)
+{
+	rootNode = treeAVL[0];
+	rootNode = rootNode["Root"];
+	return subtreeAVLStr (rootNode,0,0);
+}
+
+
+/*************************************************************************************/
+
+function subtreeAVLStr (nodeIndex,k,treeString)
+{
+	nodeInfo = treeAVL[nodeIndex];
+	k = Abs(nodeInfo["Children"])-1;
+	if (k>=0)
+	{
+		while (k>=0)
+		{
+			nodeInfo = treeAVL[nodeIndex];
+			cNodes = nodeInfo["Children"];
+			cNodes = cNodes[k];
+			if (k < Abs(nodeInfo["Children"])-1)
+			{
+				ExecuteCommands("treeString=subtreeAVLStr (cNodes,k,treeString)+\",\"+treeString;");
+			}
+			else
+			{
+				ExecuteCommands("treeString=subtreeAVLStr (cNodes,k,treeString)+\")\";");
+			}
+			k=k-1;
+		}
+		return "("+treeString;
+	}
+	else
+	{
+		callLevel = callLevel - 1;
+		return nodeInfo["Name"];
+	}
+}
+
+/*************************************************************************************/
+
+function InsertANode (theAVL&,insertAt,newNodeName)
+{
+	nodeInfo = theAVL[insertAt];
+	if (Abs(nodeInfo))
+	{
+		nparent = nodeInfo["Parent"];
+		if (nparent > 0)
+		{
+			lastIndex = Abs(theAVL);
+			myDepth = nodeInfo["Depth"];
+			newParentNode = {};
+			newParentNode ["Name"] = "Node"+lastIndex;
+			newParentNode ["Parent"] = nparent;
+			newParentNode ["Depth"] = myDepth;
+			
+			newChildNode = {};
+			newChildNode ["Name"] = newNodeName;
+			newChildNode ["Parent"] = lastIndex;
+			newChildNode ["Depth"] = myDepth + 1;
+			
+			pChildren = {};
+			pChildren [0] = insertAt;
+			pChildren [1] = lastIndex+1;
+			newParentNode ["Children"] = pChildren;
+			
+			theAVL[lastIndex] = newParentNode;
+			theAVL[lastIndex+1] = newChildNode;
+
+			/* update the parent*/
+
+			nodeInfo ["Parent"] = lastIndex;
+			theAVL[insertAt] = nodeInfo;
+			
+			/* update the list of children at the parent node*/
+			
+			parentInfo = theAVL[nparent];
+			parentChildren = parentInfo["Children"];
+			
+			for (nic = Abs(parentChildren)-1; nic >= 0; nic = nic-1)
+			{
+				if (parentChildren[nic] == insertAt)
+				{
+					break;
+				}
+			}
+
+			parentChildren[nic] = lastIndex;
+			parentInfo["Children"] = parentChildren;
+			theAVL[nparent] = parentInfo;
+			
+			/* now update the depths at new NodeName and all of its children */
+			
+			nodeCache    = {};
+			nodeCache[0] = insertAt;
+			cacheIndex   = 0;
+			
+			while (cacheIndex <= Abs(nodeCache))
+			{
+				nparent 			= nodeCache[cacheIndex];
+				nodeInfo 			= theAVL[nparent];
+				nodeInfo["Depth"] 	= nodeInfo["Depth"] + 1;
+				theAVL[nparent] 	= nodeInfo;
+				nodeChildren 		= nodeInfo["Children"];
+				for (nic = Abs(nodeChildren)-1; nic >=0; nic = nic-1)
+				{
+					nodeCache [Abs(nodeCache)] = nodeChildren[nic];
+				}
+				cacheIndex = cacheIndex + 1;
+			}
+			
+			nodeCache = 0;
+		}
+	}
+	return 0;
+}
+
+/*************************************************************************************/
+
+function	ModifyDepth (nIndex, modAmount)
+{
+	nodeInfo = theAVL[nIndex];
+	nodeInfo ["Depth"] = nodeInfo ["Depth"] + modAmount;
+	theAVL[nIndex] = nodeInfo;
+
+}
+
+/*************************************************************************************/
+
+function	echoAVL (anAVL)
+{
+	for (k=1; k<Abs(anAVL); k=k+1)
+	{
+		nodeInfo 			= anAVL[k];
+		myChildren			= nodeInfo["Children"];
+		if (Abs(myChildren))
+		{
+			fprintf (stdout, "Index ", k, ":", nodeInfo["Name"], " : parent = ", nodeInfo["Parent"], " children:");
+			for (k2 = 0; k2 < Abs(myChildren); k2=k2+1)
+			{
+				fprintf (stdout,"\t", myChildren[k2]);
+			}
+			fprintf (stdout, " depth: ", nodeInfo["Depth"], "\n");
+		
+		}
+		else
+		{
+			fprintf (stdout, "Index ", k, ":", nodeInfo["Name"], " : parent = ", nodeInfo["Parent"], " children: none, depth: ", nodeInfo["Depth"], "\n");
+		}
+	}
+	return 0;
+}
+
+/*************************************************************************************/
+
+function	selectATreeBranch (treeID, title)
+{
+	ExecuteCommands ("internalNodes = BranchCount(`treeID`);");
+	ExecuteCommands ("leafNodes     = TipCount(`treeID`);");
+
+	choiceMatrix  = {internalNodes+leafNodes,2};
+	
+	for (bc=0; bc<internalNodes; bc=bc+1)
+	{
+		ExecuteCommands ("choiceMatrix[bc][0] = BranchName(`treeID`,bc);choiceMatrix[bc][1] = \"Internal Branch Rooting \" + `treeID`[bc];");
+	}
+	
+	for (bc=0; bc<leafNodes; bc=bc+1)
+	{
+		ExecuteCommands ("choiceMatrix[bc+internalNodes][0] = TipName(`treeID`,bc);");
+		choiceMatrix[bc+internalNodes][1] = "Terminal branch endin in " + choiceMatrix[bc+internalNodes][0];
+	}
+	
+	mxTreeSpec = {5,1};
+	mxTreeSpec [0] = treeID;
+	mxTreeSpec [1] = "8240";
+	mxTreeSpec [2] = "10,40,-10,-175,1";
+	mxTreeSpec [3] = "";
+	mxTreeSpec [4] = "";
+	OpenWindow (TREEWINDOW, mxTreeSpec);
+	
+	ChoiceList  (bOption,title,1,NO_SKIP,choiceMatrix);
+	
+	if (bOption < 0)
+	{
+		return "";
+	}
+	return choiceMatrix[bOption][0];
+}
+
+/*************************************************************************************/
+
+function	computeTreeSplits (treeID,mirror)
+{
+	ExecuteCommands ("_treeAVL		= `treeID`^0;");
+	ExecuteCommands ("_leafNodes     = TipCount(`treeID`);");
+	_tipMap			= {};
+	_splitMap		= {};
+	_splitTemplate = {_leafNodes,1};
+	
+	for (_k = 1; _k < Abs(_treeAVL); _k = _k+1)
+	{
+		if (Abs((_treeAVL[_k])["Children"]) == 0)
+		{
+			_tipMap [_k] = Abs(_tipMap);
+		}
+		else
+		{
+			(_treeAVL[_k])["Split"]		   = _splitTemplate;
+		}
+	}
+	
+	for (_k = 1; _k < Abs(_treeAVL); _k = _k+1)
+	{
+		_pc = (_treeAVL[_k])["Parent"];
+		if (_pc)
+		{
+			_cc = Abs((_treeAVL[_k])["Children"]);
+			if (_cc)
+			{
+				_mySplit                 = ((_treeAVL[_k])["Split"])["_MATRIX_ELEMENT_VALUE_>0"];
+				_splitMap[_mySplit]		  = _k;
+				(_treeAVL[_pc])["Split"] = (_treeAVL[_pc])["Split"] + _mySplit;
+			}
+			else
+			{
+				((_treeAVL[_pc])["Split"])[_tipMap[_k]] = 1;
+			}
+		}
+	}
+	_uniqueSplits = Rows(_splitMap);
+	_splitStrings = {};
+	for (_k = 0; _k < Abs(_splitMap); _k = _k+1)
+	{
+		_stringKey = ""; _stringKey * 128;
+		_stringKey2 = ""; _stringKey2 * 128;
+		ExecuteCommands ("_thisKey   = " + _uniqueSplits[_k]);
+		for (_k2 = 0; _k2 < _leafNodes; _k2 = _k2 + 1)
+		{
+			if (_thisKey[_k2])
+			{
+				_stringKey * "*";
+				_stringKey2 * "-";
+			}
+			else
+			{
+				_stringKey * "-";
+				_stringKey2 * "*";
+			}
+		}
+		_stringKey * 0;_stringKey2 * 0;
+		_splitStrings [_stringKey] = _splitMap[_uniqueSplits[_k]];
+		if (mirror)
+		{
+			_splitStrings [_stringKey2] = _splitStrings [_stringKey];
+		}
+	}
+	DeleteObject (_splitMap);
+	return _splitStrings;
+}
+
+/*************************************************************************************/
+
+/* 
+   return the most recent common ancestor for a group 
+   of nodes in an AVL; returns the index of the MRCA
+*/
+
+function	_findMRCA (treeAVL, nodeIDList)
+{
+	_nodeCount	 = Rows(nodeIDList)*Columns(nodeIDList);
+	
+	if (_nodeCount)
+	{
+		nodeIDList    = nodeIDList % 0;
+		_highestNode  = (treeAVL[nodeIDList[0]])["Depth"];
+		_currentDepth = _highestNode;
+		_lastNode	  = nodeIDList[_nodeCount-1];
+		for (_nodeIterator = nodeIDList[0]+1; _nodeIterator <= _lastNode; 
+											  _nodeIterator  = _nodeIterator + 1)
+		{
+			_currentDepth = (treeAVL[_nodeIterator])["Depth"];
+			if (_currentDepth < _highestNode)
+			{
+				_highestNode   = _currentDepth;
+			}
+		}
+				
+		for (; _nodeIterator <= Abs(treeAVL); _nodeIterator = _nodeIterator+1)
+		{
+			if ((treeAVL[_nodeIterator])["Depth"] < _highestNode)
+			{
+				return _nodeIterator;
+			}
+		} 
+		
+	}
+	
+	return Abs(treeAVL)-1;
+}
+
+/*************************************************************************************/
+/* 
+  	use parsimony to reconstruct ancestral states based on leaf AVL labels 
+  	return the number of substitutions
+*/
+
+function _parsimonyAncestralMapping (treeAVL&, label)
+{
+	uniqueLabels = {};
+	idToLabel	 = {};
+	for (_nodeIterator = 1; _nodeIterator < Abs (treeAVL); _nodeIterator = _nodeIterator + 1)
+	{
+		isLeaf = Abs((treeAVL[_nodeIterator])["Children"]) == 0;
+		if (isLeaf)
+		{
+			isLeaf = (treeAVL[_nodeIterator])[label];
+			if (uniqueLabels[isLeaf] == 0)
+			{
+				uniqueLabels [isLeaf]     = 1+Abs(uniqueLabels);
+				idToLabel[Abs(idToLabel)] = isLeaf;
+			}
+		}
+	}
+
+	assignmentMatrices = {};
+	kindCount		   = Abs (uniqueLabels);
+	
+	for (_nodeIterator = 1; _nodeIterator < Abs (treeAVL); _nodeIterator = _nodeIterator + 1)
+	{
+		aMx = {2,kindCount};
+		s2  = uniqueLabels[(treeAVL[_nodeIterator])[label]]-1;
+		for (k=0; k<kindCount; k=k+1)
+		{
+			aMx[0][k] = s2;
+			aMx[1][k] = 1-(k==s2);	
+		}
+		assignmentMatrices [(treeAVL[_nodeIterator])["Name"]] = aMx;
+	}
+
+	for (_nodeIterator = 1; _nodeIterator < Abs (treeAVL); _nodeIterator = _nodeIterator + 1)
+	{
+		nodeInfo 		= treeAVL[_nodeIterator];
+		nodeChildren	= nodeInfo ["Children"];
+		cCount			= Abs(nodeChildren);
+		
+		if (cCount)
+		{
+			localMatrices = {};
+			
+			nodeName = nodeInfo["Name"];
+			
+			for (s1 = 0; s1<cCount; s1=s1+1)
+			{
+				localMatrices[s1] = assignmentMatrices[(treeAVL	 [nodeChildren[s1]])  ["Name"]];
+			}
+			
+			twoWay = {kindCount,1};
+			
+			for (s2 = 0; s2 < kindCount; s2 = s2+1)
+			{
+				lc = 0;
+				for (s3 = 0; s3<cCount; s3=s3+1)
+				{
+					lc  = lc + (localMatrices[s3])[1][s2];
+				}
+				twoWay[s2] = lc;
+			}
+						
+			if (nodeInfo["Parent"])
+			{
+				aMx = {2,kindCount};
+				
+				for (s2 = 0; s2 < kindCount; s2 = s2+1)
+				{
+					minV = 1e100;
+					minI = 0;
+					
+					for (s3 = 0; s3 < kindCount; s3 = s3+1)
+					{
+						aCost = (s3!=s2) + twoWay[s3];
+						if (minV > aCost)
+						{
+							minV  = aCost;
+							minI  = s3;
+						}	
+					}
+					
+					aMx[0][s2] = minI;
+					aMx[1][s2] = minV;
+				}
+				
+				assignmentMatrices [nodeName] = aMx;
+			}
+			else
+			{
+				totalCost = 1e100;
+				rootState = 0;
+				
+				for (s2 = 0; s2 < kindCount; s2 = s2+1)
+				{
+					if (twoWay[s2] < totalCost)
+					{
+						totalCost = twoWay[s2];
+						rootState = s2;
+					}	
+				}
+				(treeAVL[_nodeIterator])[label] = idToLabel[rootState];
+			}
+		}
+	}
+	
+	for (_nodeIterator = Abs (treeAVL)-1; _nodeIterator >=1 ; _nodeIterator = _nodeIterator - 1)
+	{
+		nodeInfo 		= treeAVL[_nodeIterator];
+		nodeChildren	= nodeInfo ["Children"];
+		
+		if (Abs(nodeChildren))
+		{			
+			nodeName   = nodeInfo["Name"];
+			nodeParent = nodeInfo["Parent"];
+			if (nodeParent)
+			{
+				aMx							    = assignmentMatrices [nodeName];
+				(treeAVL[_nodeIterator])[label] = idToLabel[aMx[0][uniqueLabels[(treeAVL[nodeParent])[label]]-1]];
+			}
+		}
+	}	
+
+	assignmentMatrices = 0;
+	return totalCost;
+}
+
+/*----------------------------------------------------------------------------------------------------------*/
+
+function translateCodonToAA (codonSeq,mapping,offset)
+{
+	seqLen = Abs (codonSeq);
+	translString = "";
+	translString * (seqLen/3+1);
+	for (seqPos = offset; seqPos < seqLen; seqPos = seqPos + 3) {
+		codon = codonSeq[seqPos][seqPos+2];
+		prot  = mapping[codon];
+		if (Abs(prot))
+		{
+			translString * prot;
+		}
+		else
+		{
+		    if (codon == "---") {
+			    translString * "-";
+		    } else {
+			    translString * "?";
+			}
+	    }
+	} 
+	translString * 0;
+	translString = translString^{{"X$","?"}};
+	
+	return translString;
+}
+
+
+
+/*----------------------------------------------------------------------------------------------------------*/
+function defineCodonToAA ()
+{	
+	codonToAAMap = {};
+	nucChars = "ACGT";
+	
+	for (p1=0; p1<64; p1=p1+1)
+	{
+	    if (_Genetic_Code[p1] > 10){
+	        index = allowedAACharacters[_Genetic_Code[p1]-1];}
+	    else {
+	        index = allowedAACharacters[_Genetic_Code[p1]];}
+	    codonToAAMap[nucChars[p1$16]+nucChars[p1%16$4]+nucChars[p1%4]] = index;
+		/*codonToAAMap[nucChars[p1$16]+nucChars[p1%16$4]+nucChars[p1%4]] = allowedAACharacters[_Genetic_Code[p1]];*/
+	}
+	/* allowedAACharacters */
+	return codonToAAMap;
+}
+
+ClearConstraints (NC);
+ClearConstraints (SC);
+
+MGCustomRateBiasTermsS = {{"AC*","","AT*","CG*","CT*","GT*"}};	
+MGCustomRateBiasTermsN = MGCustomRateBiasTermsS;	
+
+global AC = 1;
+global AT = 1;
+global CG = 1;
+global CT = 1;
+global GT = 1;
+modelDesc = "012345";
+				
+/*modelDesc = "010010";*/
+
+paramCount	  = 0;
+_nucBiasTerms = {4,4};
+_nucBiasTerms[0][0] = "";
+
+_nucBiasTerms2 = {4,4};
+_nucBiasTerms2[0][0] = "";
+
+
+if (modelDesc[0]==modelDesc[1])
+{
+	MGCustomRateBiasTermsS[0] = MGCustomRateBiasTermsS[1];
+	MGCustomRateBiasTermsN[0] = MGCustomRateBiasTermsN[1];
+}
+
+_nucBiasTerms[1][0] = MGCustomRateBiasTermsS[0];
+_nucBiasTerms[0][1] = MGCustomRateBiasTermsS[0];
+_nucBiasTerms[2][0] = MGCustomRateBiasTermsS[1];
+_nucBiasTerms[0][2] = MGCustomRateBiasTermsS[1];
+
+_nucBiasTerms2[1][0] = MGCustomRateBiasTermsN[0];
+_nucBiasTerms2[0][1] = MGCustomRateBiasTermsN[0];
+_nucBiasTerms2[2][0] = MGCustomRateBiasTermsN[1];
+_nucBiasTerms2[0][2] = MGCustomRateBiasTermsN[1];
+
+
+h = 0;
+v = 3;
+
+for (customLoopCounter2=2; customLoopCounter2<6; customLoopCounter2=customLoopCounter2+1)
+{
+	for (customLoopCounter=0; customLoopCounter<customLoopCounter2; customLoopCounter=customLoopCounter+1)
+	{
+		if (modelDesc[customLoopCounter]==modelDesc[customLoopCounter2])
+		{
+			_nucBiasTerms[h][v] = MGCustomRateBiasTermsS[customLoopCounter];
+			_nucBiasTerms[v][h] = MGCustomRateBiasTermsS[customLoopCounter];
+			_nucBiasTerms2[h][v] = MGCustomRateBiasTermsN[customLoopCounter];
+			_nucBiasTerms2[v][h] = MGCustomRateBiasTermsN[customLoopCounter];
+			break;
+		}
+	}
+	if (customLoopCounter == customLoopCounter2)
+	{
+		_nucBiasTerms[h][v]  = MGCustomRateBiasTermsS[customLoopCounter2];
+		_nucBiasTerms[v][h]  = MGCustomRateBiasTermsS[customLoopCounter2];
+		_nucBiasTerms2[h][v] = MGCustomRateBiasTermsN[customLoopCounter2];
+		_nucBiasTerms2[v][h] = MGCustomRateBiasTermsN[customLoopCounter2];
+	}
+	
+	v = v+1;
+	if (v==4)
+	{
+		h=h+1;
+		v=h+1;
+	}
+}
+
+
+fscanf (stdin, "String", input);
+fscanf (input, "String", filename);
+/*fprintf(stdout, filename,"  asdfasdf\n");*/
+DataSet gene = ReadDataFile (filename);
+DataSetFilter backgroundData = CreateFilter (gene,3,"","",GeneticCodeExclusions);
+DataSetFilter all = CreateFilter (gene,1,"","");
+HarvestFrequencies (observedFreq,backgroundData,3,1,1);
+
+MG94custom = 0;
+MULTIPLY_BY_FREQS = PopulateModelMatrix ("MG94custom", observedFreq);
+vectorOfFrequencies = BuildCodonFrequencies (observedFreq);
+Model MG94customModel = (MG94custom,vectorOfFrequencies,0);
+UseModel(MG94customModel);
+
+fscanf (input, "String", treefile);
+fscanf (input, "String", positfile);
+fscanf (input, "String", reference);
+fscanf(treefile,"String",treestring);
+Tree givenTree = treestring;
+Tree tree = treestring;
+Tree mtree = treestring;
+LIKELIHOOD_FUNCTION_OUTPUT = 5;
+branchNames = BranchName(givenTree,-1);
+
+/* Constant dn/ds ratio
+global constraintall = .2;
+for(k=0; k < Columns(branchNames)-1; k=k+1)
+{
+    ExecuteCommands("givenTree."+branchNames[k]+".nsClass1 := constraintall*givenTree."+branchNames[k]+".synRate;");
+}
+*/
+fprintf(stdout,"Sites: ",backgroundData.sites,"\nSpecies: ",backgroundData.species,"\n");
+timer1 = Time(0);
+LikelihoodFunction lf = (backgroundData,givenTree); 
+Optimize (res_alt, lf);
+timer2 = Time(0);
+fprintf (stdout, "CPU time taken for dS: ", timer2-timer1, " seconds.\n");
+T = Columns(branchNames);
+
+ExecuteCommands("GetInformation (aRateMx, givenTree."+branchNames[0]+");");
+	/* make syn and non-syn template matrices */
+nonStopCount = Columns (aRateMx);
+_EFV_MATRIX0_ = {4,4};
+_EFV_MATRIX1_ = {4,4};
+_EFV_MATRIX2_ = {4,4};
+for (h=0; h<4; h=h+1)
+{
+	for (v=0; v<4; v=v+1)
+	{
+		_EFV_MATRIX0_ [h][v] = .25;
+		_EFV_MATRIX1_ [h][v] = .25;
+		_EFV_MATRIX2_ [h][v] = .25;
+	}
+}
+_S_NS_POSITIONS_ = {2,64};
+
+hShift = 0;
+
+for (h=0; h<64; h=h+1)
+{
+	myAA = _Genetic_Code[h];
+	
+	if (myAA != 10) /* not a stop codon */
+	{
+		norm_factor  = 0.0;
+		sSites	 	 = 0.0;
+		nsSites 	 = 0.0;
+		
+		/* first position change */
+		/* actual first position */
+		
+		p1 = h$16; /* 0->A, 1->C, 2->G, 3->T */
+		p2 = h%16; /* remainder - i.e. positions 2 and 3*/
+				
+		for (n1 = 0; n1 < 4; n1=n1+1)
+		{
+			if (n1 != p1) /* a change */
+			{
+				/* new codon */
+				nc = n1*16 + p2;
+				newAA = _Genetic_Code[nc];
+				
+				if (newAA!=10) /* not a stop codon */
+				{
+					if (newAA == myAA) /* syn. change */
+					{
+						sSites = sSites + _EFV_MATRIX0_[p1][n1];
+					}
+					else
+					{
+						nsSites = nsSites + _EFV_MATRIX0_[p1][n1];
+					}
+				}
+				norm_factor = norm_factor + _EFV_MATRIX0_[p1][n1];
+			}
+		}
+		
+		if (norm_factor)
+		{
+			_S_NS_POSITIONS_[0][h] = _S_NS_POSITIONS_[0][h] + sSites/norm_factor;
+			_S_NS_POSITIONS_[1][h] = _S_NS_POSITIONS_[1][h] + nsSites/norm_factor;
+		}
+		
+		norm_factor  = 0.0;
+		sSites	 	 = 0.0;
+		nsSites 	 = 0.0;
+
+		/* second position change */
+		/* actual second position */
+		
+		p1 = (h%16)$4;
+		p2 = (h$16)*16+h%4; /* remainder - i.e. positions 1 and 3*/
+		
+		for (n1 = 0; n1 < 4; n1=n1+1)
+		{
+			if (n1 != p1) /* a change */
+			{
+				/* new codon */
+				nc = n1*4 + p2;
+				newAA = _Genetic_Code[nc];
+				
+				if (newAA!=10) /* not a stop codon */
+				{
+					if (newAA == myAA) /* syn. change */
+					{
+						sSites = sSites + _EFV_MATRIX1_[p1][n1];
+					}
+					else
+					{
+						nsSites = nsSites + _EFV_MATRIX1_[p1][n1];
+					}
+				}
+				norm_factor = norm_factor + _EFV_MATRIX1_[p1][n1];
+			}
+		}
+
+		/* 3rd position change */
+		/* actual 3rd position */
+		
+		if (norm_factor)
+		{
+			_S_NS_POSITIONS_[0][h] = _S_NS_POSITIONS_[0][h] + sSites/norm_factor;
+			_S_NS_POSITIONS_[1][h] = _S_NS_POSITIONS_[1][h] + nsSites/norm_factor;
+		}
+		
+		norm_factor  = 0.0;
+		sSites	 	 = 0.0;
+		nsSites 	 = 0.0;
+
+		p1 = h%4;
+		p2 = (h$4)*4; /* remainder - i.e. positions 1 and 2*/
+		
+		for (n1 = 0; n1 < 4; n1=n1+1)
+		{
+			if (n1 != p1) /* a change */
+			{
+				/* new codon */
+				nc = n1 + p2;
+				newAA = _Genetic_Code[nc];
+				
+				if (newAA!=10) /* not a stop codon */
+				{
+					if (newAA == myAA) /* syn. change */
+					{
+						sSites = sSites + _EFV_MATRIX2_[p1][n1];
+					}
+					else
+					{
+						nsSites = nsSites + _EFV_MATRIX2_[p1][n1];
+					}
+				}
+				norm_factor = norm_factor + _EFV_MATRIX2_[p1][n1];
+			}
+		}
+		
+		if (norm_factor)
+		{
+			_S_NS_POSITIONS_[0][h] = _S_NS_POSITIONS_[0][h] + sSites/norm_factor;
+			_S_NS_POSITIONS_[1][h] = _S_NS_POSITIONS_[1][h] + nsSites/norm_factor;
+		}
+		
+	}
+	else
+	{
+		hShift = hShift+1;
+	}
+}
+
+stateCharCount = 64-hShift;
+
+
+/* now compute pairwise codon distance matrix */
+
+nuc_split 	  = {2,3};
+_PAIRWISE_S_  = {stateCharCount,stateCharCount};
+_PAIRWISE_NS_ = {stateCharCount,stateCharCount};
+_OBSERVED_S_  = {stateCharCount,stateCharCount};
+_OBSERVED_NS_ = {stateCharCount,stateCharCount};
+_NUC_SUB_TYPE_= {stateCharCount,stateCharCount};
+
+_NUC_TEMPL_	  = {{0,0,1,2}
+                 {0,0,3,4}
+                 {1,3,0,5}
+                 {2,4,5,0}};
+
+hShift = 0;
+
+for (h = 0; h<64; h=h+1)
+{
+	myAA = _Genetic_Code[h];
+	if (myAA == 10)
+	{
+		hShift = hShift+1;
+	}
+	else
+	{
+		nuc_split[0][0] = h$16;
+		nuc_split[0][1] = (h%16)$4;
+		nuc_split[0][2] = h%4;
+		
+		_PAIRWISE_S_  [h-hShift][h-hShift] = _S_NS_POSITIONS_[0][h];
+		_PAIRWISE_NS_ [h-hShift][h-hShift] = _S_NS_POSITIONS_[1][h];
+		
+		vShift = hShift;
+		
+		for (v = h+1; v<64; v=v+1)
+		{
+			newAA = _Genetic_Code[v];
+			if (newAA == 10)
+			{
+				vShift = vShift+1;
+			}
+			else
+			{
+				/*fprintf ("echo", codonString (h), "->", codonString(v), "\n");*/
+				nuc_split[1][0] = v$16;
+				nuc_split[1][1] = (v%16)$4;
+				nuc_split[1][2] = v%4;
+				
+				p1 = (nuc_split[1][0]!=nuc_split[0][0])+
+					 (nuc_split[1][1]!=nuc_split[0][1])+
+					 (nuc_split[1][2]!=nuc_split[0][2]);
+					 
+				if (p1==1) 
+				{
+					_PAIRWISE_S_ [h-hShift][v-vShift] = (_S_NS_POSITIONS_[0][h]+_S_NS_POSITIONS_[0][v])/2;
+					_PAIRWISE_NS_ [h-hShift][v-vShift] = (_S_NS_POSITIONS_[1][h]+_S_NS_POSITIONS_[1][v])/2;
+					
+					if (myAA == newAA)
+					{
+						_OBSERVED_S_[h-hShift][v-vShift] = 1;
+					}
+					else
+					{
+						_OBSERVED_NS_[h-hShift][v-vShift] = 1;					
+					}
+					
+					/*fprintf ("echo", "\tOne change:", _PAIRWISE_S_ [h][v], "\t", _PAIRWISE_NS_ [h][v], "\n");*/
+					
+					for (p1 = 0; p1 < 3; p1=p1+1)
+					{
+						if (nuc_split[0][p1] != nuc_split[1][p1])
+						{
+							_NUC_SUB_TYPE_[h-hShift][v-vShift] = _NUC_TEMPL_[nuc_split[0][p1]][nuc_split[1][p1]];
+							break;
+						}
+					}
+				}
+				else
+				{
+					if (p1==2) 
+					{
+						/*fprintf ("echo", "\tTwo changes:\n");*/
+						if (nuc_split[1][0]==nuc_split[0][0]) 
+						{
+							pc1 = 16*nuc_split[0][0]+4*nuc_split[0][1]+nuc_split[1][2];
+							pc2 = 16*nuc_split[0][0]+4*nuc_split[1][1]+nuc_split[0][2];
+						}
+						else
+						{
+							if (nuc_split[1][1]==nuc_split[0][1])
+							{
+								pc1 = 16*nuc_split[0][0]+4*nuc_split[0][1]+nuc_split[1][2];
+								pc2 = 16*nuc_split[1][0]+4*nuc_split[0][1]+nuc_split[0][2];
+							}
+							else 
+							{
+								pc1 = 16*nuc_split[1][0]+4*nuc_split[0][1]+nuc_split[0][2];
+								pc2 = 16*nuc_split[0][0]+4*nuc_split[1][1]+nuc_split[0][2];
+							}
+						}
+						
+						pc = 0;
+						
+						pc1AA = _Genetic_Code[pc1];
+						if (pc1AA != 10)
+						{	
+							_OBSERVED_S_   [h-hShift][v-vShift]  = (pc1AA == myAA) + (pc1AA == newAA);
+							_OBSERVED_NS_  [h-hShift][v-vShift]  = (pc1AA != myAA) + (pc1AA != newAA);
+							
+							_PAIRWISE_S_  [h-hShift][v-vShift] = (_S_NS_POSITIONS_[0][h]+_S_NS_POSITIONS_[0][v]+_S_NS_POSITIONS_[0][pc1])/3;
+							_PAIRWISE_NS_ [h-hShift][v-vShift] = (_S_NS_POSITIONS_[1][h]+_S_NS_POSITIONS_[1][v]+_S_NS_POSITIONS_[1][pc1])/3;
+							/*fprintf ("echo", "\t", codonString (h), "->", codonString(pc1), "->", codonString(v), "\t", _PAIRWISE_S_ [h][v], "\t", _PAIRWISE_NS_ [h][v], "\n");*/
+							pc = 1;
+						}
+						
+						pc1AA = _Genetic_Code[pc2];
+						if (pc1AA != 10)
+						{
+							_OBSERVED_S_  [h-hShift][v-vShift]  = _OBSERVED_S_ [h-hShift][v-vShift] + (pc1AA == myAA) + (pc1AA == newAA);
+							_OBSERVED_NS_ [h-hShift][v-vShift]  = _OBSERVED_NS_[h-hShift][v-vShift] + (pc1AA != myAA) + (pc1AA != newAA);
+
+							_PAIRWISE_S_  [h-hShift][v-vShift] = _PAIRWISE_S_ [h-hShift][v-vShift]+(_S_NS_POSITIONS_[0][h]+_S_NS_POSITIONS_[0][v]+_S_NS_POSITIONS_[0][pc2])/3;
+							_PAIRWISE_NS_ [h-hShift][v-vShift] = _PAIRWISE_NS_ [h-hShift][v-vShift]+(_S_NS_POSITIONS_[1][h]+_S_NS_POSITIONS_[1][v]+_S_NS_POSITIONS_[1][pc2])/3;
+							/*fprintf ("echo", "\t", codonString (h), "->", codonString(pc2), "->", codonString(v), "\t", _PAIRWISE_S_ [h][v], "\t", _PAIRWISE_NS_ [h][v], "\n");*/
+							pc = pc+1;
+						}
+						
+						if (pc == 0)
+						{
+							_PAIRWISE_S_  [h-hShift][v-vShift] = 0;
+							_PAIRWISE_NS_ [h-hShift][v-vShift] = 0;
+							_OBSERVED_S_  [h-hShift][v-vShift] = 0;
+							_OBSERVED_NS_ [h-hShift][v-vShift] = 0;
+						}
+						else
+						{
+							_PAIRWISE_S_  [h-hShift][v-vShift] = _PAIRWISE_S_  [h-hShift][v-vShift]/pc;
+							_PAIRWISE_NS_ [h-hShift][v-vShift] = _PAIRWISE_NS_ [h-hShift][v-vShift]/pc;
+							_OBSERVED_S_  [h-hShift][v-vShift] = _OBSERVED_S_  [h-hShift][v-vShift]/pc;
+							_OBSERVED_NS_ [h-hShift][v-vShift] = _OBSERVED_NS_ [h-hShift][v-vShift]/pc;						
+						}
+					}
+					else 
+					{
+						pc = 0;
+						
+						/*
+						fprintf ("echo", "\tThree changes:\n");
+						*/
+						
+						for (p1=0;p1<3;p1=p1+1)
+						{
+							pc1   = (h+4^(2-p1)*(nuc_split[1][p1]-nuc_split[0][p1])+0.5)$1;
+							pc1AA = _Genetic_Code[pc1];
+							if (pc1AA != 10)
+							{
+								for (p2=0;p2<3;p2=p2+1)
+								{
+									if (p2 != p1)
+									{
+										pc2 = (pc1+4^(2-p2)*(nuc_split[1][p2]-nuc_split[0][p2]) + 0.5)$1;
+										pc2AA = _Genetic_Code[pc2];
+										if (pc2AA != 10)
+										{
+											_OBSERVED_S_   [h-hShift][v-vShift]  = _OBSERVED_S_ [h-hShift][v-vShift] + (pc1AA == myAA) + (pc1AA == pc2AA) + (pc2AA == newAA);
+											_OBSERVED_NS_  [h-hShift][v-vShift]  = _OBSERVED_NS_[h-hShift][v-vShift] + (pc1AA != myAA) + (pc1AA != pc2AA) + (pc2AA != newAA);
+											
+											_PAIRWISE_S_ [h-hShift][v-vShift] = _PAIRWISE_S_ [h-hShift][v-vShift]+
+																(_S_NS_POSITIONS_[0][h]+_S_NS_POSITIONS_[0][v]+_S_NS_POSITIONS_[0][pc1]+_S_NS_POSITIONS_[0][pc2])/4;
+											_PAIRWISE_NS_ [h-hShift][v-vShift] = _PAIRWISE_NS_ [h-hShift][v-vShift]+
+																(_S_NS_POSITIONS_[1][h]+_S_NS_POSITIONS_[1][v]+_S_NS_POSITIONS_[1][pc1]+_S_NS_POSITIONS_[1][pc2])/4;
+											pc = pc+1;
+										
+											/*
+											fprintf (stdout, "\t", codonString (h), "->", codonString(pc1), "->", codonString(pc2), "->",codonString(v), "\t", _PAIRWISE_S_ [h][v], "\t", _PAIRWISE_NS_ [h][v], "\n");
+											*/
+										}
+									}
+								}
+							}
+						}
+						if (pc == 0)
+						{
+							_PAIRWISE_S_  [h-hShift][v-vShift] = 0;
+							_PAIRWISE_NS_ [h-hShift][v-vShift] = 0;
+							_OBSERVED_S_  [h-hShift][v-vShift] = 0;
+							_OBSERVED_NS_ [h-hShift][v-vShift] = 0;
+						}
+						else
+						{
+							_PAIRWISE_S_  [h-hShift][v-vShift] = _PAIRWISE_S_  [h-hShift][v-vShift]/pc;
+							_PAIRWISE_NS_ [h-hShift][v-vShift] = _PAIRWISE_NS_ [h-hShift][v-vShift]/pc;
+							_OBSERVED_S_  [h-hShift][v-vShift] = _OBSERVED_S_  [h-hShift][v-vShift]/pc;
+							_OBSERVED_NS_ [h-hShift][v-vShift] = _OBSERVED_NS_ [h-hShift][v-vShift]/pc;						
+						}
+					}
+				}
+				_PAIRWISE_S_  [v-vShift][h-hShift] = _PAIRWISE_S_  [h-hShift][v-vShift];
+				_PAIRWISE_NS_ [v-vShift][h-hShift] = _PAIRWISE_NS_ [h-hShift][v-vShift];
+				_OBSERVED_S_  [v-vShift][h-hShift] = _OBSERVED_S_  [h-hShift][v-vShift];
+				_OBSERVED_NS_ [v-vShift][h-hShift] = _OBSERVED_NS_ [h-hShift][v-vShift];
+				
+				
+			}
+		}
+	}
+}	
+sSites  = 0;
+nsSites = 0;
+
+synM    = {nonStopCount,nonStopCount};
+nonSynM = {nonStopCount,nonStopCount};
+
+vertOnes = {nonStopCount,1};
+horOnes  = {1,nonStopCount};
+	
+for (h1 = 0; h1<nonStopCount; h1=h1+1)
+{
+	vertOnes [h1] = 1;
+	horOnes  [h1] = 1;
+}
+
+hShift = 0;
+for (h1 = 0; h1 < 64; h1=h1+1)
+{
+	gc1 = _Genetic_Code[h1];
+	if (gc1 == 10)
+	{
+		hShift = hShift+1;
+	}
+	else
+	{
+		sSites = sSites   + backgroundData.sites * _S_NS_POSITIONS_[0][h1] * vectorOfFrequencies[h1-hShift];
+		nsSites = nsSites + backgroundData.sites * _S_NS_POSITIONS_[1][h1] * vectorOfFrequencies[h1-hShift];
+	
+		vShift = hShift;
+		for (v1 = h1+1; v1 < 64; v1=v1+1)
+		{
+			gc2 = _Genetic_Code[v1];
+			if (gc2 == 10)
+			{
+				vShift = vShift + 1;
+			}
+			else
+			{
+				if (gc1 == gc2)
+				{
+					synM [h1-hShift][v1-vShift] = vectorOfFrequencies[h1-hShift];
+					synM [v1-vShift][h1-hShift] = vectorOfFrequencies[v1-vShift];
+				}
+				else
+				{
+					nonSynM [h1-hShift][v1-vShift] = vectorOfFrequencies[h1-hShift];
+					nonSynM [v1-vShift][h1-hShift] = vectorOfFrequencies[v1-vShift];
+				}	
+			}
+		}
+	}
+}	
+
+synSubsAVL = {};
+dSAVL	   = {};
+nsSubsAVL  = {};
+dNAVL	   = {};
+
+
+
+/*fprintf (stdout, "\nTotal nucleotide sites :", backgroundData.sites*3,
+	 "\nSynonymous  sites      :", sSites, 
+			 "\nNonsynonymous  sites   :", nsSites, "\n");
+*/			 
+sSites  = 3*backgroundData.sites/sSites;
+nsSites = 3*backgroundData.sites/nsSites;
+
+for (h1=0; h1 < T-1; h1=h1+1)
+{
+	abn = branchNames[h1];
+	ExecuteCommands("GetInformation (aRateMx, givenTree."+abn+");");
+	synSubs  = (horOnes*(aRateMx$synM))*vertOnes;
+	nsynSubs = (horOnes*(aRateMx$nonSynM))*vertOnes;
+	synSubs = synSubs[0]/3;
+	nsynSubs = nsynSubs[0]/3;
+
+	synSubsAVL[abn] = synSubs;
+	nsSubsAVL [abn] = nsynSubs;
+	dSAVL[abn]	    = synSubs *sSites;
+	dNAVL[abn]	    = nsynSubs*nsSites;
+}
+treeAVL = givenTree ^ 0;
+/*synTreeString 		= PostOrderAVL2StringDistances (treeAVL, synSubsAVL); 
+nonSynTreeString	= PostOrderAVL2StringDistances (treeAVL, nsSubsAVL);*/
+dSTreeString 		= PostOrderAVL2StringDistances (treeAVL, dSAVL); 
+dNTreeString	    = PostOrderAVL2StringDistances (treeAVL, dNAVL);
+
+/*fprintf (stdout, "\nE[Syn subs/nucleotide site] tree: \n\t",     synTreeString, 	   "\n");
+fprintf (stdout, "\nE[Non-syn subs/nucleotide site] tree: \n\t", nonSynTreeString, "\n");*/
+/*fprintf (stdout, "\ndS tree: \n\t", dSTreeString, "\n");
+fprintf (stdout, "\ndN tree: \n\t", dNTreeString, "\n");
+*/
+UseModel (USE_NO_MODEL);
+	/*Tree 	synSubsTree 	= synTreeString;
+Tree	nonsynSubsTree 	= nonSynTreeString;
+*/
+Tree 	dSTree 	= dSTreeString;
+Tree	dNTree 	= dNTreeString;
+/*fprintf(stdout, "dS\t");*/
+ds = 0;
+for(k=0; k < Columns(branchNames)-1; k=k+1)
+{
+    ds = ds + BranchLength(dSTree,k);
+	/*fprintf(stdout, BranchLength(dSTree,k));
+	fprintf(stdout, "\t");*/
+}	
+/*fprintf(stdout, "dN\t");*/
+dn = 0;	
+for(k=0; k < Columns(branchNames)-1; k=k+1)
+{
+    dn = dn + BranchLength(dNTree,k);
+	/*fprintf(stdout, BranchLength(dNTree,k));
+	fprintf(stdout, "\t");*/
+}	
+/*fprintf(stdout, "\n");*/
+fprintf(stdout, "Total dN: ",dn,"\n");
+fprintf(stdout, "Total dS: ",ds,"\n");
+dnds = dn/ds;
+fprintf(stdout, "Total dN/dS: ",dnds,"\n");
+
+UseModel(MG94customModel);
+fprintf (stdout, lf);
+synonymousrates = {1,Columns(branchNames)-1};
+for(k=0; k < Columns(branchNames)-1; k=k+1)
+{
+	/*ExecuteCommands("synonymousrates[k] = 10;"); */
+	ExecuteCommands("syn = givenTree."+branchNames[k]+".synRate");
+	if (syn > 3){
+		ExecuteCommands("givenTree."+branchNames[k]+".synRate = 3");}
+	ExecuteCommands("synonymousrates[k] = givenTree."+branchNames[k]+".synRate;");
+	/*fprintf (stdout,synonymousrates[k]," asdf\n");
+	fprintf (stdout,syn," addsdf\n");*/
+}
+/*fprintf(stdout,"Global Constraint: ",constraintall,"\n");*/
+GetDataInfo (charInfo, all, "CHARACTERS");
+GetDataInfo (siteToPatternMap,  all);
+charCount   = Columns (charInfo);
+template    = {1,charCount}["1"];
+passcode    = 2;
+ds = 0;
+	for(k=0; k < Columns(branchNames)-1; k=k+1)
+	{
+	ExecuteCommands("ds = ds+givenTree."+branchNames[k]+".synRate;");
+	}
+/*fprintf (stdout, "Total dS: ",ds,"\n");*/
+dn = 0;
+for(k=0; k < Columns(branchNames)-1; k=k+1)
+{
+	ExecuteCommands("dn = dn+givenTree."+branchNames[k]+".nsClass1;");
+}
+/*fprintf (stdout, "Total dN: ",dn,"\n");*/
+dns = dn/ds;
+/*fprintf (stdout, "dN/dS: ",dns,"\n");*/
+a1 = AC;
+a2 = AT;
+a3 = CG;
+a4 = CT;
+a5 = GT;
+global AC := a1;
+global AT := a2;
+global CG := a3;
+global CT := a4;
+global GT := a5;
+codonToAAMap = defineCodonToAA();
+fprintf (stdout, "Position\tL0\tL1\tConstraint\tChisquared\tP-value\tSeqCount\tAlignment\tReferenceAA\t","MaskedConstraint\tMaskedP-value\n");
+/*fprintf(stdout,"Fasta: ",filename,"\nTree: ",treefile,"\n");*/
+fscanf (positfile, "Number", testpos);
+for (pos = 0; pos < backgroundData.sites*3; pos = pos + 3) {
+    posend = pos + 2;
+    range = ""+pos+"-"+posend;
+    DataSetFilter codonData = CreateFilter(backgroundData,3,range,"",GeneticCodeExclusions);
+    seq_count = 0;
+	for (sequence = 0; sequence < all.species; sequence = sequence + 1)
+	{
+		GetDataInfo (thisChar, all, sequence, siteToPatternMap[pos]);
+		if ((template*thisChar)[0] < passcode)
+		{
+			seq_count = seq_count + 1;
+		}
+	}
+	
+    /*fprintf(stdout,codonData);*/
+    for(k=0; k < Columns(branchNames)-1; k=k+1) 
+    {
+        ExecuteCommands("tree."+branchNames[k]+".nsClass1 := "+synonymousrates[k]+";");
+        /*ExecuteCommands("tree."+branchNames[k]+".nsClass1 := 1;");*/
+        ExecuteCommands("tree."+branchNames[k]+".synRate := "+synonymousrates[k]+";");
+    }
+    LikelihoodFunction lf = (codonData,tree); 
+    global constraint = 0.2;
+    /*fprintf (stdout,AC, "AC\n");*/
+    /*fprintf (stdout,a1, "A1\n");*/
+    if (pos == testpos){
+    	Optimize (res_null, lf);}
+    for(k=0; k < Columns(branchNames)-1; k=k+1)
+    {
+        ExecuteCommands("tree."+branchNames[k]+".nsClass1 := constraint*"+synonymousrates[k]+";");
+        /*ExecuteCommands("tree."+branchNames[k]+".nsClass1 := constraint;"); */
+        ExecuteCommands("tree."+branchNames[k]+".synRate := "+synonymousrates[k]+";");
+    }	
+    
+    LikelihoodFunction lf2 = (codonData,tree);
+    fprintf (stdout, pos, "\t");
+    if (pos == testpos){
+    	Optimize (res_alt, lf2);
+    	/*fprintf (stdout,lf2,"\n");*/
+    	lnLikDiff = -2(res_null[1][0]-res_alt[1][0]);
+    	degFDiff = res_alt[1][1]-res_null[1][1];
+    	fprintf (stdout,res_null[1][0],"\t",res_alt[1][0],"\t",constraint,"\t",lnLikDiff,"\t", 1-CChi2(lnLikDiff,degFDiff),"\t",seq_count,"\t");
+    }
+    /* Get Aligned Codons*/
+    refaa  = "NA";
+	for (seq = 0; seq < codonData.species; seq = seq+1) {
+	    GetDataInfo   (seq_data, codonData, seq);
+	    GetString   (seq_name, codonData, seq);
+	    /*fprintf(stdout,seq_data," ",seq," ",pos," CODON ");*/
+	    translString = translateCodonToAA (seq_data, codonToAAMap, 0);
+	    fprintf(stdout,translString);
+	    if (seq_name == reference) {
+            refaa = translString;}
+	}
+	fprintf(stdout,"\t",refaa,"\t");
+	if (pos != testpos){ fprintf(stdout,"NOSNP\n");}
+	/* Mask Barley */
+
+	filtered_FASTA = ""; filtered_FASTA * (codonData.species * codonData.sites);
+	for (seq = 0; seq < codonData.species; seq = seq + 1) {
+        GetString   (seq_name, codonData, seq);
+        GetDataInfo (seq_data, codonData, seq);
+        filtered_FASTA * ">";
+        filtered_FASTA * seq_name; /* push the FASTA header for this sequence onto string buffer */
+        filtered_FASTA * ("\n");
+        for (char = 0; char < codonData.sites; char = char + 3) {
+            current_codon = seq_data[char][char+2];
+            if (seq_name == reference) {
+                /*fprintf(stdout,seq_name," SPECIES\n");*/
+                filtered_FASTA * "???";
+            } else {
+                filtered_FASTA * current_codon;
+                /*fprintf(stdout,current_codon,"8\n");*/
+            }   
+        }
+        filtered_FASTA * "\n";
+    }
+
+    filtered_FASTA * 0; /* close the buffer */
+
+    /*fprintf (stdout, "\n", filtered_FASTA, "\n");*/
+
+    DataSet codonsMasked = ReadFromString (filtered_FASTA);
+    /*fprintf(stdout,codonsMasked.sites," ",codonsMasked.species,"\n");*/
+    /*fprintf(stdout,filtered_FASTA);*/
+    DataSetFilter codonsMaskedF = CreateFilter (codonsMasked,3,"0-2","",GeneticCodeExclusions);
+    /*fprintf(stdout,codonsMaskedF,"hello\n");*/
+    /*fprintf(stdout,codonData);*/
+    for(k=0; k < Columns(branchNames)-1; k=k+1) 
+    {
+        ExecuteCommands("mtree."+branchNames[k]+".nsClass1 := "+synonymousrates[k]+";");
+        ExecuteCommands("mtree."+branchNames[k]+".synRate := "+synonymousrates[k]+";");
+    }
+    /*fprintf (stdout,lf,"\n");*/
+    LikelihoodFunction lf = (codonsMaskedF,mtree); 
+    global constraint = 0.2;
+    if (pos == testpos){
+    	Optimize (res_null, lf);
+    }
+    
+    for(k=0; k < Columns(branchNames)-1; k=k+1)
+    {
+        ExecuteCommands("mtree."+branchNames[k]+".nsClass1 := constraint*"+synonymousrates[k]+";");
+        ExecuteCommands("mtree."+branchNames[k]+".synRate := "+synonymousrates[k]+";");
+    }	
+    LikelihoodFunction lf2 = (codonsMaskedF,mtree);
+    if (pos == testpos){
+    	Optimize (res_alt, lf2);
+    	fscanf (positfile, "Number", testpos);
+    	if (pos == testpos){
+    		fscanf (positfile, "Number", testpos);}
+    	if (pos == testpos){
+    		fscanf (positfile, "Number", testpos);}
+    	lnLikDiff = -2(res_null[1][0]-res_alt[1][0]);
+    	degFDiff = res_alt[1][1]-res_null[1][1];
+    
+    	fprintf (stdout, pos, "\t",res_null[1][0],"\t",res_alt[1][0],"\t",constraint,"\t",lnLikDiff,"\t", 1-CChi2(lnLikDiff,degFDiff),"\t",seq_count,"\t");
+    	fprintf (stdout, constraint, "\t",1-CChi2(lnLikDiff,degFDiff),"\n");
+    }
+
+}
+fprintf(stdout,"Alignment order: ");
+for (seq = 0; seq < codonData.species; seq = seq+1) {
+	    GetString   (seq_name, codonData, seq);
+	    fprintf(stdout,seq_name);
+	    if (seq + 1 < codonData.species){
+	        fprintf(stdout,",");
+	    }
+}
+fprintf(stdout,"\n");
+fprintf(stdout,"Species masked: ");
+for (seq = 0; seq < codonsMasked.species; seq = seq + 1) {
+    GetString   (seq_name, codonsMasked, seq);
+    if (seq_name == reference) {
+        fprintf(stdout,seq_name,"\n");}
+}
+timer3 = Time(0);
+fprintf (stdout, "CPU time taken for sites: ", timer3-timer2, " seconds.\n");
+
+/* /home/jfay/applications/hyphy/HYPHY/HYPHYMP Constraint.barley7.hyphy <<< $'test/test3.fasta\ntest/test3.tre\nmloc798551' */
+
+
+
+
+
