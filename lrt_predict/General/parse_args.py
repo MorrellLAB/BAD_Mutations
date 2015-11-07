@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Script to parse and validate arguments passed to LRT_Predict.py"""
+"""Script to parse and validate arguments passed to BAD_Mutations.py"""
 #   Helper script for Phytozome.py
 #   Contains argument parsing code
 
@@ -46,7 +46,7 @@ def parse_args():
     #   Create a parser for 'setup'
     setup_args = subparser.add_parser(
         'setup',
-        help='Set up the runtime environment of LRT_Predict')
+        help='Set up the runtime environment of BAD_Mutations')
     setup_args.add_argument(
         '--list-species',
         required=False,
@@ -286,7 +286,7 @@ def validate_args(args, log):
 #   Python 3+.
 def usage():
     """Print a usage message."""
-    print '''Usage: LRT_Predict.py <subcommand> <arguments>
+    print '''Usage: BAD_Mutations.py <subcommand> <arguments>
 
 where <subcommand> is one of 'setup', 'fetch', or 'predict.' This script will
 download the necessary data to perform the likelihood ratio test (LRT) for
@@ -301,7 +301,7 @@ recommended, as it makes batches of analysis much easier to standardize.
 The 'fetch' subcommand will download gzipped CDS FASTA files from Phytozome,
 unzip them, and convert them into BLAST databases. It requires a (free)
 username and password for the JGI Genomes Portal. Check with Phytozome for
-their data release and usage policies. Use 'LRT_Predict.py fetch -h' for more
+their data release and usage policies. Use 'BAD_Mutations.py fetch -h' for more
 information.
 
 The 'predict' subcommand will run the LRT with a given query sequence and a
@@ -311,5 +311,5 @@ Dependencies:
     Biopython
     tblastx (NCBI BLAST executables)
     requests (Python HTTP requests module)
-    prank-msa (Phylogeny-aware sequence alignment)'''
+    pasta (Phylogeny-aware sequence alignment)'''
     return

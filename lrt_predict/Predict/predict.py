@@ -15,7 +15,7 @@ from ..General import parse_input
 from ..General import set_verbosity
 from ..General import check_modules
 
-class LRTPredict:
+class LRTPredict(object):
     def __init__(self, nuc_aln, treefile, query, substitutions, verbose):
         self.mainlog = set_verbosity.verbosity('LRT_Prediction', verbose)
         self.nmsa = nuc_aln
@@ -24,8 +24,9 @@ class LRTPredict:
         self.substitutions = parse_input.parse_subs(substitutions, self.mainlog)
         self.query_pos = 0
         return
-    #   A function to get the index of the query sequence in the prank alignment
+
     def get_query_position(self):
+        """Get the index of the query sequence in the Pasta alignment."""
         #   Get the name from the query sequence
         qseq = SeqIO.read(self.query, 'fasta')
         #   Read the alignment
@@ -39,10 +40,58 @@ class LRTPredict:
         #   Return the alignment object, so we don't have to read it up again
         return a
 
-    #   A function to extract the amino acid states from the prank alignment
-    def get_codon_columns(self):
+    def get_aligned_positions(self):
+        """Get the position of the query codons in the alignment. Uses the
+        query sequence, and counts gap characters to calculate the aligned
+        positions to be computed."""
         pass
 
-    #   A function to get the LRT predictions
+    def prepare_hyphy_inputs(self):
+        """Prepare the input files for the HYPHY prediction script. Writes the
+        paths of the MSA, tree, and substitutions file into a plain text file.
+        Also builds the name of the temporary output file to hold the
+        predictions."""
+        infile = tempfile.NamedTemporaryFile(
+            mode='w+t',
+            prefix='BAD_Mutations_HYHPY_In_',
+            suffix='.txt'
+            )
+        #   We write the paths of the MSA, the tree, the positions, and the
+        #   query name into the input file.
+        infile.write("...")
+        infile.flush()
+        #   And then we create a name for the HYPHY output file
+        outfile = tempfile.NamedTemporaryFile(
+            mode='w+t',
+            prefix='BAD_Mutations_HYPHY_Out_',
+            suffix='.txt'
+            )
+        self.hyphy_input = infile.name
+        self.hyphy_output = outfile.name
+        return
+
     def predict_codons(self):
-        pass
+        """Run the HYPHY script to predict the codons."""
+        #   Get the base directory of the LRT package
+        lrt_path = os.path.realpath(__file__).rsplit(os.path.sep, 3)[0]
+        #   Then build the path to the pasta script
+        hyphy_script = os.path.join(
+            lrt_path,
+            'Shell_Scripts',
+            'Prediction.sh')
+        hyphy_path = check_modules.check_executable('HYPHYMP')
+        #   Build the command for predictig
+        cmd = [
+            'bash',
+            hyphy_script,
+            self.hyphy_input,
+            self.hyphy_output
+            ]
+        self.mainlog.debug(' '.join(cmd))
+        #   Then run the command
+        p = subprocess.Popen(
+            cmd,
+            shell=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+        out, err = p.communicate()

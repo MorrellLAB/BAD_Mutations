@@ -258,19 +258,15 @@ def main():
             fetch(arguments_valid, loglevel)
         elif arguments_valid['action'] == 'predict':
             #   We will return the filename that contains the unaligned
-            #   sequences, as we will use these as inputs for prank
+            #   sequences, as we will use these as inputs for pasta
             unaligned_seqs = blast(arguments_valid, loglevel)
             #   Then add the query sequence and align them
             alignment, tree_file = align(arguments_valid, unaligned_seqs, loglevel)
             loglevel.info('Nucleotide alignment in ' + alignment.name)
             loglevel.info('Tree in ' + tree_file)
-            new_nuc = '/Users/tomkono/Data_Disk/tmp/Barley_Anc_Aln/' + file_funcs.local_name(arguments_valid['fasta'])
-            new_tree = '/Users/tomkono/Data_Disk/tmp/Barley_Anc_Aln/' + file_funcs.local_name(arguments_valid['fasta'].replace('.fasta', '.tree'))
-            open(new_nuc, 'w').close()
-            open(new_tree, 'w').close()
-            shutil.copy2(alignment.name, new_nuc)
-            shutil.copy2(tree_file, new_tree)
-            #predict(arguments_valid, nuc_file, tree_file, loglevel)
+            #new_nuc = '/Users/tomkono/Data_Disk/tmp/Soy_Anc_Aln/' + file_funcs.local_name(arguments_valid['fasta'])
+            #new_tree = '/Users/tomkono/Data_Disk/tmp/Soy_Anc_Aln/' + file_funcs.local_name(arguments_valid['fasta'].replace('.fasta', '.tree'))
+            predict(arguments_valid, nuc_file, tree_file, loglevel)
     else:
         loglevel.error(msg)
     return

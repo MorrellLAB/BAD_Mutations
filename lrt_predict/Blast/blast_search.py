@@ -98,7 +98,7 @@ class BlastSearch(object):
         #   We also need the filename, so used the NamedTemporaryFile method
         temp_output = tempfile.NamedTemporaryFile(
             mode='w+t',
-            prefix='LRTPredict_BlastSearch_',
+            prefix='BAD_Mutations_BlastSearch_',
             suffix='_BLASTout.xml')
         self.mainlog.debug('Temp file created with name ' + temp_output.name)
         #   Return the file-like object
@@ -186,7 +186,7 @@ class BlastSearch(object):
         self.mainlog.debug('Creating named tempfile for homologous sequences.')
         temp_output = tempfile.NamedTemporaryFile(
             mode='w+t',
-            prefix='LRTPredict_BlastSearch_',
+            prefix='BAD_Mutations_BlastSearch_',
             suffix='_orthologues.fasta')
         self.mainlog.debug('Created temporary file ' + temp_output.name)
         qseq = SeqIO.read(self.query, 'fasta')

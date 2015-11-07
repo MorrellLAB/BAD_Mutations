@@ -20,7 +20,7 @@ from lrt_predict.General import set_verbosity
 from lrt_predict.General import check_modules
 
 
-class PastaAlign:
+class PastaAlign(object):
     def __init__(self, unaligned_sequences, query_sequence, verbose):
         self.mainlog = set_verbosity.verbosity('Pasta_Align', verbose)
         #   This is file-like object
@@ -87,7 +87,7 @@ class PastaAlign:
         #   sequences.
         self.protein_input = tempfile.NamedTemporaryFile(
             mode='w+t',
-            prefix='LRTPredict_PastaInput_',
+            prefix='BAD_Mutations_PastaInput_',
             suffix='.fasta')
         #   And write the protein sequences into it
         SeqIO.write(fixed_tl_seqs, self.protein_input, 'fasta')
@@ -128,7 +128,7 @@ class PastaAlign:
         #   And create a new temporary file for them
         final_seqs = tempfile.NamedTemporaryFile(
             mode='w+t',
-            prefix='LRTPredict_BackTranslated_',
+            prefix='BAD_Mutations_BackTranslated_',
             suffix='.fasta')
         SeqIO.write(bt_seqs, final_seqs, 'fasta')
         final_seqs.flush()

@@ -25,14 +25,12 @@ class SetupEnv(object):
                                   multiple sequence alignment.
         MISSING_THRESHOLD (float) Max. missing (gap) for a codon to be
                                   considered in prediction.
-        PRANK_MODEL (str)         Which model (-codon or -translate) for use
-                                  in prank-msa.
         BASH (str)                Path to bash.
         GZIP (str)                Path to gzip.
         SUM (str)                 Path to sum.
         TBLASTX (str)             Path to tblastx.
-        PRANK (str)               Path to prank.
-        HYPHY (str)               Path to HyPhy.
+        PASTA (str)               Path to pasta.
+        HYPHY (str)               Path to HyPhy
 
     Contains no class attributes.
 
@@ -66,7 +64,6 @@ class SetupEnv(object):
         self.deps = deps
         self.target_species = target
         self.eval_thresh = str(evalue)
-        self.alignment_model = model
         self.miss_thresh = str(missingness)
         self.config_file = cfg
         self.missing_progs = []
@@ -77,12 +74,11 @@ class SetupEnv(object):
             '#define TARGET_SPECIES ' + self.target_species + '\n' +
             '#define EVAL_THRESHOLD ' + self.eval_thresh + '\n' +
             '#define MISSING_THRESHOLD ' + self.miss_thresh + '\n' +
-            '#define PRANK_MODEL ' + self.alignment_model)
         self.bash_path = spawn.find_executable('bash') or ''
         self.gzip_path = spawn.find_executable('gzip') or ''
         self.sum_path = spawn.find_executable('sum') or ''
         self.tblastx_path = spawn.find_executable('tblastx') or ''
-        self.prank_path = spawn.find_executable('prank') or ''
+        self.prank_path = spawn.find_executable('run_pasta.py') or ''
         self.hyphy_path = spawn.find_executable('HYPHYSP') or ''
         self.mainlog.debug(
             'Setting executable path variables:\n' +
@@ -90,7 +86,7 @@ class SetupEnv(object):
             '#define GZIP ' + self.gzip_path + '\n' +
             '#define SUM ' + self.sum_path + '\n' +
             '#define TBLASTX ' + self.tblastx_path + '\n' +
-            '#define PRANK ' + self.prank_path + '\n' +
+            '#define PASTA ' + self.pasta_path + '\n' +
             '#define HYPHY ' + self.hyphy_path)
         #   Print out some warnings if executables are not found
         if self.bash_path == '':
@@ -104,7 +100,7 @@ class SetupEnv(object):
             self.missing_progs.append('tBLASTx')
         if self.prank_path == '':
             self.mainlog.warning('Cannot find prank! Will download')
-            self.missing_progs.append('PRANK')
+            self.missing_progs.append('PASTA')
         if self.hyphy_path == '':
             self.mainlog.warning('Cannot find HYPHYSP! Will download')
             self.missing_progs.append('HyPhy')
@@ -131,13 +127,12 @@ class SetupEnv(object):
         handle.write('#define TARGET_SPECIES ' + self.target_species + '\n')
         handle.write('#define EVAL_THRESHOLD ' + self.eval_thresh + '\n')
         handle.write('#define MISSING_THRESHOLD ' + self.miss_thresh + '\n')
-        handle.write('#define PRANK_MODEL ' + self.alignment_model + '\n')
         handle.write('\n// Program paths\n')
         handle.write('#define BASH ' + self.bash_path + '\n')
         handle.write('#define GZIP ' + self.gzip_path + '\n')
         handle.write('#define SUM ' + self.sum_path + '\n')
         handle.write('#define TBLASTX ' + self.tblastx_path + '\n')
-        handle.write('#define PRANK ' + self.prank_path + '\n')
+        handle.write('#define PASTA ' + self.pasta_path + '\n')
         handle.write('#define HYPHY ' + self.hyphy_path + '\n')
         handle.flush()
         handle.close()
