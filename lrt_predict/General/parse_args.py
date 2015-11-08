@@ -282,6 +282,10 @@ def validate_args(args, log):
                 return (
                     False,
                     'The specified configuration file does not exist!')
+        if not check_args.valid_dir(args['output']):
+            return (
+                False,
+                'Output directory is not readable/writable, or does not exist.')
         if not parse_input.valid_fasta(args['fasta'], log):
             return (
                 False,

@@ -271,12 +271,33 @@ def main():
                 loglevel)
             loglevel.info('Nucleotide alignment in ' + alignment.name)
             loglevel.info('Tree in ' + tree_file)
-            #new_nuc = '/Users/tomkono/Data_Disk/tmp/Soy_Anc_Aln/' + file_funcs.local_name(arguments_valid['fasta'])
-            #new_tree = '/Users/tomkono/Data_Disk/tmp/Soy_Anc_Aln/' + file_funcs.local_name(arguments_valid['fasta'].replace('.fasta', '.tree'))
             out = predict(arguments_valid, alignment, tree_file, loglevel)
             #   copy the output file into the destination directory
-            open("... output ...", 'w').close()
-            shutil.copy2(out, "... output ...")
+            #   To build the output filename, we join the output directory
+            #   with a new name based on the input filename
+            out_fname = os.path.join(
+                arguments_valid['output'],
+                arguments_valid['fasta'].replace('.fasta', '_Predictions.txt')
+                )
+            open(out_fname, 'w').close()
+            shutil.copy2(out.name, out_fname)
+            loglevel.info('Prediction in ' + out_fname)
+            #   Check if the user wants the MSA and the tree, too
+            if arguments_valid['keep_intermediates']:
+                new_nuc = os.path.join(
+                    arguments_valid['output'],
+                    arguments_valid['fasta'].replace('.fasta', '_MSA.fasta')
+                    )
+                new_tree = os.path.join(
+                    arguments_valid['output'],
+                    arguments_valid['fasta'].replace('.fasta', '.tree')
+                    )
+                open(new_nuc, 'w').close()
+                open(new_tree, 'w').close()
+                shutil.copy2(alignment.name, new_nuc)
+                shutil.copy2(tree_file, new_tree)
+                loglevel.info('MSA copied to ' + new_nuc)
+                loglevel.info('Tree copied to ' + new_tree)
     else:
         loglevel.error(msg)
     return
