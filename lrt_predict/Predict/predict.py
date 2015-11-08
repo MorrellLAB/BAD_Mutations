@@ -39,9 +39,10 @@ class LRTPredict(object):
                 self.query_pos = index
                 break
         #   Return the alignment object, so we don't have to read it up again
-        return a
+        self.msa_obj = a
+        return
 
-    def get_aligned_positions(self, alignment):
+    def get_aligned_positions(self):
         """Get the position of the query codons in the alignment. Uses the
         query sequence, and counts gap characters to calculate the aligned
         positions to be computed."""
@@ -49,20 +50,33 @@ class LRTPredict(object):
         #   that need to be predicted.
         self.aligned_pos = []
         real_position = 1
-        for index, column in enumerate(alignment[self.query_pos:]):
+        for index, column in enumerate(self.msa_obj[self.query_pos:]):
             if column == '-':
                 continue
             else:
                 real_position += 1
             if real_position % 3 == 0:
                 if real_position / 3 in self.subs:
-                    self.aligned_position.append(real_position/3)
+                    self.aligned_pos.append(real_position/3)
+        return
+
+    def write_aligned_subs(self):
+        """Write the aligned positions into a temporary file."""
+        subsfile = tempfile.NamedTempraryFile(
+            mode='w+t',
+            prefix='BAD_Mutations_HYPHY_Subs_',
+            suffix='.txt'
+            )
+        subsfile.write('\n'.join([str(i) for i in self.aligned_pos])
+        return subsfile.name
 
     def prepare_hyphy_inputs(self):
         """Prepare the input files for the HYPHY prediction script. Writes the
         paths of the MSA, tree, and substitutions file into a plain text file.
         Also builds the name of the temporary output file to hold the
         predictions."""
+        #   Write the substitutions file
+        alignedsubs = self.write_aligned_subs()
         infile = tempfile.NamedTemporaryFile(
             mode='w+t',
             prefix='BAD_Mutations_HYHPY_In_',
@@ -72,7 +86,7 @@ class LRTPredict(object):
         #   query name into the input file.
         infile.write(self.nmsa.name + '\n')
         infile.write(self.phylogenetic + '\n')
-        infile.write(self.subs + '\n')
+        infile.write(alignedsubs + '\n')
         infile.write(self.qname)
         infile.flush()
         #   And then we create a name for the HYPHY output file
@@ -110,4 +124,7 @@ class LRTPredict(object):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
         out, err = p.communicate()
-
+        self.mainlog.debug('stdout:\n' + out)
+        self.mainlog.debug('stderr:\n' + err)
+        #   Return the output file
+        return self.hyphy_output

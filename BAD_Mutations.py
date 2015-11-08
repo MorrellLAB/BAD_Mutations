@@ -3,7 +3,7 @@
 Script to perform LRT from Chun and Fay (2009) to predict deleterious SNPs in
 plants. Requires a user name and password for the JGI phyotzome portal (Free)
 Author: Thomas Kono
-        March 4, 2015
+        Nov 8, 2015
         Saint Paul, MN
 """
 #   Dependencies:
@@ -187,7 +187,7 @@ def predict(arg, nuc, tree, log):
         check_modules.missing_mods(predictdeps)
         exit(1)
     #   Check for the required executables
-    missing_reqs = check_modules.missing_executables(['bash', 'HYPHYSP'])
+    missing_reqs = check_modules.missing_executables(['bash', 'HYPHYMPI'])
     if missing_reqs:
         log.error(
             'Some required executables were not found on your system: ' +
@@ -202,8 +202,12 @@ def predict(arg, nuc, tree, log):
         arg['fasta'],
         arg['substitutions'],
         arg['loglevel'])
-    position = lrt.get_query_position()
-    return position
+    lrt.get_query_position()
+    lrt.get_aligned_positions()
+    lrt.write_aligned_subs()
+    lrt.prepare_hyphy_inputs()
+    outputfile = lrt.predict_codons()
+    return outputfile
 
 
 def main():
@@ -261,12 +265,18 @@ def main():
             #   sequences, as we will use these as inputs for pasta
             unaligned_seqs = blast(arguments_valid, loglevel)
             #   Then add the query sequence and align them
-            alignment, tree_file = align(arguments_valid, unaligned_seqs, loglevel)
+            alignment, tree_file = align(
+                arguments_valid,
+                unaligned_seqs,
+                loglevel)
             loglevel.info('Nucleotide alignment in ' + alignment.name)
             loglevel.info('Tree in ' + tree_file)
             #new_nuc = '/Users/tomkono/Data_Disk/tmp/Soy_Anc_Aln/' + file_funcs.local_name(arguments_valid['fasta'])
             #new_tree = '/Users/tomkono/Data_Disk/tmp/Soy_Anc_Aln/' + file_funcs.local_name(arguments_valid['fasta'].replace('.fasta', '.tree'))
-            predict(arguments_valid, alignment, tree_file, loglevel)
+            out = predict(arguments_valid, alignment, tree_file, loglevel)
+            #   copy the output file into the destination directory
+            open("... output ...", 'w').close()
+            shutil.copy2(out, "... output ...")
     else:
         loglevel.error(msg)
     return

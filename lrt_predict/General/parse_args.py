@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 """Script to parse and validate arguments passed to BAD_Mutations.py"""
-#   Helper script for Phytozome.py
-#   Contains argument parsing code
 
 import argparse
 import os
@@ -127,8 +125,8 @@ def parse_args():
         '--password',
         '-p',
         required=False,
-        help='Password for jgi.doe.gov. If you are not comfortable supplying\
-        this on the command-line in text, you can enter it on the prompt.',
+        help=('Password for jgi.doe.gov. If you are not comfortable supplying '
+        'this on the command-line in text, you can enter it on the prompt.'),
         default=None)
     #   Create a new mutually exclusive group for deciding if we want to only
     #   fetch, or if we want to convert
@@ -174,12 +172,26 @@ def parse_args():
         default=None,
         help='Path to the input substitutions file.')
     predict_args.add_argument(
+        '--output',
+        '-o',
+        required=False,
+        default='.',
+        help='Output directory.')
+    predict_args.add_argument(
         '--evalue',
         '-e',
         required=False,
         default=0.05,
         type=float,
         help='E-value threshold for accepting sequences into the alignment.')
+    predict_args.add_argument(
+        '--keep-intermediates',
+        '-k',
+        required=False,
+        default=False,
+        action='store_true',
+        help=('If passed, will keep the alignment and the tree used for '
+            'prediction. Default False.'))
     #   Add a switch for verbosity
     parser.add_argument(
         '--verbosity',
