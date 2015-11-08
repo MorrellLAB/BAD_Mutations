@@ -122,7 +122,10 @@ def blast(arg, log):
     if blastdeps:
         check_modules.missing_mods(blastdeps)
         exit(1)
-    missing_reqs = check_modules.missing_executables(['bash', 'tblastx'])
+    missing_reqs = check_modules.missing_executables(
+        ['bash',
+        arg['TBLASTX']
+        ])
     #   And then check the executable dependencies
     if missing_reqs:
         log.error(
@@ -151,7 +154,10 @@ def align(arg, unaligned, log):
         check_modules.missing_mods(aligndeps)
         exit(1)
     #   Check for the required executables
-    missing_reqs = check_modules.missing_executables(['bash', 'run_pasta.py'])
+    missing_reqs = check_modules.missing_executables(
+        ['bash',
+        arg['PASTA']
+        ])
     if missing_reqs:
         log.error(
             'Some required executables were not found on your system: ' +
@@ -187,7 +193,10 @@ def predict(arg, nuc, tree, log):
         check_modules.missing_mods(predictdeps)
         exit(1)
     #   Check for the required executables
-    missing_reqs = check_modules.missing_executables(['bash', 'HYPHYMPI'])
+    missing_reqs = check_modules.missing_executables(
+        ['bash',
+        arg['HYPHY']
+        ])
     if missing_reqs:
         log.error(
             'Some required executables were not found on your system: ' +

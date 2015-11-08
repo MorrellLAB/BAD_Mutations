@@ -5,7 +5,10 @@
 from ..General import set_verbosity
 
 
-class ConfigHandler:
+class ConfigHandler(object):
+    """A class to handle the reading and storing of configuration variables.
+    Checks the validity of the configuration file as well as writes new
+    configuration files."""
     #   Here are the keywords that we are accepting
     #   We define it as a dictionary with the config keywords as keys
     #   and the internal variable names as values.
@@ -31,33 +34,43 @@ class ConfigHandler:
         self.mainlog = set_verbosity.verbosity('Configuration_Handler', verbose)
         return
 
-    #   A function to check if the configuration file is valid
     def is_valid(self):
+        """Checks if the configuration file is valid."""
         with open(self.config_file, 'r') as f:
             for index, line in enumerate(f):
                 #   Check the variable declarations
                 if line.startswith(self.DECLR):
                     #   If None is passed to str.split(), it will just split
-                    #   on any whitespace. Pass 2, so that we split the string into
-                    #   three elements:
+                    #   on any whitespace. Pass 2, so that we split the string
+                    #   into three elements:
                     #       #define KEYWORD VALUE
-                    #   This allows VALUE to have spaces in it (though not recommended)
+                    #   This allows VALUE to have spaces in it
+                    #   (though not recommended)
                     tmp = line.strip().split(None, 2)
-                    #   If we don't have three elements, then the line is malformed
+                    #   If we don't have three elements, the line is malformed
                     if len(tmp) != 3:
-                        self.mainlog.error('Line ' + str(index+1) + ': Expected three fields, got ' + str(len(tmp)))
+                        self.mainlog.error(
+                            'Line ' + \
+                            str(index+1) + \
+                            ': Expected three fields, got ' \
+                            + str(len(tmp)))
                         return False
                     #   Then we get the keyword
                     k = tmp[1]
-                    #   Check if the keyword is in the list of accepted keywords
+                    #   Check if the keyword is in the accepted keywords
                     if k not in self.KEYWORDS:
-                        self.mainlog.warning('Line ' + str(index+1) + ': Unknown variable ' + k)
+                        self.mainlog.warning(
+                            'Line ' + \
+                            str(index+1) + \
+                            ': Unknown variable ' + \
+                            k)
                 else:
                     continue
         return True
 
-    #   A function to step through the config file and set variables as necessary
     def read_vars(self):
+        """Step through the configuration file, and set variables as they are
+        encountered."""
         conf_dict = {}
         with open(self.config_file, 'r') as f:
             #   Split up the lines as in the above function
@@ -68,18 +81,23 @@ class ConfigHandler:
                     value = tmp[2]
                     #   We use a dictionary in lieu of a case/switch statement
                     if k in self.KEYWORDS:
-                        self.mainlog.debug('Setting variable ' + k + ' to ' + value)
+                        self.mainlog.debug(
+                            'Setting variable ' + \
+                            k + \
+                            ' to ' + \
+                            value)
                         conf_dict[self.KEYWORDS[k]] = value
                     else:
                         self.mainlog.warning('Unknown variable ' + k)
         self.config_vars = conf_dict
         return
 
-    #   A function to merge the two input dictionaries and create the final
-    #   set of options. Options specified on the command line will take
-    #   precedence over the ones in the configuration file.
     def merge_options(self):
-        #   Here is a list of keys that we do not want to clobber if they are not
+        """Merge the two input dictionaries: the one recieved on the command
+        line, and the one read out of the configuration file. Options given on
+        the command line will take precedence over the ones in the
+        configuration file."""
+        #   List of keys that we do not want to clobber if they are not
         #   passed on the command line
         do_not_clobber = ['base']
         #   This takes up a bit of extra memory, but it will preserve the two
