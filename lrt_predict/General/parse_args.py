@@ -321,7 +321,7 @@ their data release and usage policies. Use 'BAD_Mutations.py fetch -h' for more
 information.
 
 The 'predict' subcommand will run the LRT with a given query sequence and a
-list of affected codons. This feature has not yet been implemented.
+list of affected codons.
 
 Dependencies:
     Biopython
