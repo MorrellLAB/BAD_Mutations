@@ -31,6 +31,7 @@ class LRTPredict(object):
         qseq = SeqIO.read(self.query, 'fasta')
         #   Read the alignment
         a = AlignIO.read(open(self.nmsa, 'r'), 'fasta')
+        self.qname = qseq.id
         #   And step through it, saving the position of the query
         for index, sequence in enumerate(a):
             if sequence.id == qseq.id:
@@ -40,11 +41,22 @@ class LRTPredict(object):
         #   Return the alignment object, so we don't have to read it up again
         return a
 
-    def get_aligned_positions(self):
+    def get_aligned_positions(self, alignment):
         """Get the position of the query codons in the alignment. Uses the
         query sequence, and counts gap characters to calculate the aligned
         positions to be computed."""
-        pass
+        #   Parse the alignment object and get the list of aligned positions
+        #   that need to be predicted.
+        self.aligned_pos = []
+        real_position = 1
+        for index, column in enumerate(alignment[self.query_pos:]):
+            if column == '-':
+                continue
+            else:
+                real_position += 1
+            if real_position % 3 == 0:
+                if real_position / 3 in self.subs:
+                    self.aligned_position.append(real_position/3)
 
     def prepare_hyphy_inputs(self):
         """Prepare the input files for the HYPHY prediction script. Writes the
@@ -58,7 +70,10 @@ class LRTPredict(object):
             )
         #   We write the paths of the MSA, the tree, the positions, and the
         #   query name into the input file.
-        infile.write("...")
+        infile.write(self.nmsa.name + '\n')
+        infile.write(self.phylogenetic + '\n')
+        infile.write(self.subs + '\n')
+        infile.write(self.qname)
         infile.flush()
         #   And then we create a name for the HYPHY output file
         outfile = tempfile.NamedTemporaryFile(
@@ -95,3 +110,4 @@ class LRTPredict(object):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
         out, err = p.communicate()
+

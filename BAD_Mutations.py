@@ -266,7 +266,7 @@ def main():
             loglevel.info('Tree in ' + tree_file)
             #new_nuc = '/Users/tomkono/Data_Disk/tmp/Soy_Anc_Aln/' + file_funcs.local_name(arguments_valid['fasta'])
             #new_tree = '/Users/tomkono/Data_Disk/tmp/Soy_Anc_Aln/' + file_funcs.local_name(arguments_valid['fasta'].replace('.fasta', '.tree'))
-            predict(arguments_valid, nuc_file, tree_file, loglevel)
+            predict(arguments_valid, alignment, tree_file, loglevel)
     else:
         loglevel.error(msg)
     return

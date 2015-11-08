@@ -55,6 +55,6 @@ def parse_subs(f, log):
                 else:
                     snpid = tmp[1]
                 #   Return these as a tuple
-                subs_data.append((pos, snpid))
+                subs_data.append(pos)
     log.info('Input file ' + f + ' contains ' + str(index+1) + ' positions to predict.')
     return subs_data
