@@ -21,13 +21,19 @@ from lrt_predict.General import check_modules
 
 
 class PastaAlign(object):
-    def __init__(self, unaligned_sequences, query_sequence, verbose):
+    def __init__(
+            self,
+            pasta_path,
+            unaligned_sequences,
+            query_sequence,
+            verbose):
         self.mainlog = set_verbosity.verbosity('Pasta_Align', verbose)
         #   This is file-like object
         self.input_seq = unaligned_sequences
         #   This will be populated with sequences for back-translation
         self.input_dict = {}
         self.query = query_sequence
+        self.pasta_path = check_modules.check_executable(pasta_path)
         return
 
     def prepare_sequences(self):
@@ -143,8 +149,6 @@ class PastaAlign(object):
             lrt_path,
             'Shell_Scripts',
             'Pasta_Align.sh')
-        #   Check for the presence of the pasta executable
-        pasta_path = check_modules.check_executable('run_pasta.py')
         #   Pasta expects a directory for output. We use the system temp dir
         pasta_out = tempfile.gettempdir()
         #   We make a job name from the time in microseconds
@@ -154,7 +158,7 @@ class PastaAlign(object):
         cmd = [
             'bash',
             pasta_script,
-            pasta_path,
+            self.pasta_path,
             self.protein_input.name,
             pasta_out,
             pasta_job]

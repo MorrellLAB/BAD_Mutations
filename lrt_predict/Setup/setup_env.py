@@ -73,12 +73,13 @@ class SetupEnv(object):
             '#define BASE ' + self.base + '\n' +
             '#define TARGET_SPECIES ' + self.target_species + '\n' +
             '#define EVAL_THRESHOLD ' + self.eval_thresh + '\n' +
-            '#define MISSING_THRESHOLD ' + self.miss_thresh + '\n' +
+            '#define MISSING_THRESHOLD ' + self.miss_thresh + '\n'
+            )
         self.bash_path = spawn.find_executable('bash') or ''
         self.gzip_path = spawn.find_executable('gzip') or ''
         self.sum_path = spawn.find_executable('sum') or ''
         self.tblastx_path = spawn.find_executable('tblastx') or ''
-        self.prank_path = spawn.find_executable('run_pasta.py') or ''
+        self.pasta_path = spawn.find_executable('run_pasta.py') or ''
         self.hyphy_path = spawn.find_executable('HYPHYSP') or ''
         self.mainlog.debug(
             'Setting executable path variables:\n' +
@@ -98,11 +99,11 @@ class SetupEnv(object):
         if self.tblastx_path == '':
             self.mainlog.warning('Cannot find tblastx! Will download')
             self.missing_progs.append('tBLASTx')
-        if self.prank_path == '':
-            self.mainlog.warning('Cannot find prank! Will download')
+        if self.pasta_path == '':
+            self.mainlog.warning('Cannot find PASTA! Will download')
             self.missing_progs.append('PASTA')
         if self.hyphy_path == '':
-            self.mainlog.warning('Cannot find HYPHYSP! Will download')
+            self.mainlog.warning('Cannot find HyPhy! Will download')
             self.missing_progs.append('HyPhy')
         return
 

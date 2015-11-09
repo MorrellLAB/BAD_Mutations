@@ -257,7 +257,11 @@ codon.
     \midrule
     \texttt{-s/--subs} & [FILE] & Path to substitutions file. Required\\
     \midrule
+	\texttt{-o/--output} & [DIR] & Directory for output. Defaults to current directory.\\
+	\midrule
     \texttt{-e/--evalue}* & [FLOAT] & E-value threshold for accepting TBLASTX hits as putative orthologues. Defaults to 0.05.\\
+	\midrule
+	\texttt{-k/--keep} & NA & If supplied, the MSA and the phylogenetic tree will be copied to the output directory as well. Default False.\\
     \bottomrule
     \end{tabular}
 \end{table}

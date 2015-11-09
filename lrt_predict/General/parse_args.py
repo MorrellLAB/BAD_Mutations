@@ -175,7 +175,7 @@ def parse_args():
         '--output',
         '-o',
         required=False,
-        default='.',
+        default=os.getcwd(),
         help='Output directory.')
     predict_args.add_argument(
         '--evalue',
@@ -185,7 +185,7 @@ def parse_args():
         type=float,
         help='E-value threshold for accepting sequences into the alignment.')
     predict_args.add_argument(
-        '--keep-intermediates',
+        '--keep',
         '-k',
         required=False,
         default=False,
@@ -232,6 +232,13 @@ def validate_args(args, log):
                 False,
                 ('The species name you provided is not in the list of '
                  'allowable species.'))
+        #   Check the filename for the config file. It can be a relative path
+        #   or start with a tilde.
+        if not args['config'].startswith('/'):
+            args['config'] = os.path.join(os.getcwd(), args['config'])
+        elif args['config'].startswith('~'):
+            #   os.path.expanduser() will transform ~/... into /home/user/...
+            args['config'] = os.path.expanduser(args['config'])
         if not check_args.valid_dir(os.path.dirname(args['config'])):
             return (
                 False,

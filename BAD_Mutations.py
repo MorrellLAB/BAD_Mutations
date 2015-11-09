@@ -62,7 +62,7 @@ def fetch(arg, log):
     #   Next we check for the presence of the utilities we need to
     #   do the fetching
     missing_reqs = check_modules.missing_executables(
-        ['bash',
+        [arg['bash_path'],
          'makeblastdb',
          'gzip',
          'sum'])
@@ -123,8 +123,8 @@ def blast(arg, log):
         check_modules.missing_mods(blastdeps)
         exit(1)
     missing_reqs = check_modules.missing_executables(
-        ['bash',
-        arg['TBLASTX']
+        [arg['bash_path'],
+        arg['tblastx_path']
         ])
     #   And then check the executable dependencies
     if missing_reqs:
@@ -155,8 +155,8 @@ def align(arg, unaligned, log):
         exit(1)
     #   Check for the required executables
     missing_reqs = check_modules.missing_executables(
-        ['bash',
-        arg['PASTA']
+        [arg['bash_path'],
+        arg['pasta_path']
         ])
     if missing_reqs:
         log.error(
@@ -167,6 +167,7 @@ def align(arg, unaligned, log):
     import lrt_predict.Predict.align as aligner
     log.info('Creating a new instance of PastaAlign.')
     aln = aligner.PastaAlign(
+        arg['pasta_path'],
         unaligned,
         arg['fasta'],
         arg['loglevel'])
@@ -194,8 +195,8 @@ def predict(arg, nuc, tree, log):
         exit(1)
     #   Check for the required executables
     missing_reqs = check_modules.missing_executables(
-        ['bash',
-        arg['HYPHY']
+        [arg['bash_path'],
+        arg['hyphy_path']
         ])
     if missing_reqs:
         log.error(
@@ -206,6 +207,7 @@ def predict(arg, nuc, tree, log):
     import lrt_predict.Predict.predict as predictor
     #   Create a new instance of class LRTPredict
     lrt = predictor.LRTPredict(
+        arg['hyphy_path'],
         nuc,
         tree,
         arg['fasta'],
@@ -286,20 +288,30 @@ def main():
             #   with a new name based on the input filename
             out_fname = os.path.join(
                 arguments_valid['output'],
-                arguments_valid['fasta'].replace('.fasta', '_Predictions.txt')
+                os.path.basename(
+                    arguments_valid['fasta'].replace(
+                        '.fasta',
+                        '_Predictions.txt')
+                    )
                 )
             open(out_fname, 'w').close()
             shutil.copy2(out.name, out_fname)
             loglevel.info('Prediction in ' + out_fname)
             #   Check if the user wants the MSA and the tree, too
-            if arguments_valid['keep_intermediates']:
+            if arguments_valid['keep']:
                 new_nuc = os.path.join(
                     arguments_valid['output'],
-                    arguments_valid['fasta'].replace('.fasta', '_MSA.fasta')
+                    os.path.basename(
+                        arguments_valid['fasta'].replace(
+                            '.fasta',
+                            '_MSA.fasta')
+                        )
                     )
                 new_tree = os.path.join(
                     arguments_valid['output'],
-                    arguments_valid['fasta'].replace('.fasta', '.tree')
+                    os.path.basename(
+                        arguments_valid['fasta'].replace('.fasta', '.tree')
+                        )
                     )
                 open(new_nuc, 'w').close()
                 open(new_tree, 'w').close()

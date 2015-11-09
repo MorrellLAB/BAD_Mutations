@@ -5,6 +5,7 @@
 #   Import standard library modules here
 import subprocess
 import os
+import tempfile
 
 #   Import Biopython library
 from Bio import AlignIO
@@ -16,8 +17,16 @@ from ..General import set_verbosity
 from ..General import check_modules
 
 class LRTPredict(object):
-    def __init__(self, nuc_aln, treefile, query, substitutions, verbose):
+    def __init__(
+            self,
+            hyphy_path,
+            nuc_aln,
+            treefile,
+            query,
+            substitutions,
+            verbose):
         self.mainlog = set_verbosity.verbosity('LRT_Prediction', verbose)
+        self.hyphy_path = check_modules.check_executable(hyphy_path)
         self.nmsa = nuc_aln
         self.phylogenetic = treefile
         self.query = query
@@ -30,7 +39,7 @@ class LRTPredict(object):
         #   Get the name from the query sequence
         qseq = SeqIO.read(self.query, 'fasta')
         #   Read the alignment
-        a = AlignIO.read(open(self.nmsa, 'r'), 'fasta')
+        a = AlignIO.read(open(self.nmsa.name, 'r'), 'fasta')
         self.qname = qseq.id
         #   And step through it, saving the position of the query
         for index, sequence in enumerate(a):
@@ -56,18 +65,18 @@ class LRTPredict(object):
             else:
                 real_position += 1
             if real_position % 3 == 0:
-                if real_position / 3 in self.subs:
+                if real_position / 3 in self.substitutions:
                     self.aligned_pos.append(real_position/3)
         return
 
     def write_aligned_subs(self):
         """Write the aligned positions into a temporary file."""
-        subsfile = tempfile.NamedTempraryFile(
+        subsfile = tempfile.NamedTemporaryFile(
             mode='w+t',
             prefix='BAD_Mutations_HYPHY_Subs_',
             suffix='.txt'
             )
-        subsfile.write('\n'.join([str(i) for i in self.aligned_pos])
+        subsfile.write('\n'.join([str(i) for i in self.aligned_pos]))
         return subsfile.name
 
     def prepare_hyphy_inputs(self):
@@ -95,26 +104,32 @@ class LRTPredict(object):
             prefix='BAD_Mutations_HYPHY_Out_',
             suffix='.txt'
             )
-        self.hyphy_input = infile.name
-        self.hyphy_output = outfile.name
+        self.hyphy_input = infile
+        self.hyphy_output = outfile
         return
 
     def predict_codons(self):
         """Run the HYPHY script to predict the codons."""
         #   Get the base directory of the LRT package
         lrt_path = os.path.realpath(__file__).rsplit(os.path.sep, 3)[0]
-        #   Then build the path to the pasta script
+        #   Then build the path to the hyphy script
         hyphy_script = os.path.join(
             lrt_path,
             'Shell_Scripts',
             'Prediction.sh')
-        hyphy_path = check_modules.check_executable('HYPHYMP')
+        #   And the actual HyPhy code that JCF wrote
+        prediction_script = os.path.join(
+            lrt_path,
+            'Shell_Scripts',
+            'LRT.hyphy')
         #   Build the command for predictig
         cmd = [
             'bash',
             hyphy_script,
-            self.hyphy_input,
-            self.hyphy_output
+            self.hyphy_path,
+            prediction_script,
+            self.hyphy_input.name,
+            self.hyphy_output.name
             ]
         self.mainlog.debug(' '.join(cmd))
         #   Then run the command
