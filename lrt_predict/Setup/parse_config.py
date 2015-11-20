@@ -50,19 +50,19 @@ class ConfigHandler(object):
                     #   If we don't have three elements, the line is malformed
                     if len(tmp) != 3:
                         self.mainlog.error(
-                            'Line ' + \
-                            str(index+1) + \
-                            ': Expected three fields, got ' \
-                            + str(len(tmp)))
+                            'Line ' +
+                            str(index+1) +
+                            ': Expected three fields, got ' +
+                            str(len(tmp)))
                         return False
                     #   Then we get the keyword
                     k = tmp[1]
                     #   Check if the keyword is in the accepted keywords
                     if k not in self.KEYWORDS:
                         self.mainlog.warning(
-                            'Line ' + \
-                            str(index+1) + \
-                            ': Unknown variable ' + \
+                            'Line ' +
+                            str(index+1) +
+                            ': Unknown variable ' +
                             k)
                 else:
                     continue
@@ -82,9 +82,9 @@ class ConfigHandler(object):
                     #   We use a dictionary in lieu of a case/switch statement
                     if k in self.KEYWORDS:
                         self.mainlog.debug(
-                            'Setting variable ' + \
-                            k + \
-                            ' to ' + \
+                            'Setting variable ' +
+                            k +
+                            ' to ' +
                             value)
                         conf_dict[self.KEYWORDS[k]] = value
                     else:

@@ -11,8 +11,6 @@ import lrt_predict.General.check_args as check_args
 import lrt_predict.General.parse_input as parse_input
 #   And the script to operate on files
 import lrt_predict.General.file_funcs as file_funcs
-#   And the script to check the configuration file
-import lrt_predict.Setup.parse_config as parse_config
 #   And the species lists
 import lrt_predict.Fetch.ensembl_species as ensembl_species
 import lrt_predict.Fetch.phytozome_species as phytozome_species
@@ -125,8 +123,10 @@ def parse_args():
         '--password',
         '-p',
         required=False,
-        help=('Password for jgi.doe.gov. If you are not comfortable supplying '
-        'this on the command-line in text, you can enter it on the prompt.'),
+        help=(
+            'Password for jgi.doe.gov. If you are not comfortable supplying '
+            'this on the command-line in text, you can enter it on the prompt.'
+            ),
         default=None)
     #   Create a new mutually exclusive group for deciding if we want to only
     #   fetch, or if we want to convert
@@ -144,6 +144,34 @@ def parse_args():
         default=False,
         help='Do not fetch new CDS from databases, just convert to BLAST db.')
 
+    #   Create a parser for 'align'
+    align_args = subparser.add_parser(
+        'align',
+        help='Produce a multiple sequence alignment and phylogenetic tree.')
+    align_args.add_argument(
+        '--base',
+        '-b',
+        required=False,
+        help='Base directory for species databses.')
+    align_args.add_argument(
+        '--config',
+        '-c',
+        required=False,
+        help='Use this configuration file.')
+    align_args.add_argument(
+        '--evalue',
+        '-e',
+        required=False,
+        default=0.05,
+        type=float,
+        help='E-value threshold for accepting sequences into the alignment.')
+    align_args.add_argument(
+        '--output',
+        '-o',
+        required=False,
+        default=os.getcwd(),
+        help='Output directory.')
+
     #   Create a parser for 'predict'
     predict_args = subparser.add_parser(
         'predict',
@@ -154,11 +182,6 @@ def parse_args():
         required=False,
         help='Use this configuration file.')
     #   Give 'predict' some arguments
-    predict_args.add_argument(
-        '--base',
-        '-b',
-        required=False,
-        help='Base directory for species databses.')
     predict_args.add_argument(
         '--fasta',
         '-f',
@@ -178,20 +201,15 @@ def parse_args():
         default=os.getcwd(),
         help='Output directory.')
     predict_args.add_argument(
-        '--evalue',
-        '-e',
-        required=False,
-        default=0.05,
-        type=float,
-        help='E-value threshold for accepting sequences into the alignment.')
-    predict_args.add_argument(
         '--keep',
         '-k',
         required=False,
         default=False,
         action='store_true',
-        help=('If passed, will keep the alignment and the tree used for '
-            'prediction. Default False.'))
+        help=(
+            'If passed, will keep the alignment and the tree used for '
+            'prediction. Default False.')
+        )
     #   Add a switch for verbosity
     parser.add_argument(
         '--verbosity',
@@ -281,6 +299,18 @@ def validate_args(args, log):
                 'Base directory is not readable/writable, or does not exist.')
         else:
             pass
+    #   Check the arguments passed to align
+    elif args['action'] == 'align':
+        #   If config is suppled:
+        if args['config']:
+            if not file_funcs.file_exists(args['config'], log):
+                return (
+                    False,
+                    'The specified configuration file does not exist!')
+        if not check_args.valid_dir(args['output']):
+            return (
+                False,
+                'Output directory is not readable/writable, or does not exist.')
     #   Check arguments to predict
     elif args['action'] == 'predict':
         #   If config is suppled:
@@ -326,6 +356,10 @@ unzip them, and convert them into BLAST databases. It requires a (free)
 username and password for the JGI Genomes Portal. Check with Phytozome for
 their data release and usage policies. Use 'BAD_Mutations.py fetch -h' for more
 information.
+
+The 'align' subcommand will run TBLASTX against all of the available BLAST
+databases, collect orthologues that pass the E-value threshold, align them with
+PASTA, and produce a phylogenetic tree.
 
 The 'predict' subcommand will run the LRT with a given query sequence and a
 list of affected codons.

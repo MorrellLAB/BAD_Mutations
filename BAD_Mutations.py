@@ -25,8 +25,6 @@ import lrt_predict.General.check_modules as check_modules
 import lrt_predict.General.set_verbosity as set_verbosity
 #   Import our argument parsing script
 import lrt_predict.General.parse_args as parse_args
-#   Import our file handling script
-import lrt_predict.General.file_funcs as file_funcs
 
 
 def setup(arg):
@@ -123,8 +121,9 @@ def blast(arg, log):
         check_modules.missing_mods(blastdeps)
         exit(1)
     missing_reqs = check_modules.missing_executables(
-        [arg['bash_path'],
-        arg['tblastx_path']
+        [
+            arg['bash_path'],
+            arg['tblastx_path']
         ])
     #   And then check the executable dependencies
     if missing_reqs:
@@ -155,8 +154,9 @@ def align(arg, unaligned, log):
         exit(1)
     #   Check for the required executables
     missing_reqs = check_modules.missing_executables(
-        [arg['bash_path'],
-        arg['pasta_path']
+        [
+            arg['bash_path'],
+            arg['pasta_path']
         ])
     if missing_reqs:
         log.error(
@@ -195,8 +195,9 @@ def predict(arg, nuc, tree, log):
         exit(1)
     #   Check for the required executables
     missing_reqs = check_modules.missing_executables(
-        [arg['bash_path'],
-        arg['hyphy_path']
+        [
+            arg['bash_path'],
+            arg['hyphy_path']
         ])
     if missing_reqs:
         log.error(
