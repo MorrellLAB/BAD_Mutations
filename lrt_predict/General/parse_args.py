@@ -166,6 +166,12 @@ def parse_args():
         type=float,
         help='E-value threshold for accepting sequences into the alignment.')
     align_args.add_argument(
+        '--fasta',
+        '-f',
+        required=True,
+        default=None,
+        help='Path to the input FASTA file.')
+    align_args.add_argument(
         '--output',
         '-o',
         required=False,
@@ -183,11 +189,17 @@ def parse_args():
         help='Use this configuration file.')
     #   Give 'predict' some arguments
     predict_args.add_argument(
-        '--fasta',
-        '-f',
+        '--alignment',
+        '-a',
         required=True,
         default=None,
-        help='Path to the input FASTA file.')
+        help='Path to the input multiple sequence alignment.')
+    predict_args.add_argument(
+        '--tree',
+        '-r',
+        required=True,
+        default=None,
+        help='Path to the phylogenetic tree.')
     predict_args.add_argument(
         '--substitutions',
         '-s',
@@ -200,16 +212,6 @@ def parse_args():
         required=False,
         default=os.getcwd(),
         help='Output directory.')
-    predict_args.add_argument(
-        '--keep',
-        '-k',
-        required=False,
-        default=False,
-        action='store_true',
-        help=(
-            'If passed, will keep the alignment and the tree used for '
-            'prediction. Default False.')
-        )
     #   Add a switch for verbosity
     parser.add_argument(
         '--verbosity',
