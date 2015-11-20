@@ -16,6 +16,7 @@ from ..General import parse_input
 from ..General import set_verbosity
 from ..General import check_modules
 
+
 class LRTPredict(object):
     def __init__(
             self,
@@ -79,11 +80,43 @@ class LRTPredict(object):
         subsfile.write('\n'.join([str(i) for i in self.aligned_pos]))
         return subsfile.name
 
+    def sanitize_inputs(self):
+        """Remove illegal characters from the phylogenetic tree and the
+        multiple sequence alignment that cause HyPhy to crash."""
+        #   Get the base directory of the LRT package
+        lrt_path = os.path.realpath(__file__).rsplit(os.path.sep, 3)[0]
+        #   Then build the path to the hyphy script
+        sanitize_script = os.path.join(
+            lrt_path,
+            'Shell_Scripts',
+            'Prepare_HyPhy.sh')
+        #   Build the command for predictig
+        cmd = [
+            'bash',
+            sanitize_script,
+            self.hyphy_path,
+            self.nmsa.name,
+            self.phylogenetic
+            ]
+        self.mainlog.debug(' '.join(cmd))
+        #   Then run the command
+        p = subprocess.Popen(
+            cmd,
+            shell=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+        out, err = p.communicate()
+        self.mainlog.debug('stdout:\n' + out)
+        self.mainlog.debug('stderr:\n' + err)
+        return
+
     def prepare_hyphy_inputs(self):
         """Prepare the input files for the HYPHY prediction script. Writes the
         paths of the MSA, tree, and substitutions file into a plain text file.
         Also builds the name of the temporary output file to hold the
         predictions."""
+        #   Sanitize the input files
+        self.sanitize_inputs()
         #   Write the substitutions file
         alignedsubs = self.write_aligned_subs()
         infile = tempfile.NamedTemporaryFile(
