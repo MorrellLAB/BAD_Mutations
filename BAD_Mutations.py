@@ -186,7 +186,7 @@ def align(arg, unaligned, log):
     return (alignment, tree)
 
 
-def predict(arg, nuc, tree, log):
+def predict(arg, log):
     """A function to run the HYPHY codon prediction model on each column of
     the alignment and return a score for each one."""
     predictdeps = check_modules.check_modules(predict=True)
@@ -209,8 +209,8 @@ def predict(arg, nuc, tree, log):
     #   Create a new instance of class LRTPredict
     lrt = predictor.LRTPredict(
         arg['hyphy_path'],
-        nuc,
-        tree,
+        arg['alignment'],
+        arg['tree'],
         arg['fasta'],
         arg['substitutions'],
         arg['loglevel'])
@@ -305,7 +305,7 @@ def main():
             loglevel.info('MSA copied to ' + new_nuc)
             loglevel.info('Tree copied to ' + new_tree)
         elif arguments_valid['action'] == 'predict':
-            out = predict(arguments_valid, alignment, tree_file, loglevel)
+            out = predict(arguments_valid, loglevel)
             #   copy the output file into the destination directory
             #   To build the output filename, we join the output directory
             #   with a new name based on the input filename
