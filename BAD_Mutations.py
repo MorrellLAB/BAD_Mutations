@@ -283,7 +283,6 @@ def main():
                 loglevel)
             loglevel.info('Nucleotide alignment in ' + alignment.name)
             loglevel.info('Tree in ' + tree_file)
-            out = predict(arguments_valid, alignment, tree_file, loglevel)
             new_nuc = os.path.join(
                 arguments_valid['output'],
                 os.path.basename(
