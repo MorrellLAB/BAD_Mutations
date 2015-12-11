@@ -8,6 +8,11 @@ from distutils import spawn
 #   Try to import them, return names of those that are not installed
 def check_modules(setup=False, fetch=False, predict=False):
     missing_modules = []
+    #   ConfigParser
+    try:
+        import ConfigParser
+    except ImportError:
+        missing_modules.append('ConfigParser')
     #   Argparse
     try:
         import argparse

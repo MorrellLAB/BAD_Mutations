@@ -5,6 +5,11 @@ supplied variables and store them in a configuration file."""
 #   Import standard library modules here
 from distutils import spawn
 import datetime
+try
+    import ConfigParser
+except ImportError:
+    import sys
+    sys.exit("Please use Python 2.7.XX or Python 2.8.XX")
 
 #   Import the file functions script
 import lrt_predict.General.file_funcs as file_funcs
