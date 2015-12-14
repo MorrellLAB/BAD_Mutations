@@ -71,8 +71,10 @@ def parse_args():
         '--target',
         '-t',
         required=False,
-        help=('Which species are you predicting in (case sensitive)? Pass '
-              '--list-species to see a full list of allowable species names.'),
+        help=(
+            'Which species are you predicting in (case sensitive)? Pass '
+            '--list-species to see a full list of allowable species names.'
+            ),
         default=None)
     setup_args.add_argument(
         '--evalue',
@@ -83,12 +85,15 @@ def parse_args():
         help='E-value threshold for accepting sequences into the alignment.')
     setup_args.add_argument(
         '-m',
-        '--missing_threshold',
+        '--min-seqs',
         required=False,
-        type=float,
-        default=0.25,
-        help=('Skip predictions for sites with at least this much missing '
-              ' data (gaps) in the multiple sequence alignment.'))
+        type=int,
+        default=10,
+        help=(
+            'Skip predictions for SNPs with fewer than this number of '
+            'species represented in the multiple sequence alignment.'
+            )
+        )
     setup_args.add_argument(
         '--codon',
         required=False,
@@ -181,7 +186,7 @@ def parse_args():
     #   Create a parser for 'predict'
     predict_args = subparser.add_parser(
         'predict',
-        help='Run the LRT prediction pipeline.')
+        help='Run the LRT, generate HyPhy report.')
     predict_args.add_argument(
         '--config',
         '-c',
@@ -212,6 +217,32 @@ def parse_args():
         required=False,
         default=os.getcwd(),
         help='Output directory.')
+
+    #   Create a parser for 'compile'
+    compile_args = subparser.add_parser(
+        'compile',
+        help=(
+            'Compile a directory of HyPhy outputs into a single file with '
+            'an evaluation of the impact for each SNP.'
+            )
+        )
+    compile_args.add_argument(
+        '--pred-dir',
+        '-P',
+        required=True,
+        help='Directory where HyPhy outputs are stored.'
+        )
+    compile_args.add_argument(
+        '--long-subs',
+        '-S',
+        required=True,
+        default=None,
+        help=(
+            'Path to a long substitutions file, listing every SNP that is to '
+            'be predicted. Same format as -s.'
+            )
+        )
+
     #   Add a switch for verbosity
     parser.add_argument(
         '--verbosity',

@@ -17,7 +17,7 @@
 \usepackage[colorlinks=true, urlcolor=blue]{hyperref}
 \pagestyle{fancy}
 \fancyhead[RO]{\BM Documentation}
-\fancyhead[LO]{Version 1 \\ October 7, 2015}
+\fancyhead[LO]{Version 1 \\ December 14, 2015}
 %   Set some lengths. No ident on new paragraphs, extra space after paragraph.
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{\baselineskip}
@@ -36,10 +36,12 @@ conversion to Python 3 is planned. \BM is designed to be run from the command
 line. Running from an interactive Python environment is not recommended nor
 supported.
 
-\par \BM contains three major subcommands: \texttt{setup}, \texttt{fetch}, and
-\texttt{predict}. Both \texttt{setup} and \texttt{fetch} are meant to be run
-once, or very rarely. The \texttt{predict} subcommand does most of the actual
-work in predicting variants. More information about how to run \BM is available
+\par \BM contains five major subcommands: \texttt{setup}, \texttt{fetch}, 
+\texttt{align}, \texttt{predict}, and \texttt{compile}. Both \texttt{setup} and
+\texttt{fetch} are meant to be run once, or very rarely. The \texttt{align}
+subcommand generates phylogenetic trees and multiple sequence alignments for
+input to the prediction scripts. The \texttt{predict} subcommand does the actual
+variant effect prediction. More information about how to run \BM is available
 in the ``Usage'' section.
 
 \par Briefly, \BM predicts deleterious variants using a sequence constraint
@@ -88,6 +90,20 @@ install GNU Bash or Python, as it assumes you have those available. The
 dependencies will be installed locally, and so you must direct \BM to the paths
 of the install programs in the configuration file.
 
+\subsection*{Instructions for UMN MSI}
+\par This section is specific to using \BM on the \href{http://msi.umn.edu/}
+{University of Minnesoa Super Computing Institue} cluser. Our cluster uses the
+\texttt{module} command to add and remove certain programs from the user's
+environment. The following commands should be run for \BM on the cluster:
+\begin{Verbatim}[frame=single, fontsize=\small, rulecolor=\color{gray}]
+$ module load python2
+$ module load biopython
+$ module load ncbi_blast+
+$ module load hyphy/2.2.6_smp
+\end{Verbatim}
+\par You will have to install \texttt{requests} and \texttt{PASTA} as their
+user manuals instruct.
+
 \section*{Input}
 \par Input files should be plain text with UNIX line endings (LF). \BM takes a
 FASTA file containing the query coding sequence, and a text file with the list
@@ -109,7 +125,6 @@ coordinates must match in order for the predictions to be valid.
 ATGCCAGTGCAG...
 ...
 \end{Verbatim}
-\newpage
 And the substitutions file should look like this:
 \begin{Verbatim}[frame=single, fontsize=\small, rulecolor=\color{gray}]
 4   SNP_1
@@ -152,7 +167,8 @@ $ python BAD_Mutations.py [Options] [Subcommand] [More Options ... ]
 \texttt{predict}. They are summarized below.
 
 \subsection*{Subcommands, Options, and Switches}
-\par Note: \BM example command lines will be provided at the end of the setup, predict and fetch sections below. 
+\par Note: \BM example command lines will be provided at the end of the setup,
+predict and fetch sections below. 
 \subsection*{General Options}
 \par \BM takes the following general options:
 \begin{table}[h]
@@ -236,12 +252,38 @@ the species info page on Phytozome for specific data usage policies.
 \par $^*$: If this value is supplied on the command line, it will override
 the value set in the configuration file.
 
+\subsection*{The \texttt{align} Subcommand}
+\par The \texttt{align} subcommand will run BLAST to identify putative
+orthologues against each species' CDS sequence database. The putative
+orthologues are aligned with PASTA, and a phylogenetic tree is estimated from
+the alignment.
+
+\par The \texttt{align} subcommand accepts the following options:
+\begin{table}[H]
+    \centering
+    \begin{tabular}{p{105pt} l p{260pt}}
+    \toprule
+    Option & Value & Description \\
+    \midrule
+    \texttt{-b/--base}* & [DIR] & Directory to store the BLAST databases. Defaults to the current directory.\\
+    \midrule
+    \texttt{-c/--config} & [FILE] & Path to configuration file. Defaults to \texttt{LRTPredict\_Config.txt}. \\
+    \midrule
+    \texttt{-e/--evalue}* & [FLOAT] & E-value threshold for accepting TBLASTX hits as putative orthologues. Defaults to 0.05.\\
+    \midrule
+    \texttt{-f/--fasta} & [FILE] & Path to FASTA file with query sequence. Required.\\password.\\
+    \midrule
+    \texttt{-o/--output} & [DIR] & Directory for output. Defaults to current directory.\\
+    \bottomrule
+    \end{tabular}
+\end{table}
+
 \subsection*{The \texttt{predict} Subcommand}
 \par The \texttt{predict} subcommand will generate predictions for a list of
-affected codons. It will run a BLAST search of the query sequence against each CDS sequence
-that was downloaded with the \texttt{fetch} subcommand, pick the likely
-orthologous sequences, align them, and then use HyPhy to predict each query
-codon.
+affected codons. It will run a BLAST search of the query sequence against each
+CDS sequence that was downloaded with the \texttt{fetch} subcommand, pick the
+likely orthologous sequences, align them, and then use HyPhy to predict each
+query codon.
 
 \par The \texttt{predict} subcommand accepts the following options:
 \begin{table}[H]
@@ -250,24 +292,44 @@ codon.
     \toprule
     Option & Value & Description \\
     \midrule
+    \texttt{-a/--alignment} & [FILE] & Path to the multiple sequence alignment file. Required.\\
+    \midrule
     \texttt{-c/--config} & [FILE] & Path to configuration file. Defaults to \texttt{LRTPredict\_Config.txt}. \\
     \midrule
-    \texttt{-b/--base}* & [DIR] & Directory to store the BLAST databases. Defaults to the current directory.\\
+    \texttt{-r/--tree} & [FILE] & Path to the phylogenetic tree. Required.\\
     \midrule
-    \texttt{-f/--fasta} & [FILE] & Path to FASTA file with query sequence. Required.\\
-    \midrule
-    \texttt{-s/--subs} & [FILE] & Path to substitutions file. Required\\
+    \texttt{-s/--substitutions} & [FILE] & Path to substitutions file. Required\\
     \midrule
 	\texttt{-o/--output} & [DIR] & Directory for output. Defaults to current directory.\\
-	\midrule
-    \texttt{-e/--evalue}* & [FLOAT] & E-value threshold for accepting TBLASTX hits as putative orthologues. Defaults to 0.05.\\
-	\midrule
-	\texttt{-k/--keep} & NA & If supplied, the MSA and the phylogenetic tree will be copied to the output directory as well. Default False.\\
     \bottomrule
     \end{tabular}
 \end{table}
 \par $^*$: If this value is supplied on the command line, it will override
 the value set in the configuration file.
+
+\subsection*{The \texttt{compile} Subcommand}
+\par The \texttt{compile} subcommand will take an output directory containing
+HyPhy output files, and produce a table with predictions for each variant. The
+script will print $P$-values, but will not assess significance, as a suitable
+significance threshold cannot be determined programmatically. This is left to
+the user to interpret. This subcommand requires the output from another SNP
+effect script, \href{https://raw.githubusercontent.com/TomJKono/Misc_Utils/master/SNP_Effect_Predictor.py}
+{SNP\_Effect\_Predictor.py} (NOTE: requires the companion Python class defined
+in \href{https://raw.githubusercontent.com/TomJKono/Misc_Utils/master/gff_parse.py}{gff\_parse.py}).
+
+\par The \texttt{compile} subcommand accepts the following options:
+\begin{table}[H]
+    \centering
+    \begin{tabular}{p{105pt} l p{260pt}}
+    \toprule
+    Option & Value & Description \\
+    \midrule
+    \texttt{-S/--long-subs} & [FILE] & Path to the SNP effect table. Required.\\
+    \midrule
+    \texttt{-p/--pred-dir} & [DIR] & Output directory from the \texttt{predict} subcommand. Required.\\
+    \bottomrule
+    \end{tabular}
+\end{table}
 
 \subsection*{Example Command Lines}
 \par The following command line demonstrates the typical usage of \BM.
