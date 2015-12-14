@@ -43,7 +43,7 @@ def setup(arg):
         arg['target'],
         arg['evalue'],
         arg['codon'],
-        arg['missing_threshold'],
+        arg['min_seqs'],
         arg['config'],
         arg['loglevel'])
     s_env.write_config()
