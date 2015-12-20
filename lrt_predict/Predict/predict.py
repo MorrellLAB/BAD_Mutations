@@ -40,7 +40,7 @@ class LRTPredict(object):
         #   Get the name from the query sequence
         qseq = SeqIO.read(self.query, 'fasta')
         #   Read the alignment
-        a = AlignIO.read(open(self.nmsa.name, 'r'), 'fasta')
+        a = AlignIO.read(open(self.nmsa, 'r'), 'fasta')
         self.qname = qseq.id
         #   And step through it, saving the position of the query
         for index, sequence in enumerate(a):
@@ -94,8 +94,7 @@ class LRTPredict(object):
         cmd = [
             'bash',
             sanitize_script,
-            self.hyphy_path,
-            self.nmsa.name,
+            self.nmsa,
             self.phylogenetic
             ]
         self.mainlog.debug(' '.join(cmd))
@@ -125,9 +124,10 @@ class LRTPredict(object):
             suffix='.txt'
             )
         #   We write the paths of the MSA, the tree, the positions, and the
-        #   query name into the input file.
-        infile.write(self.nmsa.name + '\n')
-        infile.write(self.phylogenetic + '\n')
+        #   query name into the input file. But we need to put the full paths
+        #   into the file.
+        infile.write(os.path.abspath(self.nmsa) + '\n')
+        infile.write(os.path.abspath(self.phylogenetic) + '\n')
         infile.write(alignedsubs + '\n')
         infile.write(self.qname)
         infile.flush()

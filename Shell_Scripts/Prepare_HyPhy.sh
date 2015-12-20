@@ -12,18 +12,18 @@ FASTA="$1"
 TREE="$2"
 
 #   In place, remove the ' <unknown description>' tag from the alignment
-sed -i 's/[[:space:]]<unknown description>//g' ${FASTA}
+sed -i '.bak' 's/[[:space:]]<unknown description>//g' ${FASTA}
 
 #   In place, remove the same from the tree, as well as bootstrap values
-sed -i 's/[[:space:]]<unknown description>//g' ${TREE}
+sed -i '.bak' 's/[[:space:]]<unknown description>//g' ${TREE}
 #   '-r' (Extended regex) is a GNU option
 if [ "$(uname)" == "Linux" ]
     then
-        sed -i -r 's/\\\)[0-9].[0-9]+/\\\)/g' ${TREE}
+        sed -i -r 's/[)][0-9]\.[0-9]+/\)/g' ${TREE}
         sed -i -r "s/'//g" ${TREE}
 #   The equivalent is -E in MacOS
 elif [ "$(uname)" == "Darwin" ]
     then
-        sed -i -E 's/\\\)[0-9].[0-9]+/\\\)/g' ${TREE}
-        sed -i -E "s/'//g" ${TREE}
+        sed -i '.bak' -E 's/[)][0-9]\.[0-9]+/\)/g' ${TREE}
+        sed -i '.bak' -E "s/'//g" ${TREE}
 fi

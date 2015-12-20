@@ -194,6 +194,12 @@ def parse_args():
         help='Use this configuration file.')
     #   Give 'predict' some arguments
     predict_args.add_argument(
+        '--fasta',
+        '-f',
+        required=True,
+        default=None,
+        help='Path to the input FASTA file.')
+    predict_args.add_argument(
         '--alignment',
         '-a',
         required=True,
@@ -356,10 +362,14 @@ def validate_args(args, log):
             return (
                 False,
                 'Output directory is not readable/writable, or does not exist.')
-        if not parse_input.valid_fasta(args['fasta'], log):
+        if not parse_input.valid_tree(args['tree'], log):
             return (
                 False,
-                'The input FASTA file provided is not valid.')
+                'The input Newick tree is not valid.')
+        if not parse_input.valid_msa(args['alignment'], log):
+            return (
+                False,
+                'The input MSA file provided is not valid.')
         if not parse_input.parse_subs(args['substitutions'], log):
             return (
                 False,

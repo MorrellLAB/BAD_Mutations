@@ -6,12 +6,56 @@
 #   Import standard library modules here
 import re
 
-#   We need to handle sequence records
+#   We need to handle sequence records, alignments, and phylogenies
 from Bio import SeqIO
+from Bio import AlignIO
+from Bio import Phylo
+from Bio.Phylo.NewickIO import NewickError
 
 #   Our helper scripts
 import set_verbosity
 import file_funcs
+
+
+def valid_tree(f, log):
+    """Check that the phylogenetic tree is valid. This only checks the tree
+    structure and doesn't check any of the branch lengths or names."""
+    if not file_funcs.file_exists(f, log):
+        log.error('File ' + f + ' does not exist')
+        return False
+    else:
+        #   Phylo.read() raises a NewickError when the tree is not valid
+        try:
+            p = Phylo.read(f, 'newick')
+        except NewickError:
+            log.error(
+                'Input file ' + \
+                f + \
+                ' is not a valid Newick tree file!')
+            return False
+        return True
+
+
+def valid_msa(f, log):
+    """Check if the MSA is a valid sequence alignment or not. All sequences
+    should be the same length, and should be in FASTA format."""
+    if not file_funcs.file_exists(f, log):
+        log.error('File ' + f + ' does not exist.')
+        return False
+    else:
+        #   AlignIO.read() raises a ValueError if the alignment is not in the
+        #   right format, or if not all the sequences are the same length
+        try:
+            a = AlignIO.read(f, 'fasta')
+        except ValueError:
+            log.error(
+                'Input file ' + \
+                f + \
+                ' is not a valid FASTA alignment!' + \
+                ' Check the length of each sequence.')
+            return False
+        return True
+
 
 def valid_fasta(f, log):
     """Check if the FASTA supplied is valid."""
