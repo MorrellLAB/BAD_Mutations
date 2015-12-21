@@ -166,7 +166,7 @@ class BlastSearch(object):
         for blast_db in databases:
             #   If the target species is in the filename of the FASTA sequence,
             #   we will skip it.
-            if self.target in blast_db:
+            if self.target.upper() in blast_db.upper():
                 continue
             #   Get the BLAST output
             blast_output = self.run_blast(blast_db)
