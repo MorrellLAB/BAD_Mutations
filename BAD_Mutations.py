@@ -136,6 +136,7 @@ def blast(arg, log):
     log.info('Creating a new instance to BLAST.')
     b_search = blast_search.BlastSearch(
         arg['base'],
+        arg['target'],
         arg['fasta'],
         arg['evalue'],
         arg['loglevel'])

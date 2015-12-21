@@ -56,7 +56,7 @@ class BlastSearch(object):
         the homologous sequences and write them into a temporary file.
     """
 
-    def __init__(self, base, query, evalue, verbose):
+    def __init__(self, base, target, query, evalue, verbose):
         """Initialize the class with base directory, query sequence, e-value
         threshold and verbosity level."""
         self.query = query
@@ -64,6 +64,7 @@ class BlastSearch(object):
         self.orthologues = {}
         self.mainlog = set_verbosity.verbosity('BLAST_Search', verbose)
         self.basedir = base
+        self.target = target
         return
 
     def best_hit(self, brecord):
@@ -163,6 +164,10 @@ class BlastSearch(object):
                                ' does not contain any BLAST databases!')
             exit(1)
         for blast_db in databases:
+            #   If the target species is in the filename of the FASTA sequence,
+            #   we will skip it.
+            if self.target in blast_db:
+                continue
             #   Get the BLAST output
             blast_output = self.run_blast(blast_db)
             #   And parse it
