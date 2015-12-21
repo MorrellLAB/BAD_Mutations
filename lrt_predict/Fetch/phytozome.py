@@ -6,6 +6,8 @@ import requests
 from xml.etree import ElementTree
 import os
 import re
+import subprocess
+import tempfile
 
 #   Import our helper scripts here
 import lrt_predict.Fetch.phytozome_species as phytozome_species
@@ -71,8 +73,7 @@ class Phytozome(fetch.Fetcher):
     #   They should not change from instance to instance
     JGI_LOGIN = 'https://signon.jgi.doe.gov/signon/create'
     DL_BASE = 'http://genome.jgi.doe.gov'
-    XML_URL = 'http://genome.jgi.doe.gov/ext-api/downloads/get-directory'
-    XML_DATA = {'organism': 'PhytozomeV10'}
+    XML_URL = 'http://genome.jgi.doe.gov/ext-api/downloads/get-directory?organism=PhytozomeV10'
     FAILED_LOGIN = 'Login and password do not match'
     EXPIRED_ACCOUNT = 'Sorry, your password has expired'
     TO_FETCH = phytozome_species.phyto_fetch
@@ -87,9 +88,9 @@ class Phytozome(fetch.Fetcher):
         self.mainlog.debug('Creating new instance of Phytozome')
         #   If we are only converting, then we don't have to sign on
         if convertonly:
-            self.session = None
+            self.cookie = None
         else:
-            self.session = self.sign_on()
+            self.cookie = self.sign_on()
         self.urls = []
         self.md5s = []
         return
@@ -100,54 +101,73 @@ class Phytozome(fetch.Fetcher):
            password combinations. Returns a requests.Session object."""
         self.mainlog.debug('Logging in to JGI Genomes Portal with username ' +
                            self.username)
-        #   Start a new session, this will store our login information
-        session = requests.Session()
-        #   We have to get the HTML form that the page sends, so that we can
-        #   try to send the correct authentication tokens. We are looking for
-        #   The specific piece of text that is "authenticity_token" in the
-        #   input form.
-        login_text = requests.get(self.JGI_LOGIN).text
-        for line in login_text.split('\n'):
-            if 'authenticity_token' in line:
-                #   There are two value="..." bits in the line. We want the
-                #   second one.
-                auth_token = re.findall('value=".+?"', line)[1]
-                #   we have to pull off the value=" and the final "
-                auth_token = auth_token[7:-1]
-                #   We're done here
-                break
-        #   This is the data we will send to phytozome
-        login_creds = {
-            'login': self.username,
-            'password': self.password,
-            'authenticity_token': auth_token}
-        #   Get the response data back - the results of our login attempt
-        resp = session.post(self.JGI_LOGIN, data=login_creds)
-        if self.FAILED_LOGIN in resp.text:
-            self.mainlog.critical('Could not log into JGI Genomes Portal.\
- Check username and password')
-            exit(1)
-        elif self.EXPIRED_ACCOUNT in resp.text:
-            self.mainlog.critical('Your JGI Genomes Portal username and\
- password have expired!')
-            exit(1)
-        self.mainlog.debug('The page I got back was \n' + resp.text)
-        return session
+        #   Create a named temporary file to hold the cookie information
+        cookie_file = tempfile.NamedTemporaryFile(
+            mode='w+t',
+            prefix='BAD_Mutations_JGI_Cookie_',
+            suffix='.txt',
+            delete=False)
+        self.mainlog.debug('Cookies file: ' + cookie_file.name)
+        #   Use cURL to log in to JGI, and create a cookie file that we will
+        #   use to fetch all other files.
+        cmd = [
+            'curl',
+            self.JGI_LOGIN,
+            '--data-urlencode',
+            'login=' + self.username,
+            '--data-urlencode',
+            'password=' + self.password,
+            '-c',
+            cookie_file.name
+            ]
+        #   Then we execute the command
+        p = subprocess.Popen(
+            cmd,
+            shell=False,
+            stdout=subprocess.PIPE,
+            stdin=subprocess.PIPE
+            )
+        out, err = p.communicate()
+        return cookie_file
 
     def get_xml_urls(self):
         """Gets the URLs and th MD5s of the CDS files from the XML file from
            Phytozome. Stores these data in `urls' and `md5s' respectively."""
         self.mainlog.debug('Fetching XML')
+        #   Create another temporary named file for the XML output
+        xml_out = tempfile.NamedTemporaryFile(
+            mode='w+t',
+            prefix='BAD_Mutations_JGI_XML_',
+            suffix='.xml',
+            delete=False)
+        #   Use cURL to download the XML, passing the cookies we generated
+        #   earlier to authenticate.
+        cmd = [
+            'curl',
+            self.XML_URL,
+            '-b',
+            self.cookie.name,
+            '-o',
+            xml_out.name
+            ]
+        #   Execute the command
+        p = subprocess.Popen(
+            cmd,
+            shell=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+        out, err = p.communicate()
+        #   Then, read the XML back from the file
+        xml = xml_out.read()
         #   This suffix is what we want the filenames ending with
         #   this can change, depending on the target of the LRT
         suffix = '.cds.fa.gz'
         #   Use HTTP GET to fetch the XML from Phytozome's server
         #   This is also a response obkect
-        xml = self.session.get(self.XML_URL, params=self.XML_DATA)
-        self.mainlog.debug('The XML I got was \n\n' + xml.text)
+        self.mainlog.debug('The XML I got was \n\n' + xml)
         #   Create an element tree out of it, so we can easily step
         #   through the data
-        xml_tree = ElementTree.fromstring(xml.text)
+        xml_tree = ElementTree.fromstring(xml)
         #   Step through it and extract all CDS URLs
         for elem in xml_tree.findall('.//file'):
             #   if the URL ends in a certain suffix, then save it
@@ -165,23 +185,29 @@ class Phytozome(fetch.Fetcher):
         return
 
     def download_file(self, url):
-        """Fetches a remote file. Uses the requests.Session object to
+        """Fetches a remote file. Uses the cookies file from cURL to
            authenticate."""
         self.mainlog.debug('Fetching ' + url)
-        #   With stream=True, it downloads the response right away
-        resp = self.session.get(self.DL_BASE + url, stream=True)
-        #   Save the file
-        with open(file_funcs.local_name(url), 'wb') as f:
-            #   Take the file in pieces
-            for chunk in resp.iter_content(chunk_size=1024):
-                #   Empty chunks are for keepalive
-                #   purposes, we don't save those
-                if chunk:
-                    #   Write the file to disk
-                    f.write(chunk)
-                    #   and flush the buffer
-                    f.flush()
-            self.mainlog.debug('Done fetching ' + url)
+        #   Build the full URL to fetch
+        full_url = self.DL_BASE + url
+        #   And build the command to download it
+        cmd = [
+            'curl',
+            full_url,
+            '-b',
+            self.cookie.name,
+            '-o',
+            file_funcs.local_name(url)
+            ]
+        #   Then download it
+        p = subprocess.Popen(
+            cmd,
+            shell=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+            )
+        out, err = p.communicate()
+        self.mainlog.debug('Done fetching ' + url)
         return
 
     #    A function to fetch the CDS files
