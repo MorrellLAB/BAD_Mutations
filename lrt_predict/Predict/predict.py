@@ -58,16 +58,22 @@ class LRTPredict(object):
         positions to be computed."""
         #   Parse the alignment object and get the list of aligned positions
         #   that need to be predicted.
+        self.mainlog.debug(
+            'Searching for positions: ' + \
+            ', '.join([str(i) for i in self.substitutions]))
         self.aligned_pos = []
         real_position = 1
-        for index, column in enumerate(self.msa_obj[self.query_pos:]):
+        self.mainlog.debug(self.msa_obj[self.query_pos].seq)
+        for index, column in enumerate(self.msa_obj[self.query_pos].seq):
             if column == '-':
                 continue
             else:
                 real_position += 1
             if real_position % 3 == 0:
                 if real_position / 3 in self.substitutions:
-                    self.aligned_pos.append(real_position/3)
+                    self.aligned_pos.append(index/3)
+        self.mainlog.debug(
+            'Aligned Pos: ' + ', '.join([str(i) for i in self.aligned_pos]))
         return
 
     def write_aligned_subs(self):
@@ -75,10 +81,11 @@ class LRTPredict(object):
         subsfile = tempfile.NamedTemporaryFile(
             mode='w+t',
             prefix='BAD_Mutations_HYPHY_Subs_',
-            suffix='.txt'
+            suffix='.txt',
+            delete=False
             )
         subsfile.write('\n'.join([str(i) for i in self.aligned_pos]))
-        return subsfile.name
+        return subsfile
 
     def sanitize_inputs(self):
         """Remove illegal characters from the phylogenetic tree and the
@@ -128,7 +135,7 @@ class LRTPredict(object):
         #   into the file.
         infile.write(os.path.abspath(self.nmsa) + '\n')
         infile.write(os.path.abspath(self.phylogenetic) + '\n')
-        infile.write(alignedsubs + '\n')
+        infile.write(alignedsubs.name + '\n')
         infile.write(self.qname)
         infile.flush()
         #   And then we create a name for the HYPHY output file
