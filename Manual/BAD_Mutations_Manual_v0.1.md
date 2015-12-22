@@ -1,7 +1,7 @@
 Overview
 ========
 
-<span>`BAD_Mutations` </span>(****LAST-****ligned-****eleterious?)
+<span>`BAD_Mutations` </span>(**B**LAST-**A**ligned-**D**eleterious?)
 performs a likelihood ratio test (LRT) for the prediction of deleterious
 variants. The package is comprised of Python and Bourne Again Shell
 (BASH) scripts. The LRT is handled by a HYPHY script.
@@ -60,23 +60,14 @@ tested on other variants of commercial UNIX.
 <span>`BAD_Mutations` </span>requires that the following software is
 installed and available in your `$PATH` or `sys.path` in Python:
 
--   [GNU Bash](https://www.gnu.org/software/bash/) $\geq$ 3.2
-
--   [Python](https://www.python.org/) $\geq$ 2.6.x
-
--   [Biopython](http://biopython.org/) 1.6x
-
--   [argparse](https://code.google.com/p/argparse/) (Python library) If
-    using Python 2.6
-
--   [BLAST+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download)
-    $\geq$ 2.2.29
-
--   [PASTA](http://www.cs.utexas.edu/~phylo/software/pasta/)
-
--   [HyPhy](http://hyphy.org/) 2.2.x
-
--   [cURL](http://curl.haxx.se/)
+- [GNU Bash](https://www.gnu.org/software/bash/) >= 3.2
+- [Python](https://www.python.org/) >= 2.6.x
+- [Biopython](http://biopython.org/) 1.6x
+- [argparse](https://code.google.com/p/argparse/) (Python library) If using Python 2.6
+- [BLAST+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download) >= 2.2.29
+- [PASTA](http://www.cs.utexas.edu/~phylo/software/pasta/)
+- [HyPhy](http://hyphy.org/) 2.2.x
+- [cURL](http://curl.haxx.se/)
 
 Instructions for UMN MSI
 ------------------------
@@ -187,14 +178,14 @@ General Options
 
 <span>`BAD_Mutations` </span>takes the following general options:
 
-  Option          Value        Description
-  --------------- ------------ -----------------------------------------------------------------------------
-  `-h`            NA           Show help message and exit.
-                  ’DEBUG’      Be very verbose. Print all messages.
-                  ’INFO’       Just print info, warning, and error messages. Useful for progress checking.
-  `-v/–verbose`   ’WARNING’    Print warnings and errors. Default setting.
-                  ’ERROR’      Only print error messages.
-                  ’CRITICAL’   Print almost nothing. Critical failures only.
+  Option         |Value       |Description
+  ---------------|------------|-----------------------------------------------------------------------------
+  `-h`           |NA          |Show help message and exit.
+                 |’DEBUG’     |Be very verbose. Print all messages.
+                 |’INFO’      |Just print info, warning, and error messages. Useful for progress checking.
+  `-v/–verbose`  |’WARNING’   |Print warnings and errors. Default setting.
+                 |’ERROR’     |Only print error messages.
+                 |’CRITICAL’  |Print almost nothing. Critical failures only.
 
 The `setup` Subcommand
 ----------------------
@@ -211,15 +202,15 @@ prototypes are present, but they currently do not work.
 
 The `setup` subcommand takes the following options:
 
-  Option            Value          Description
-  ----------------- -------------- --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  `–list-species`   NA             Show all species databases available.
-  `-c/–config`      \[FILE\]       Where to store the configuration file. Defaults to `LRTPredict_Config.txt`.
-  `-b/–base`        \[DIR\]        Directory to store the BLAST databases. Defaults to the current directory.
-  `-d/–deps-dir`    \[DIR\]        Directory to download and store the dependencies. Defaults to current directory.
-  `-t/–target`      \[SP\_NAME\]   Target species name. Must be one of the species (case sensitive) given by `–list-species`. This species will be excluded from the prediction pipeline to avoid reference bias. No default.
-  `-e/–evalue`      \[FLOAT\]      E-value threshold for accepting TBLASTX hits as putative orthologues. Defaults to 0.05.
-  `-m/–missing`     \[INT\]        Minimum number of gapped (missing) sites in the multiple species alignment (MSA) to be considered for prediction.
+  Option           |Value         |Description
+  -----------------|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  `–list-species`  |NA            |Show all species databases available.
+  `-c/–config`     |\[FILE\]      |Where to store the configuration file. Defaults to `LRTPredict_Config.txt`.
+  `-b/–base`       |\[DIR\]       |Directory to store the BLAST databases. Defaults to the current directory.
+  `-d/–deps-dir`   |\[DIR\]       |Directory to download and store the dependencies. Defaults to current directory.
+  `-t/–target`     |\[SP\_NAME\]  |Target species name. Must be one of the species (case sensitive) given by `–list-species`. This species will be excluded from the prediction pipeline to avoid reference bias. No default.
+  `-e/–evalue`     |\[FLOAT\]     |E-value threshold for accepting TBLASTX hits as putative orthologues. Defaults to 0.05.
+  `-m/–missing`    |\[INT\]       |Minimum number of gapped (missing) sites in the multiple species alignment (MSA) to be considered for prediction.
 
 The `fetch` Subcommand
 ----------------------
@@ -235,14 +226,14 @@ policies.
 
 The `fetch` subcommand accepts the following options:
 
-  Option            Value      Description
-  ----------------- ---------- -----------------------------------------------------------------------------------------------------
-  `-c/–config`      \[FILE\]   Path to configuration file. Defaults to `LRTPredict_Config.txt`.
-  `-b/–base`\*      \[DIR\]    Directory to store the BLAST databases. Defaults to the current directory.
-  `-u/–user`        \[STR\]    Username for JGI Genome Portal. Required.
-  `-p/–password`    \[STR\]    Password for JGI Genome Portal. If not supplied on command line, will prompt user for the password.
-  `–fetch-only`     NA         If supplied, do not convert CDS FASTA files into BLAST databases.
-  `–convert-only`   NA         If supplied, only unzip and convert FASTA files into BLAST databases. Do not download.
+  Option           |Value     |Description
+  -----------------|----------|-----------------------------------------------------------------------------------------------------
+  `-c/–config`     |\[FILE\]  |Path to configuration file. Defaults to `LRTPredict_Config.txt`.
+  `-b/–base`\*     |\[DIR\]   |Directory to store the BLAST databases. Defaults to the current directory.
+  `-u/–user`       |\[STR\]   |Username for JGI Genome Portal. Required.
+  `-p/–password`   |\[STR\]   |Password for JGI Genome Portal. If not supplied on command line, will prompt user for the password.
+  `–fetch-only`    |NA        |If supplied, do not convert CDS FASTA files into BLAST databases.
+  `–convert-only`  |NA        |If supplied, only unzip and convert FASTA files into BLAST databases. Do not download.
 
 $^*$: If this value is supplied on the command line, it will override
 the value set in the configuration file.
@@ -257,13 +248,13 @@ alignment.
 
 The `align` subcommand accepts the following options:
 
-  Option           Value       Description
-  ---------------- ----------- -----------------------------------------------------------------------------------------
-  `-b/–base`\*     \[DIR\]     Directory to store the BLAST databases. Defaults to the current directory.
-  `-c/–config`     \[FILE\]    Path to configuration file. Defaults to `LRTPredict_Config.txt`.
-  `-e/–evalue`\*   \[FLOAT\]   E-value threshold for accepting TBLASTX hits as putative orthologues. Defaults to 0.05.
-  `-f/–fasta`      \[FILE\]    Path to FASTA file with query sequence. Required.
-  `-o/–output`     \[DIR\]     Directory for output. Defaults to current directory.
+  Option          |Value      |Description
+  ----------------|-----------|-----------------------------------------------------------------------------------------
+  `-b/–base`\*    |\[DIR\]    |Directory to store the BLAST databases. Defaults to the current directory.
+  `-c/–config`    |\[FILE\]   |Path to configuration file. Defaults to `LRTPredict_Config.txt`.
+  `-e/–evalue`\*  |\[FLOAT\]  |E-value threshold for accepting TBLASTX hits as putative orthologues. Defaults to 0.05.
+  `-f/–fasta`     |\[FILE\]   |Path to FASTA file with query sequence. Required.
+  `-o/–output`    |\[DIR\]    |Directory for output. Defaults to current directory.
 
 $^*$: If this value is supplied on the command line, it will override
 the value set in the configuration file.
@@ -279,13 +270,13 @@ use HyPhy to predict each query codon.
 
 The `predict` subcommand accepts the following options:
 
-  Option                Value      Description
-  --------------------- ---------- ------------------------------------------------------------------
-  `-a/–alignment`       \[FILE\]   Path to the multiple sequence alignment file. Required.
-  `-c/–config`          \[FILE\]   Path to configuration file. Defaults to `LRTPredict_Config.txt`.
-  `-r/–tree`            \[FILE\]   Path to the phylogenetic tree. Required.
-  `-s/–substitutions`   \[FILE\]   Path to substitutions file. Required
-  `-o/–output`          \[DIR\]    Directory for output. Defaults to current directory.
+  Option               |Value     |Description
+  ---------------------|----------|------------------------------------------------------------------
+  `-a/–alignment`      |\[FILE\]  |Path to the multiple sequence alignment file. Required.
+  `-c/–config`         |\[FILE\]  |Path to configuration file. Defaults to `LRTPredict_Config.txt`.
+  `-r/–tree`           |\[FILE\]  |Path to the phylogenetic tree. Required.
+  `-s/–substitutions`  |\[FILE\]  |Path to substitutions file. Required
+  `-o/–output`         |\[DIR\]   |Directory for output. Defaults to current directory.
 
 $^*$: If this value is supplied on the command line, it will override
 the value set in the configuration file.
@@ -305,10 +296,10 @@ output from another SNP effect script,
 
 The `compile` subcommand accepts the following options:
 
-  Option            Value      Description
-  ----------------- ---------- -----------------------------------------------------------
-  `-S/–long-subs`   \[FILE\]   Path to the SNP effect table. Required.
-  `-p/–pred-dir`    \[DIR\]    Output directory from the `predict` subcommand. Required.
+  Option           |Value     |Description
+  -----------------|----------|-----------------------------------------------------------
+  `-S/–long-subs`  |\[FILE\]  |Path to the SNP effect table. Required.
+  `-p/–pred-dir`   |\[DIR\]   |Output directory from the `predict` subcommand. Required.
 
 Example Command Lines
 ---------------------
