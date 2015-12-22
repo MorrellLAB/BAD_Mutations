@@ -13,13 +13,6 @@ def check_modules(setup=False, fetch=False, predict=False):
         import argparse
     except ImportError:
         missing_modules.append('argparse')
-    #   If fetch:
-    if fetch:
-        #   Requests
-        try:
-            import requests
-        except ImportError:
-            missing_modules.append('requests')
     #   If predict
     if predict:
         #   Biopython

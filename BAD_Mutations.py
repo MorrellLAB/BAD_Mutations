@@ -7,11 +7,12 @@ Author: Thomas Kono
         Saint Paul, MN
 """
 #   Dependencies:
-#       1) requests http://www.python-requests.org
-#       2) argparse https://code.google.com/p/argparse/
+#       1) argparse https://code.google.com/p/argparse/
 #           (Not required for Python 3 and Python 2 >= 2.7)
-#       3) Biopython http://biopython.org/
-#       4) BLAST+ executables from NCBI
+#       2) Biopython http://biopython.org/
+#       3) BLAST+ executables from NCBI
+#       4) PASTA phylogeny-aware alignment https://github.com/smirarab/pasta
+#       5) cURL http://curl.haxx.se/
 
 #   to check arguments
 import sys
