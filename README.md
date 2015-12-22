@@ -30,6 +30,6 @@ TODO
     * ~~Write PRANK sequence alignment script~~ **Done!**
     * ~~Compute phylogentic tree of species in database~~ **Not necessary, build tree from MSA**
     * ~~Add option to "prune" species from the all-species phylogenetic tree~~ **Not necessary, build tree from MSA**
-    * Implement the LRT itself
+    * ~~Implement the LRT itself`` **Done!**
     * ~~Add support for parallel execution~~ **Parallelize at the process level, not within the package**
     * Add support for substitutions in nucleotide sequence as well as protein sequence
