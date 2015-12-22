@@ -12,3 +12,6 @@ Modifications to documentation do not alter version numbers.
 ### Added
 - User manuals in plain text and GitHub-Flavored Markdown
 - This CHANGELOG to document changes
+### Removed
+- Old workflows
+- Old package source files
