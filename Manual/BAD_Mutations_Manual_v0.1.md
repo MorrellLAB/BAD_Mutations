@@ -183,7 +183,7 @@ General Options
   `-h`           |NA          |Show help message and exit.
                  |’DEBUG’     |Be very verbose. Print all messages.
                  |’INFO’      |Just print info, warning, and error messages. Useful for progress checking.
-  `-v/–verbose`  |’WARNING’   |Print warnings and errors. Default setting.
+  `-v/--verbose` |’WARNING’   |Print warnings and errors. Default setting.
                  |’ERROR’     |Only print error messages.
                  |’CRITICAL’  |Print almost nothing. Critical failures only.
 
@@ -204,13 +204,13 @@ The `setup` subcommand takes the following options:
 
   Option           |Value         |Description
   -----------------|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  `–list-species`  |NA            |Show all species databases available.
-  `-c/–config`     |\[FILE\]      |Where to store the configuration file. Defaults to `LRTPredict_Config.txt`.
-  `-b/–base`       |\[DIR\]       |Directory to store the BLAST databases. Defaults to the current directory.
-  `-d/–deps-dir`   |\[DIR\]       |Directory to download and store the dependencies. Defaults to current directory.
-  `-t/–target`     |\[SP\_NAME\]  |Target species name. Must be one of the species (case sensitive) given by `–list-species`. This species will be excluded from the prediction pipeline to avoid reference bias. No default.
-  `-e/–evalue`     |\[FLOAT\]     |E-value threshold for accepting TBLASTX hits as putative orthologues. Defaults to 0.05.
-  `-m/–missing`    |\[INT\]       |Minimum number of gapped (missing) sites in the multiple species alignment (MSA) to be considered for prediction.
+  `--list-species` |NA            |Show all species databases available.
+  `-c/--config`    |\[FILE\]      |Where to store the configuration file. Defaults to `LRTPredict_Config.txt`.
+  `-b/--base`      |\[DIR\]       |Directory to store the BLAST databases. Defaults to the current directory.
+  `-d/--deps-dir`  |\[DIR\]       |Directory to download and store the dependencies. Defaults to current directory.
+  `-t/--target`    |\[SP\_NAME\]  |Target species name. Must be one of the species (case sensitive) given by `--list-species`. This species will be excluded from the prediction pipeline to avoid reference bias. No default.
+  `-e/--evalue`    |\[FLOAT\]     |E-value threshold for accepting TBLASTX hits as putative orthologues. Defaults to 0.05.
+  `-m/--missing`   |\[INT\]       |Minimum number of gapped (missing) sites in the multiple species alignment (MSA) to be considered for prediction.
 
 The `fetch` Subcommand
 ----------------------
@@ -228,12 +228,12 @@ The `fetch` subcommand accepts the following options:
 
   Option           |Value     |Description
   -----------------|----------|-----------------------------------------------------------------------------------------------------
-  `-c/–config`     |\[FILE\]  |Path to configuration file. Defaults to `LRTPredict_Config.txt`.
-  `-b/–base`\*     |\[DIR\]   |Directory to store the BLAST databases. Defaults to the current directory.
-  `-u/–user`       |\[STR\]   |Username for JGI Genome Portal. Required.
-  `-p/–password`   |\[STR\]   |Password for JGI Genome Portal. If not supplied on command line, will prompt user for the password.
-  `–fetch-only`    |NA        |If supplied, do not convert CDS FASTA files into BLAST databases.
-  `–convert-only`  |NA        |If supplied, only unzip and convert FASTA files into BLAST databases. Do not download.
+  `-c/--config`    |\[FILE\]  |Path to configuration file. Defaults to `LRTPredict_Config.txt`.
+  `-b/--base`\*    |\[DIR\]   |Directory to store the BLAST databases. Defaults to the current directory.
+  `-u/--user`      |\[STR\]   |Username for JGI Genome Portal. Required.
+  `-p/--password`  |\[STR\]   |Password for JGI Genome Portal. If not supplied on command line, will prompt user for the password.
+  `--fetch-only`   |NA        |If supplied, do not convert CDS FASTA files into BLAST databases.
+  `--convert-only` |NA        |If supplied, only unzip and convert FASTA files into BLAST databases. Do not download.
 
 $^*$: If this value is supplied on the command line, it will override
 the value set in the configuration file.
@@ -250,11 +250,11 @@ The `align` subcommand accepts the following options:
 
   Option          |Value      |Description
   ----------------|-----------|-----------------------------------------------------------------------------------------
-  `-b/–base`\*    |\[DIR\]    |Directory to store the BLAST databases. Defaults to the current directory.
-  `-c/–config`    |\[FILE\]   |Path to configuration file. Defaults to `LRTPredict_Config.txt`.
-  `-e/–evalue`\*  |\[FLOAT\]  |E-value threshold for accepting TBLASTX hits as putative orthologues. Defaults to 0.05.
-  `-f/–fasta`     |\[FILE\]   |Path to FASTA file with query sequence. Required.
-  `-o/–output`    |\[DIR\]    |Directory for output. Defaults to current directory.
+  `-b/--base`\*   |\[DIR\]    |Directory to store the BLAST databases. Defaults to the current directory.
+  `-c/--config`   |\[FILE\]   |Path to configuration file. Defaults to `LRTPredict_Config.txt`.
+  `-e/--evalue`\* |\[FLOAT\]  |E-value threshold for accepting TBLASTX hits as putative orthologues. Defaults to 0.05.
+  `-f/--fasta`    |\[FILE\]   |Path to FASTA file with query sequence. Required.
+  `-o/--output`   |\[DIR\]    |Directory for output. Defaults to current directory.
 
 $^*$: If this value is supplied on the command line, it will override
 the value set in the configuration file.
@@ -272,11 +272,11 @@ The `predict` subcommand accepts the following options:
 
   Option               |Value     |Description
   ---------------------|----------|------------------------------------------------------------------
-  `-a/–alignment`      |\[FILE\]  |Path to the multiple sequence alignment file. Required.
-  `-c/–config`         |\[FILE\]  |Path to configuration file. Defaults to `LRTPredict_Config.txt`.
-  `-r/–tree`           |\[FILE\]  |Path to the phylogenetic tree. Required.
-  `-s/–substitutions`  |\[FILE\]  |Path to substitutions file. Required
-  `-o/–output`         |\[DIR\]   |Directory for output. Defaults to current directory.
+  `-a/--alignment`     |\[FILE\]  |Path to the multiple sequence alignment file. Required.
+  `-c/--config`        |\[FILE\]  |Path to configuration file. Defaults to `LRTPredict_Config.txt`.
+  `-r/--tree`          |\[FILE\]  |Path to the phylogenetic tree. Required.
+  `-s/--substitutions` |\[FILE\]  |Path to substitutions file. Required
+  `-o/--output`        |\[DIR\]   |Directory for output. Defaults to current directory.
 
 $^*$: If this value is supplied on the command line, it will override
 the value set in the configuration file.
@@ -298,8 +298,8 @@ The `compile` subcommand accepts the following options:
 
   Option           |Value     |Description
   -----------------|----------|-----------------------------------------------------------
-  `-S/–long-subs`  |\[FILE\]  |Path to the SNP effect table. Required.
-  `-p/–pred-dir`   |\[DIR\]   |Output directory from the `predict` subcommand. Required.
+  `-S/--long-subs` |\[FILE\]  |Path to the SNP effect table. Required.
+  `-p/--pred-dir`  |\[DIR\]   |Output directory from the `predict` subcommand. Required.
 
 Example Command Lines
 ---------------------
@@ -459,7 +459,7 @@ Species                    |Common Name           |Assembly Version  |Annotation
 *Brachypodium distachyon*  |Purple false brome    |2.1               |2.1                 |Phytozome 10
 *Brassica oleracea*        |Cabbage               |2.1               |2.1                 |Ensembl Plants
 *Brassica rapa*            |Turnip mustard        |FPsc 1.3          |1                   |Phytozome 10
-*Capsella grandiflora*     |–                     |1.1               |1.1                 |Phytozome 10
+*Capsella grandiflora*     |--                     |1.1               |1.1                 |Phytozome 10
 *Capsella rubella*         |Red shepherd’s purse  |1.0               |1.0                 |Phytozome 10
 *Carica papaya*            |Papaya                |ASGPBv0.4         |ASGPBv0.4           |Phytozome 10
 *Citrus clementina*        |Clementine            |1.0               |clementine1.0       |Phytozome 10
