@@ -179,8 +179,9 @@ BAD_Mutations.py, or pass the script to the Python interpreter.
     --OR--
     $ python BAD_Mutations.py [Options] [Subcommand] [More Options ... ]
 
-BAD_Mutations offers three subcommands, setup, fetch, and predict. They
-are summarized below.
+BAD_Mutations offers five subcommands, setup, fetch, align, predict, and
+compile. They are summarized below. As of the current version, setup and
+compile are not fully implemented.
 
 
 Subcommands, Options, and Switches
