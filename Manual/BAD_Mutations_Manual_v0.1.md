@@ -1,4 +1,4 @@
-Overview {#overview .unnumbered}
+Overview
 ========
 
 <span>`BAD_Mutations` </span>(****LAST-****ligned-****eleterious?)
@@ -27,7 +27,7 @@ conservation are inferred to be deleterious. More details on the
 procedure in <span>`BAD_Mutations` </span>is available in the “Methods”
 section.
 
-Citation {#citation .unnumbered}
+Citation
 ========
 
 The model used to estimate codon conservation and predict which variants
@@ -41,7 +41,7 @@ Paul J Hoffman. The HYPHY script for estimating codon conservation was
 written by Justin C Fay. Testing was performed by Chaochih Liu, Felipe
 Reyes, and Skylar Wyant.
 
-Downloading {#downloading .unnumbered}
+Downloading
 ===========
 
 <span>`BAD_Mutations` </span>is distributed through a [GitHub
@@ -49,7 +49,7 @@ repository](https://github.com/MorrellLAB/BAD_Mutations). You can use
 [Git](https://git-scm.com/) to clone the repository, or download a ZIP
 archive from GitHub.
 
-Dependencies {#dependencies .unnumbered}
+Dependencies
 ============
 
 <span>`BAD_Mutations` </span>is written to run in a UNIX-like
@@ -78,7 +78,7 @@ installed and available in your `$PATH` or `sys.path` in Python:
 
 -   [cURL](http://curl.haxx.se/)
 
-Instructions for UMN MSI {#instructions-for-umn-msi .unnumbered}
+Instructions for UMN MSI
 ------------------------
 
 This section is specific to using <span>`BAD_Mutations` </span>on the
@@ -95,7 +95,7 @@ run for <span>`BAD_Mutations` </span>on the cluster:
 You will have to install `PASTA` as its user manual instructs. cURL
 should be available on MSI.
 
-Input {#input .unnumbered}
+Input
 =====
 
 Input files should be plain text with UNIX line endings (LF).
@@ -146,7 +146,7 @@ This table is required, as part of the significance testing involves
 polarizing nonsynonymous SNPs by their ancestral states, and this
 information is not present in the raw HyPhy output.
 
-Output {#output .unnumbered}
+Output
 ======
 
 <span>`BAD_Mutations` </span>returns a report with information for each
@@ -158,10 +158,10 @@ reduce reference bias. Information is also available in the multiple
 sequence alignment, phylogenetic tree, and raw HyPhy output, which are
 all kept as intermediate files.
 
-Usage {#usage .unnumbered}
+Usage
 =====
 
-Basic Invocation {#basic-invocation .unnumbered}
+Basic Invocation
 ----------------
 
 <span>`BAD_Mutations` </span>can be called from command line in a manner
@@ -176,13 +176,13 @@ script `BAD_Mutations.py`, or pass the script to the Python interpreter.
 <span>`BAD_Mutations` </span>offers three subcommands, `setup`, `fetch`,
 and `predict`. They are summarized below.
 
-Subcommands, Options, and Switches {#subcommands-options-and-switches .unnumbered}
+Subcommands, Options, and Switches
 ----------------------------------
 
 Note: <span>`BAD_Mutations` </span>example command lines will be
 provided at the end of the setup, predict and fetch sections below.
 
-General Options {#general-options .unnumbered}
+General Options
 ---------------
 
 <span>`BAD_Mutations` </span>takes the following general options:
@@ -196,7 +196,7 @@ General Options {#general-options .unnumbered}
                   ’ERROR’      Only print error messages.
                   ’CRITICAL’   Print almost nothing. Critical failures only.
 
-The `setup` Subcommand {#the-setup-subcommand .unnumbered}
+The `setup` Subcommand
 ----------------------
 
 The `setup` subcommand creates a configuration file that contains paths
@@ -221,7 +221,7 @@ The `setup` subcommand takes the following options:
   `-e/–evalue`      \[FLOAT\]      E-value threshold for accepting TBLASTX hits as putative orthologues. Defaults to 0.05.
   `-m/–missing`     \[INT\]        Minimum number of gapped (missing) sites in the multiple species alignment (MSA) to be considered for prediction.
 
-The `fetch` Subcommand {#the-fetch-subcommand .unnumbered}
+The `fetch` Subcommand
 ----------------------
 
 The `fetch` subcommand creates the necessary BLAST databases for
@@ -247,7 +247,7 @@ The `fetch` subcommand accepts the following options:
 $^*$: If this value is supplied on the command line, it will override
 the value set in the configuration file.
 
-The `align` Subcommand {#the-align-subcommand .unnumbered}
+The `align` Subcommand
 ----------------------
 
 The `align` subcommand will run BLAST to identify putative orthologues
@@ -268,7 +268,7 @@ The `align` subcommand accepts the following options:
 $^*$: If this value is supplied on the command line, it will override
 the value set in the configuration file.
 
-The `predict` Subcommand {#the-predict-subcommand .unnumbered}
+The `predict` Subcommand
 ------------------------
 
 The `predict` subcommand will generate predictions for a list of
@@ -290,7 +290,7 @@ The `predict` subcommand accepts the following options:
 $^*$: If this value is supplied on the command line, it will override
 the value set in the configuration file.
 
-The `compile` Subcommand {#the-compile-subcommand .unnumbered}
+The `compile` Subcommand
 ------------------------
 
 The `compile` subcommand will take an output directory containing HyPhy
@@ -310,7 +310,7 @@ The `compile` subcommand accepts the following options:
   `-S/–long-subs`   \[FILE\]   Path to the SNP effect table. Required.
   `-p/–pred-dir`    \[DIR\]    Output directory from the `predict` subcommand. Required.
 
-Example Command Lines {#example-command-lines .unnumbered}
+Example Command Lines
 ---------------------
 
 The following command line demonstrates the typical usage of
@@ -346,7 +346,7 @@ in `subs.txt` using `CoolGene.fasta` as a query:
                          -f CoolGene.fasta \
                          -s subs.txt 2> CoolGene_Predictions.log
 
-Configuration File Format {#configuration-file-format .unnumbered}
+Configuration File Format
 =========================
 
 **NOTE:** The configuration file format is under revision (in a new git
@@ -374,7 +374,7 @@ shown below:
     #define PASTA /usr/local/bin/run_pasta.py
     #define HYPHY /usr/local/bin/HYPHYSP
 
-Runtimes and Benchmarks {#runtimes-and-benchmarks .unnumbered}
+Runtimes and Benchmarks
 =======================
 
 By far, the slowest part of <span>`BAD_Mutations` </span>is fetching CDS
@@ -410,7 +410,7 @@ search, alignment, and prediction stages. The max amount of time it took
 for <span>`BAD_Mutations` </span>to calcuate $\frac{dN}{dS}$ was
 $\approx$46 CPU-hours, for instance.
 
-Methods {#methods .unnumbered}
+Methods
 =======
 
 <span>`BAD_Mutations` </span>uses TBLASTX to identify genes that are
@@ -452,54 +452,52 @@ subject to a different mode of selection than purifying selection.
 As such, exercise caution when interpreting results from
 <span>`BAD_Mutations` </span>.
 
-Data Sources {#data-sources .unnumbered}
+Data Sources
 ============
 
 As of October 2015, the following Angiosperm genomes (41) are available
 for use in Ensembl and Phytozome:
 
-  Species                     Common Name            Assembly Version   Annotation Version   Source
-  --------------------------- ---------------------- ------------------ -------------------- ----------------
-  *Aegilops tauschii*         Goatgrass              ASM34733v1         1                    Ensembl Plants
-  *Aquilegia coerulea*        Columbine              1.1                1.1                  Phytozome 10
-  *Arabidopsis lyrata*        Lyrate rockcress       1.0                1.0                  Phytozome 10
-  *Arabidopsis thaliana*      Thale cress            TAIR10             TAIR10               Phytozome 10
-  *Boechera stricta*          Drummond’s rockcress   1.2                1.2                  Phytozome 10
-  *Brachypodium distachyon*   Purple false brome     2.1                2.1                  Phytozome 10
-  *Brassica oleracea*         Cabbage                2.1                2.1                  Ensembl Plants
-  *Brassica rapa*             Turnip mustard         FPsc 1.3           1                    Phytozome 10
-  *Capsella grandiflora*      –                      1.1                1.1                  Phytozome 10
-  *Capsella rubella*          Red shepherd’s purse   1.0                1.0                  Phytozome 10
-  *Carica papaya*             Papaya                 ASGPBv0.4          ASGPBv0.4            Phytozome 10
-  *Citrus clementina*         Clementine             1.0                clementine1.0        Phytozome 10
-  *Citrus sinensis*           Sweet orange           1.0                orange1.1            Phytozome 10
-  *Cucumis sativus*           Cucumber               1.0                1.0                  Phytozome 10
-  *Eucalyptus grandis*        Eucalyptus             2.0                2.0                  Phytozome 10
-  *Eutrema salsugineum*       Salt cress             1.0                1.0                  Phytozome 10
-  *Fragaria vesca*            Strawberry             1.1                1.1                  Phytozome 10
-  *Glycine max*               Soybean                a2                 a2.v1                Phytozome 10
-  *Gossypium raimondii*       Cotton                 2.1                2.1                  Phytozome 10
-  *Hordeum vulgare*           Barley                 082214v1           1.0                  Ensembl Plants
-  *Leersia perrieri*          Cutgrass               1.4                1.0                  Ensembl Plants
-  *Linum usitatissimum*       Flax                   1.0                1.0                  Phytozome 10
-  *Malus domestica*           Apple                  1.0                1.0                  Phytozome 10
-  *Manihot esculenta*         Cassava                6.0                6.1                  Phytozome 10
-  *Medicago truncatula*       Barrel medic           Mt4.0              Mt4.0v1              Phytozome 10
-  *Mimulus guttatus*          Monkey flower          2.0                2.0                  Phytozome 10
-  *Musa acuminata*            Banana                 MA1                MA1                  Ensembl Plants
-  *Oryza sativa*              Asian rice             IRGSP-1.0          7.0                  Phytozome 10
-  *Panicum virgatum*          Switchgrass            1.0                1.1                  Phytozome 10
-  *Phaseolus vulgaris*        Common bean            1.0                1.0                  Phytozome 10
-  *Populus trichocarpa*       Western poplar         3.0                3.0                  Phytozome 10
-  *Prunus persica*            Peach                  2.0                2.1                  Phytozome 10
-  *Ricinus communis*          Castor bean            0.1                0.1                  Phytozome 10
-  *Setaria italica*           Foxtail millet         2.0                2.1                  Phytozome 10
-  *Solanum lycopersicum*      Tomato                 SL2.50             iTAG2.3              Phytozome 10
-  *Solanum tuberosum*         Potato                 3\_2.1.10          3.4                  Phytozome 10
-  *Sorghum bicolor*           Milo                   2.0                2.1                  Phytozome 10
-  *Theobroma cacao*           Cacao                  1.0                1.0                  Phytozome 10
-  *Triticum urartu*           Red wild einkorn       ASM34745v1         1                    Ensembl Plants
-  *Vitis vinifera*            Grape                  Genoscope.12X      Genoscope.12X        Phytozome 10
-  *Zea mays*                  Maize                  6a                 6a                   Phytozome 10
-
-
+Species                    |Common Name           |Assembly Version  |Annotation Version  |Source
+---------------------------|----------------------|------------------|--------------------|----------------
+*Aegilops tauschii*        |Goatgrass             |ASM34733v1        |1                   |Ensembl Plants
+*Aquilegia coerulea*       |Columbine             |1.1               |1.1                 |Phytozome 10
+*Arabidopsis lyrata*       |Lyrate rockcress      |1.0               |1.0                 |Phytozome 10
+*Arabidopsis thaliana*     |Thale cress           |TAIR10            |TAIR10              |Phytozome 10
+*Boechera stricta*         |Drummond’s rockcress  |1.2               |1.2                 |Phytozome 10
+*Brachypodium distachyon*  |Purple false brome    |2.1               |2.1                 |Phytozome 10
+*Brassica oleracea*        |Cabbage               |2.1               |2.1                 |Ensembl Plants
+*Brassica rapa*            |Turnip mustard        |FPsc 1.3          |1                   |Phytozome 10
+*Capsella grandiflora*     |–                     |1.1               |1.1                 |Phytozome 10
+*Capsella rubella*         |Red shepherd’s purse  |1.0               |1.0                 |Phytozome 10
+*Carica papaya*            |Papaya                |ASGPBv0.4         |ASGPBv0.4           |Phytozome 10
+*Citrus clementina*        |Clementine            |1.0               |clementine1.0       |Phytozome 10
+*Citrus sinensis*          |Sweet orange          |1.0               |orange1.1           |Phytozome 10
+*Cucumis sativus*          |Cucumber              |1.0               |1.0                 |Phytozome 10
+*Eucalyptus grandis*       |Eucalyptus            |2.0               |2.0                 |Phytozome 10
+*Eutrema salsugineum*      |Salt cress            |1.0               |1.0                 |Phytozome 10
+*Fragaria vesca*           |Strawberry            |1.1               |1.1                 |Phytozome 10
+*Glycine max*              |Soybean               |a2                |a2.v1               |Phytozome 10
+*Gossypium raimondii*      |Cotton                |2.1               |2.1                 |Phytozome 10
+*Hordeum vulgare*          |Barley                |082214v1          |1.0                 |Ensembl Plants
+*Leersia perrieri*         |Cutgrass              |1.4               |1.0                 |Ensembl Plants
+*Linum usitatissimum*      |Flax                  |1.0               |1.0                 |Phytozome 10
+*Malus domestica*          |Apple                 |1.0               |1.0                 |Phytozome 10
+*Manihot esculenta*        |Cassava               |6.0               |6.1                 |Phytozome 10
+*Medicago truncatula*      |Barrel medic          |Mt4.0             |Mt4.0v1             |Phytozome 10
+*Mimulus guttatus*         |Monkey flower         |2.0               |2.0                 |Phytozome 10
+*Musa acuminata*           |Banana                |MA1               |MA1                 |Ensembl Plants
+*Oryza sativa*             |Asian rice            |IRGSP-1.0         |7.0                 |Phytozome 10
+*Panicum virgatum*         |Switchgrass           |1.0               |1.1                 |Phytozome 10
+*Phaseolus vulgaris*       |Common bean           |1.0               |1.0                 |Phytozome 10
+*Populus trichocarpa*      |Western poplar        |3.0               |3.0                 |Phytozome 10
+*Prunus persica*           |Peach                 |2.0               |2.1                 |Phytozome 10
+*Ricinus communis*         |Castor bean           |0.1               |0.1                 |Phytozome 10
+*Setaria italica*          |Foxtail millet        |2.0               |2.1                 |Phytozome 10
+*Solanum lycopersicum*     |Tomato                |SL2.50            |iTAG2.3             |Phytozome 10
+*Solanum tuberosum*        |Potato                |3\_2.1.10         |3.4                 |Phytozome 10
+*Sorghum bicolor*          |Milo                  |2.0               |2.1                 |Phytozome 10
+*Theobroma cacao*          |Cacao                 |1.0               |1.0                 |Phytozome 10
+*Triticum urartu*          |Red wild einkorn      |ASM34745v1        |1                   |Ensembl Plants
+*Vitis vinifera*           |Grape                 |Genoscope.12X     |Genoscope.12X       |Phytozome 10
+*Zea mays*                 |Maize                 |6a                |6a                  |Phytozome 10
