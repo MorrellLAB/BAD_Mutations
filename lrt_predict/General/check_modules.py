@@ -5,8 +5,10 @@
 #   Gain access to the spawn.find_executable(), which works a lot like `which`
 from distutils import spawn
 
-#   Try to import them, return names of those that are not installed
+
 def check_modules(setup=False, fetch=False, predict=False):
+    """Function to try to import required modules, and return a list of modules
+    that are not installed."""
     missing_modules = []
     #   Argparse
     try:
@@ -22,25 +24,28 @@ def check_modules(setup=False, fetch=False, predict=False):
             missing_modules.append('Biopython')
     return missing_modules
 
-#   A function to print a nice little message about missing modules
+
 def missing_mods(modules):
+    """Function to print a nice message about modules that are required."""
     msg = '''Some of the required modules were not found on your system. Please
 install them and try again. The following modules were not found:'''
     print msg
     print '\n'.join(modules)
     return
 
-#   A function that checks for a path to an executable
+
 def check_executable(exe):
+    """Checks for a path to an executable."""
     path = spawn.find_executable(exe)
     if path:
         return path
     else:
         return False
 
-#   A function that checks for the presence of all the executable names
-#   passed to it
+
 def missing_executables(exelist):
+    """Checks for the presence and execute permissions for all program names
+    passed to it."""
     missing_programs = []
     for e in exelist:
         if check_executable(e):
