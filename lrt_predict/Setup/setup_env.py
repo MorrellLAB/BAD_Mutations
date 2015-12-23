@@ -140,6 +140,7 @@ class SetupEnv(object):
             self.mainlog.warning('Config file ' + self.config_file + 'already exists. It will be overwritten!')
         BAD_Mutations_Config = ConfigParser.RawConfigParser()
         config_section = "Config"
+        BAD_Mutations_Config.add_config(config_section)
         BAD_Mutations_Config.set(config_section, "BASH", self.bash_path)
         BAD_Mutations_Config.set(config_section, "GZIP", self.gzip_path)
         BAD_Mutations_Config.set(config_section, "SUM", self.sum_path)
