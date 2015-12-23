@@ -46,6 +46,7 @@ def setup(arg):
         arg['missing_threshold'],
         arg['config'],
         arg['loglevel'])
+    s_env.get_deps() # Download dependencies
     s_env.write_config()
     return
 
@@ -253,7 +254,8 @@ def main():
                 arguments,
                 arguments['loglevel'])
             if cfg.is_valid():
-                cfg.read_vars()
+                # cfg.read_vars()
+                cfg.read_config()
                 config_opts = cfg.merge_options()
             else:
                 loglevel.error('Config file is not valid!')

@@ -75,29 +75,29 @@ class ConfigHandler(object):
                     continue
         return True
 
-    def read_vars(self):
-        """Step through the configuration file, and set variables as they are
-        encountered."""
-        conf_dict = {}
-        with open(self.config_file, 'r') as f:
-            #   Split up the lines as in the above function
-            for line in f:
-                if line.startswith(self.DECLR):
-                    tmp = line.strip().split(None, 2)
-                    k = tmp[1]
-                    value = tmp[2]
-                    #   We use a dictionary in lieu of a case/switch statement
-                    if k in self.KEYWORDS:
-                        self.mainlog.debug(
-                            'Setting variable ' +
-                            k +
-                            ' to ' +
-                            value)
-                        conf_dict[self.KEYWORDS[k]] = value
-                    else:
-                        self.mainlog.warning('Unknown variable ' + k)
-        self.config_vars = conf_dict
-        return
+    # def read_vars(self):
+    #     """Step through the configuration file, and set variables as they are
+    #     encountered."""
+    #     conf_dict = {}
+    #     with open(self.config_file, 'r') as f:
+    #         #   Split up the lines as in the above function
+    #         for line in f:
+    #             if line.startswith(self.DECLR):
+    #                 tmp = line.strip().split(None, 2)
+    #                 k = tmp[1]
+    #                 value = tmp[2]
+    #                 #   We use a dictionary in lieu of a case/switch statement
+    #                 if k in self.KEYWORDS:
+    #                     self.mainlog.debug(
+    #                         'Setting variable ' +
+    #                         k +
+    #                         ' to ' +
+    #                         value)
+    #                     conf_dict[self.KEYWORDS[k]] = value
+    #                 else:
+    #                     self.mainlog.warning('Unknown variable ' + k)
+    #     self.config_vars = conf_dict
+    #     return
 
     def read_config(self):
         """Read the configuration file provided"""
@@ -106,10 +106,10 @@ class ConfigHandler(object):
         BAD_Mutations_Config = ConfigParser.ConfigParser()
         #   Read the configuration file
         BAD_Mutations_Config.read(self.config_file)
-        #   Create dictionaries for the configration options
-        self.deps = dict(BAD_Mutations_Config.items('Dependencies'))
-        self.blast = dict(BAD_Mutations_Config.items('BLAST_Settings'))
+        #   Create a dictionary for the configration options
+        self.config_vars = dict(BAD_Mutations_Config.items('Config'))
         self.mainlog.info('Finished reading ' + self.config_file)
+        return
 
     def merge_options(self):
         """Merge the two input dictionaries: the one recieved on the command
@@ -118,7 +118,8 @@ class ConfigHandler(object):
         configuration file."""
         #   List of keys that we do not want to clobber if they are not
         #   passed on the command line
-        do_not_clobber = ['base']
+        # do_not_clobber = ['base']
+        do_not_clobber = ['Base']
         #   This takes up a bit of extra memory, but it will preserve the two
         #   dictionaries as separate variables.
         configs = self.config_vars.copy()
