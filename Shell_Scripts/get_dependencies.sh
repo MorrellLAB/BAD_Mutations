@@ -9,29 +9,29 @@
 #	Make directory for dependencies
 
 set -e
-set -u
 set -o pipefail
 
 #	Set our variables from input
 #	The first variable is the dependencies diretory, and everything else
 #	are the dependencies that need to be downloaded
 DEPSDIR="$1"
-MISSING="${@:1}"
+declare -a MISSING=("${@:2}")
 
 #	Make the dependencies directory and cd into it
+echo ${DEPSDIR}
 mkdir -p "${DEPSDIR}"
 cd "${DEPSDIR}"
 
 #   A function to check for, download, and isntall Pip
 function getPip() {
-    if ! `command -v pip > /dev/null 2> /dev/null`
-    then
-        wget https://bootstrap.pypa.io/get-pip.py
-        python get-pip.py --user
-        echo export PATH='$PATH':"${HOME}"/.local/bin >> "${HOME}"/.bash_profile
-        source "${HOME}"/.bash_profile
-        rm get-pip.py
-    fi
+	if ! `command -v pip > /dev/null 2> /dev/null`
+	then
+		wget https://bootstrap.pypa.io/get-pip.py
+		python get-pip.py --user
+		echo export PATH='$PATH':"${HOME}"/.local/bin >> "${HOME}"/.bash_profile
+		source "${HOME}"/.bash_profile
+		rm get-pip.py
+	fi
 }
 
 for x in "${MISSING}"
@@ -44,16 +44,23 @@ do
 				#	Designed to always pull latest version
 				#	unless NCBI changes their ftp heirarchy
 			wget --no-directories --progress=bar -r -A.tar.gz ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/
-				#	Get rid of all OS-specifc installers
-			find . -maxdepth 1 -not -name "*src.tar.gz" -name "*.tar.gz" -delete
+				#	Use OS-specific installer
+			if [[ $(uname) == "Linux" ]]
+			then
+				find . -maxdepth 1 -not -name "*linux*" -name "*.tar.gz" -delete
+			elif [[ $(uname) == "Darwin" ]]
+			then
+				find . -maxdepth 1 -not -name "*macosx*" -name "*.tar.gz" -delete
+			else
+				echo "Not on a supported operating system!"
+				exit 1
+			fi
 				#	Extract the source file
 				#	Designed to always install the latest verion of BLAST
 				#	unless NCBI changes their file naming scheme
 			tar -xvzf ncbi*
-				#	Install BLAST
-			cd `find . -maxdepth 1 -type d -name "ncbi*"`/c++
-			./configure
-			make
+				#	Move NCBI BLAST+ to a standard folder
+			mv ncbi* ncbi_blast+
 				#	Cleanup tarball
 			cd "${DEPSDIR}"
 			rm ncbi*tar.gz
@@ -78,35 +85,39 @@ do
 			cd "${DEPSDIR}"
 			rm prank*.tgz robots.txt
 			;;
-        "pasta" )
-            #   Install Pasta
-                #   Pull Pasta from GitHub
-                #	Requires Git to be installed
-				#	Does not require a GitHub account
-            git clone https://github.com/smirarab/pasta.git
-                #   Pull sate-tools from GitHub
-                #	Requires Git to be installed
-				#	Does not require a GitHub account
-            if [[ $( uname ) -eq "Linux" ]] # If we are on Linux
-            then # Get the linux version of sate-tools
-                git clone https://github.com/smirarab/sate-tools-linux.git
-            elif [[ $( uname ) -eq "Darwin" ]] # If we're on Mac OS X
-            then # Get the Mac OS X version of sate-tools
-                https://github.com/smirarab/sate-tools-mac.git sate-tools
-            else # If we aren't on either
-                echo "Please use Mac OS X or Linux"
-                exit 1
-            fi
-            cd pasta
-            python setup.py develop --user
-            cd "${DEPSDIR}"
+		"PASTA" )
+			#   Install Pasta
+				#	Download Pasta from GitHub using wget
+			wget https://github.com/smirarab/pasta/archive/master.zip
+			unzip master.zip
+				#   Download sate-tools from GitHub
+			if [[ $( uname ) == "Linux" ]] # If we are on Linux
+			then # Get the linux version of sate-tools
+				wget -O sate-tools.zip https://github.com/smirarab/sate-tools-linux/archive/master.zip
+			elif [[ $( uname ) == "Darwin" ]] # If we're on Mac OS X
+			then # Get the Mac OS X version of sate-tools
+				wget -O sate-tools.zip https://github.com/smirarab/sate-tools-mac/archive/master.zip
+			else # If we aren't on either
+				echo "Please use Mac OS X or Linux"
+				exit 1
+			fi
+				#	Extract sate-tools
+			unzip sate-tools.zip
+				#	Cleanup the zip files
+			rm -rf *.zip
+				#	Move sate-tools to a properly named directory
+			mv sate-tools* $(echo sate-tools* | cut -f 1,2,3 -d '-' )
+			cd pasta-master
+			python setup.py develop --user
+			cd "${DEPSDIR}"
+			;;
 		"requests" )
 			cd "${DEPSDIR}"
 			#	Install Requests
 				#	Check for Pip
 				#	Install Requests using Pip
 			getPip
-            pip install --user requests
+			pip install --user requests
 			;;
 		"HyPhy" )
 			cd "${DEPSDIR}"
@@ -114,10 +125,16 @@ do
 				#	Pull HyPhy from GitHub
 				#	Requires Git to be installed
 				#	Does not require a GitHub account
-			git clone https://github.com/veg/hyphy.git
+			wget https://github.com/veg/hyphy/archive/master.zip
+			unzip master.zip
 				#	Installing HyPhy requires CMake 3.0 or higher to be installed
-			cd hyphy
-			cmake -DINSTALL_PREFIX=./ ./
+			cd hyphy-master
+				#	Actually install HyPhy
+			sed 's/EXCLUDE_FROM_ALL//g' CMakeLists.txt > CMAKE.txt
+			mv CMAKE.txt CMakeLists.txt
+				#	Allow non-root users to install HyPhy
+			cmake -DINSTALL_PREFIX=$(pwd)
+				#	Install HyPhy
 			make install
 			cd "${DEPSDIR}"
 			;;
@@ -127,7 +144,7 @@ do
 				#	Check for Pip
 				#	Install BioPython using Pip
 			getPip
-            pip install biopython
+			pip install biopython
 			;;
 		* )
 			echo "Nothing missing"

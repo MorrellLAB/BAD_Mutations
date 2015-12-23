@@ -1,6 +1,13 @@
 #!/usr/bin/env python
 #   A script to parse the configuration file
 
+#   Import standard library modules here
+try: # This version of ConfigParser is only available on Python 2.6, 2.7, or 2.8
+    import ConfigParser
+except ImportError:
+    import sys # We require 2.7 or higher for argparse
+    sys.exit("Please use Python 2.7.XX or Python 2.8.XX")
+
 #   Import the verbosity script
 from ..General import set_verbosity
 
@@ -91,6 +98,18 @@ class ConfigHandler(object):
                         self.mainlog.warning('Unknown variable ' + k)
         self.config_vars = conf_dict
         return
+
+    def read_config(self):
+        """Read the configuration file provided"""
+        self.mainlog.info('Reading ' + self.config_file)
+        #   Setup the confiuration parser
+        BAD_Mutations_Config = ConfigParser.ConfigParser()
+        #   Read the configuration file
+        BAD_Mutations_Config.read(self.config_file)
+        #   Create dictionaries for the configration options
+        self.deps = dict(BAD_Mutations_Config.items('Dependencies'))
+        self.blast = dict(BAD_Mutations_Config.items('BLAST_Settings'))
+        self.mainlog.info('Finished reading ' + self.config_file)
 
     def merge_options(self):
         """Merge the two input dictionaries: the one recieved on the command
