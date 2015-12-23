@@ -111,7 +111,7 @@ class SetupEnv(object):
             self.missing_progs.append('PASTA')
         if not self.hyphy_path:
             self.mainlog.warning('Cannot find HyPhy! Will download')
-            self.missing_progs.append('HYPHY')
+            self.missing_progs.append('HyPhy')
         return
 
     def get_deps(self):
@@ -123,16 +123,15 @@ class SetupEnv(object):
         self.mainlog.warning('Missing the following dependencies: ' + ', '.join(self.missing_progs))
         download_script = './Shell_Scripts/get_dependencies.sh'
         download_command = ['bash', download_script, self.deps] + self.missing_progs
-        # download_shell = subprocess.Popen(download_command, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        # out, err = download_shell.communicate()
-        # self.mainlog.info(out)
-        # self.mainlog.error
-        subprocess.call(download_command)
+        download_shell = subprocess.Popen(download_command, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        out, err = download_shell.communicate()
+        self.mainlog.info(out)
+        self.mainlog.error
         if 'PASTA' in self.missing_progs:
             self.pasta_path = self.deps + '/pasta-master/run_pasta.py'
         if 'tBLASTx' in self.missing_progs:
             self.tblastx_path = self.deps + '/ncbi_blast+/bin/tblastx'
-        if 'HYPHY' in self.missing_progs:
+        if 'HyPhy' in self.missing_progs:
             self.hyphy_path = self.deps + '/hyphy-master/HYPHYMP'
         return
 

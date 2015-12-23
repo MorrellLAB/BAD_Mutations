@@ -34,9 +34,9 @@ function getPip() {
 	fi
 }
 
-for x in "${MISSING}"
+for prog in "${MISSING[@]}"
 do
-	case "${x}" in
+	case "${prog}" in
 		"tBLASTx" )
 			cd "${DEPSDIR}"
 			#	Install BLAST
@@ -86,6 +86,7 @@ do
 			rm prank*.tgz robots.txt
 			;;
 		"PASTA" )
+			cd "${DEPSDIR}"
 			#   Install Pasta
 				#	Download Pasta from GitHub using wget
 			wget https://github.com/smirarab/pasta/archive/master.zip
