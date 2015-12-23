@@ -2,9 +2,11 @@
 """
 Script to perform LRT from Chun and Fay (2009) to predict deleterious SNPs in
 plants. Requires a user name and password for the JGI phyotzome portal (Free)
-Author: Thomas Kono
-        Nov 8, 2015
+Author: Thomas JY Kono and Paul J Hoffman
+        2015-12-23
         Saint Paul, MN
+
+Version 0.1
 """
 #   Dependencies:
 #       1) argparse https://code.google.com/p/argparse/
