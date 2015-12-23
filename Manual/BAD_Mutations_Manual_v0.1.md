@@ -1,7 +1,7 @@
 Overview
 ========
 
-<span>`BAD_Mutations` </span>(**B**LAST-**A**ligned-**D**eleterious?) performs a likelihood ratio test (LRT) for the prediction of deleterious variants. The package is comprised of Python and Bourne Again Shell (BASH) scripts. The LRT is handled by a HYPHY script. <span>`BAD_Mutations` </span>was written with Python 2 syntax, but conversion to Python 3 is planned. <span>`BAD_Mutations` </span>is designed to be run from the command line. Running from an interactive Python environment is not recommended nor supported.
+<span>`BAD_Mutations` </span>(****LAST-****ligned-****eleterious?) performs a likelihood ratio test (LRT) for the prediction of deleterious variants. The package is comprised of Python and Bourne Again Shell (BASH) scripts. The LRT is handled by a HYPHY script. <span>`BAD_Mutations` </span>was written with Python 2 syntax, but conversion to Python 3 is planned. <span>`BAD_Mutations` </span>is designed to be run from the command line. Running from an interactive Python environment is not recommended nor supported.
 
 <span>`BAD_Mutations` </span>contains five major subcommands: `setup`, `fetch`, `align`, `predict`, and `compile`. Both `setup` and `fetch` are meant to be run once, or very rarely. The `align` subcommand generates phylogenetic trees and multiple sequence alignments for input to the prediction scripts. The `predict` subcommand does the actual variant effect prediction. More information about how to run <span>`BAD_Mutations` </span>is available in the “Usage” section.
 
@@ -27,13 +27,22 @@ Dependencies
 <span>`BAD_Mutations` </span>requires that the following software is installed and available in your `$PATH` or `sys.path` in Python:
 
 -   [GNU Bash](https://www.gnu.org/software/bash/) >= 3.2
--   [Python](https://www.python.org/) >= 2.6.x
+
+-   [Python](https://www.python.org/) \(\geq\) 2.6.x
+
 -   [Biopython](http://biopython.org/) 1.6x
+
 -   [argparse](https://code.google.com/p/argparse/) (Python library) If using Python 2.6
+
 -   [BLAST+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download) >= 2.2.29
+
 -   [PASTA](http://www.cs.utexas.edu/~phylo/software/pasta/)
+
 -   [HyPhy](http://hyphy.org/) 2.2.x
+
 -   [cURL](http://curl.haxx.se/)
+
+Note that if you plan to run many analyses in parallel, you should use a **single-threaded** version of HyPhy.
 
 Instructions for UMN MSI
 ------------------------
@@ -76,7 +85,7 @@ For compiling the raw HyPhy outputs (one per gene) into a final report, you must
 Output
 ======
 
-<span>`BAD_Mutations` </span>returns a report with information for each queried position. Information in the report includes the number of species in the alignment, the alignment column for the queried codon, a constraint score, a \(p\)-value associated with the LRT, and a constraint score and \(p\)-value with the query sequence masked from the alignment to reduce reference bias. Information is also available in the multiple sequence alignment, phylogenetic tree, and raw HyPhy output, which are all kept as intermediate files.
+<span>`BAD_Mutations` </span>returns a report with information for each queried position. Information in the report includes the number of species in the alignment, the alignment column for the queried codon, a constraint score, a _p_-value associated with the LRT, and a constraint score and _p_-value with the query sequence masked from the alignment to reduce reference bias. Information is also available in the multiple sequence alignment, phylogenetic tree, and raw HyPhy output, which are all kept as intermediate files.
 
 Usage
 =====
@@ -108,7 +117,7 @@ General Options
 | `-h`          | NA         | Show help message and exit.                                                 |
 |               | ’DEBUG’    | Be very verbose. Print all messages.                                        |
 |               | ’INFO’     | Just print info, warning, and error messages. Useful for progress checking. |
-| `-v/--verbose`| ’WARNING’  | Print warnings and errors. Default setting.                                 |
+| `-v/--verbose` | ’WARNING’  | Print warnings and errors. Default setting.                                 |
 |               | ’ERROR’    | Only print error messages.                                                  |
 |               | ’CRITICAL’ | Print almost nothing. Critical failures only.                               |
 
@@ -186,7 +195,7 @@ The `predict` subcommand accepts the following options:
 The `compile` Subcommand
 ------------------------
 
-The `compile` subcommand will take an output directory containing HyPhy output files, and produce a table with predictions for each variant. The script will print \(P\)-values, but will not assess significance, as a suitable significance threshold cannot be determined programmatically. This is left to the user to interpret. This subcommand requires the output from another SNP effect script, [SNP\_Effect\_Predictor.py](https://raw.githubusercontent.com/TomJKono/Misc_Utils/master/SNP_Effect_Predictor.py) (NOTE: requires the companion Python class defined in [gff\_parse.py](https://raw.githubusercontent.com/TomJKono/Misc_Utils/master/gff_parse.py)).
+The `compile` subcommand will take an output directory containing HyPhy output files, and produce a table with predictions for each variant. The script will print _p_-values, but will not assess significance, as a suitable significance threshold cannot be determined programmatically. This is left to the user to interpret. This subcommand requires the output from another SNP effect script, [SNP\_Effect\_Predictor.py](https://raw.githubusercontent.com/TomJKono/Misc_Utils/master/SNP_Effect_Predictor.py) (NOTE: requires the companion Python class defined in [gff\_parse.py](https://raw.githubusercontent.com/TomJKono/Misc_Utils/master/gff_parse.py)).
 
 The `compile` subcommand accepts the following options:
 
@@ -227,6 +236,11 @@ And this command will predict the functional impact of variants listed in `subs.
                          -f CoolGene.fasta \
                          -s subs.txt 2> CoolGene_Predictions.log
 
+A Note on Parallel Execution
+----------------------------
+
+<span>`BAD_Mutations` </span>is designed to run all predictions in a single thread. There is a joke in here somewhere about Python programs and lack of concurrency …For now, all functions and supporting scripts are written for single-thread execution, and parallel execution can be done with a tool like [GNU Parallel](http://www.gnu.org/software/parallel/). Native parallel support is planned for a future release.
+
 Configuration File Format
 =========================
 
@@ -253,20 +267,20 @@ Runtimes and Benchmarks
 
 By far, the slowest part of <span>`BAD_Mutations` </span>is fetching CDS sequences and converting them to BLAST databases. This may take up to several hours, depending on your network and disk speeds. The databases and FASTA files take up approximately 4GB, as of October 2015. As more genomes are sequenced and annotated, this figure will increase.
 
-For a typical barley gene (\(\approx\)3000 bp), <span>`BAD_Mutations` </span>can generate a phylogenetic tree and multiple sequence alignment in approximately 5-10 minutes on a desktop computer (Intel i7 2.8GHz). Note, however, that not every gene will have every species represented in the alignment and tree. This is not a problem for <span>`BAD_Mutations` </span>.
+For a typical barley gene (~3000 bp), <span>`BAD_Mutations` </span>can generate a phylogenetic tree and multiple sequence alignment in approximately 5-10 minutes on a desktop computer (Intel i7 2.8GHz). Note, however, that not every gene will have every species represented in the alignment and tree. This is not a problem for <span>`BAD_Mutations` </span>.
 
-Predictions are generated in two stages: a \(\frac{dN}{dS}\) estimation phase and a per-site prediction phase. The \(\frac{dN}{dS}\) phase is slow; for the same \(\approx\)3000bp gene, the average time to estimate \(\frac{dN}{dS}\) is 11319.5 CPU-seconds (\(\approx\)3 CPU-hours), with a standard deviation of 10803.9 CPU-seconds (also \(\approx\)3 CPU-hours). Per-site predictions are much faster, with an average runtime of 73.9 CPU-seconds, and a standard deviation of 67.8 CPU-seconds.
+Predictions are generated in two stages: a dN/dS estimation phase and a per-site prediction phase. The dN/dS phase is slow; for the same ~3000bp gene, the average time to estimate dN/dS is 11319.5 CPU-seconds (~3 CPU-hours), with a standard deviation of 10803.9 CPU-seconds (also ~3 CPU-hours). Per-site predictions are much faster, with an average runtime of 73.9 CPU-seconds, and a standard deviation of 67.8 CPU-seconds.
 
 In all, BLAST searching and predicting for a single barley gene takes an average of 3-4 CPU-hours to complete. The process is readily parallelizable on a gene-by-gene basis. This makes processing a complete dataset consisting of tens of thousands of genes feasible on a computing cluster.
 
-Note, however, that runtimes will vary depending on the gene being analyzed. Genes that are rapidly evolving will take longer in the BLAST search, alignment, and prediction stages. The max amount of time it took for <span>`BAD_Mutations` </span>to calcuate \(\frac{dN}{dS}\) was \(\approx\)46 CPU-hours, for instance.
+Note, however, that runtimes will vary depending on the gene being analyzed. Genes that are rapidly evolving will take longer in the BLAST search, alignment, and prediction stages. The max amount of time it took for <span>`BAD_Mutations` </span>to calcuate dN/dS was ~46 CPU-hours, for instance.
 
 Methods
 =======
 
 <span>`BAD_Mutations` </span>uses TBLASTX to identify genes that are homologous to the query sequence based on translated similarity. Hits that are above the user-supplied E-value threshold are excluded. Once a list of orthlogues is identified, <span>`BAD_Mutations` </span>translates the sequences into amino acids, and aligns them with PASTA. A phylogenetic tree of the species is also estimated from the alignment. The alignment is then back-translated using the original nucleotide sequence hits from their respective BLAST databases. This alignment is then supplied to the prediction script, where the query codons are evaluated using HyPhy.
 
-Evaluation of codons uses a likelihood ratio test (LRT) to give the probability that a nonsynonymous SNP is deleterious. First, the ratio of the local synonymous and nonsynonymous substitution rates (\(\frac{dN}{dS}\)) is estimated from the gene alignment. Then, using those rates and the estimated phylogenetic relationship among the sequences, the program tests the likelihood of the queried codon evolving under selective constraint against the likelihood of it evolving neutrally. For a full description of the statistical model used, see [Chun and Fay (2009)](http://genome.cshlp.org/content/19/9/1553.abstract).
+Evaluation of codons uses a likelihood ratio test (LRT) to give the probability that a nonsynonymous SNP is deleterious. First, the ratio of the local synonymous and nonsynonymous substitution rates (dN/dS) is estimated from the gene alignment. Then, using those rates and the estimated phylogenetic relationship among the sequences, the program tests the likelihood of the queried codon evolving under selective constraint against the likelihood of it evolving neutrally. For a full description of the statistical model used, see [Chun and Fay (2009)](http://genome.cshlp.org/content/19/9/1553.abstract).
 
 <span>`BAD_Mutations` </span>makes several assumptions in its prediction pipeline. First, putative orthologues identified with BLAST are assumed to have conserved function across all of the species represented in the alignment. For some gene families, particularly those involved in pathogen recognition and defense, this assumption may not be true. Next, <span>`BAD_Mutations` </span>assumes that the sequences identified as homologous through sequence similarity are *orthologous*. This assumption is manifest in the multiple sequence alignment, as each site in the alignment is then assumed to be orthologous. For gene families that are highly duplicated (either proliferating, or due to a whole genome duplication event), this assumption may also be violated. That is, sequences identified through BLAST searching may be paralogous, and subject to a different mode of selection than purifying selection.
 

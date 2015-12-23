@@ -11,6 +11,7 @@ Modifications to documentation do not alter version numbers.
 ## 0.1 - 2015-12-22
 ### Added
 - User manuals in plain text and GitHub-Flavored Markdown
+- Brief section on parallel processing to the manual
 - This CHANGELOG to document changes
 
 ### Removed

@@ -85,6 +85,9 @@ available in your \texttt{\$PATH} or \texttt{sys.path} in Python:
     \item \href{http://curl.haxx.se/}{cURL}
 \end{itemize}
 
+\par Note that if you plan to run many analyses in parallel, you should use a
+\textbf{single-threaded} version of HyPhy.
+
 \subsection*{Instructions for UMN MSI}
 \par This section is specific to using \BM on the \href{http://msi.umn.edu/}
 {University of Minnesoa Super Computing Institue} cluser. Our cluster uses the
@@ -377,6 +380,14 @@ $ ./BAD_Mutations.py -v DEBUG \
                      -f CoolGene.fasta \
                      -s subs.txt 2> CoolGene_Predictions.log
 \end{Verbatim}
+
+\subsection*{A Note on Parallel Execution}
+\par \BM is designed to run all predictions in a single thread. There is a joke
+in here somewhere about Python programs and lack of concurrency \ldots For now,
+all functions and supporting scripts are written for single-thread execution,
+and parallel execution can be done with a tool like
+\href{http://www.gnu.org/software/parallel/}{GNU Parallel}. Native parallel
+support is planned for a future release.
 
 \section*{Configuration File Format}
 \par\textbf{NOTE:} The configuration file format is under revision (in a new

@@ -80,6 +80,9 @@ available in your $PATH or sys.path in Python:
 
 -   cURL
 
+Note that if you plan to run many analyses in parallel, you should use a
+SINGLE-THREADED version of HyPhy.
+
 
 Instructions for UMN MSI
 
@@ -349,6 +352,16 @@ in subs.txt using CoolGene.fasta as a query:
                          -c BAD_Mutations_Config.txt \
                          -f CoolGene.fasta \
                          -s subs.txt 2> CoolGene_Predictions.log
+
+
+A Note on Parallel Execution
+
+BAD_Mutations is designed to run all predictions in a single thread.
+There is a joke in here somewhere about Python programs and lack of
+concurrency …For now, all functions and supporting scripts are written
+for single-thread execution, and parallel execution can be done with a
+tool like GNU Parallel. Native parallel support is planned for a future
+release.
 
 
 
