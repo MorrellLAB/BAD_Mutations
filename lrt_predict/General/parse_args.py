@@ -68,13 +68,6 @@ def parse_args():
         help='Directory to house downloaded software. Defaults to .',
         default=os.getcwd())
     setup_args.add_argument(
-        '--download-deps',
-        '-n',
-        required=False,
-        action='store_true',
-        help='Switch to download missing dependencies.',
-        default=False)
-    setup_args.add_argument(
         '--target',
         '-t',
         required=False,
