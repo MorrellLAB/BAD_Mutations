@@ -6,6 +6,7 @@ supplied variables and store them in a configuration file."""
 from distutils import spawn
 import datetime
 import subprocess
+import os
 try: # This version of ConfigParser is only available on Python 2.6, 2.7, or 2.8
     import ConfigParser
 except ImportError:
@@ -67,7 +68,7 @@ class SetupEnv(object):
                  model, missingness, cfg, verbose):
         self.mainlog = set_verbosity.verbosity('Setup_Env', verbose)
         self.base = base
-        self.deps = deps
+        self.deps = os.path.abspath(deps)
         self.target_species = target
         self.eval_thresh = str(evalue)
         self.miss_thresh = str(missingness)
