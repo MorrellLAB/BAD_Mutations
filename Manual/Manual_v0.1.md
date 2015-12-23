@@ -1,7 +1,7 @@
 Overview
 ========
 
-<span>`BAD_Mutations` </span>(****LAST-****ligned-****eleterious?) performs a likelihood ratio test (LRT) for the prediction of deleterious variants. The package is comprised of Python and Bourne Again Shell (BASH) scripts. The LRT is handled by a HYPHY script. <span>`BAD_Mutations` </span>was written with Python 2 syntax, but conversion to Python 3 is planned. <span>`BAD_Mutations` </span>is designed to be run from the command line. Running from an interactive Python environment is not recommended nor supported.
+<span>`BAD_Mutations` </span>(**B**LAST-**A**ligned-**D**eleterious?) performs a likelihood ratio test (LRT) for the prediction of deleterious variants. The package is comprised of Python and Bourne Again Shell (BASH) scripts. The LRT is handled by a HYPHY script. <span>`BAD_Mutations` </span>was written with Python 2 syntax, but conversion to Python 3 is planned. <span>`BAD_Mutations` </span>is designed to be run from the command line. Running from an interactive Python environment is not recommended nor supported.
 
 <span>`BAD_Mutations` </span>contains five major subcommands: `setup`, `fetch`, `align`, `predict`, and `compile`. Both `setup` and `fetch` are meant to be run once, or very rarely. The `align` subcommand generates phylogenetic trees and multiple sequence alignments for input to the prediction scripts. The `predict` subcommand does the actual variant effect prediction. More information about how to run <span>`BAD_Mutations` </span>is available in the “Usage” section.
 
