@@ -147,8 +147,7 @@ do
 			pip install biopython
 			;;
 		* )
-			echo "Nothing missing"
-			break
+			continue
 			;;
 	esac
 done
