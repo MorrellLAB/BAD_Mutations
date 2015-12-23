@@ -111,7 +111,7 @@ class SetupEnv(object):
             self.missing_progs.append('PASTA')
         if not self.hyphy_path:
             self.mainlog.warning('Cannot find HyPhy! Will download')
-            self.missing_progs.append('HyPhy')
+            self.missing_progs.append('HYPHY')
         return
 
     def get_deps(self):
@@ -132,7 +132,7 @@ class SetupEnv(object):
             self.pasta_path = self.deps + '/pasta-master/run_pasta.py'
         if 'tBLASTx' in self.missing_progs:
             self.tblastx_path = self.deps + '/ncbi_blast+/bin/tblastx'
-        if 'HyPhy' in self.missing_progs:
+        if 'HYPHY' in self.missing_progs:
             self.hyphy_path = self.deps + '/hyphy-master/HYPHYMP'
         return
 
