@@ -27,19 +27,12 @@ Dependencies
 <span>`BAD_Mutations` </span>requires that the following software is installed and available in your `$PATH` or `sys.path` in Python:
 
 -   [GNU Bash](https://www.gnu.org/software/bash/) >= 3.2
-
--   [Python](https://www.python.org/) \(\geq\) 2.6.x
-
+-   [Python](https://www.python.org/) >= 2.6.x
 -   [Biopython](http://biopython.org/) 1.6x
-
 -   [argparse](https://code.google.com/p/argparse/) (Python library) If using Python 2.6
-
 -   [BLAST+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download) >= 2.2.29
-
 -   [PASTA](http://www.cs.utexas.edu/~phylo/software/pasta/)
-
 -   [HyPhy](http://hyphy.org/) 2.2.x
-
 -   [cURL](http://curl.haxx.se/)
 
 Note that if you plan to run many analyses in parallel, you should use a **single-threaded** version of HyPhy.
