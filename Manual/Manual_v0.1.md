@@ -1,7 +1,7 @@
 Overview
 ========
 
-<span>`BAD_Mutations` </span>(**B**LAST-**A**ligned-**D**eleterious?) performs a likelihood ratio test (LRT) for the prediction of deleterious variants. The package is comprised of Python and Bourne Again Shell (BASH) scripts. The LRT is handled by a HYPHY script. <span>`BAD_Mutations` </span>was written with Python 2 syntax, but conversion to Python 3 is planned. <span>`BAD_Mutations` </span>is designed to be run from the command line. Running from an interactive Python environment is not recommended nor supported.
+<span>`BAD_Mutations` </span>(**B**LAST-**A**ligned-**D**eleterious?) performs a likelihood ratio test (LRT) for the prediction of deleterious variants. The package is comprised of Python and Bourne Again Shell (BASH) scripts. The LRT is handled by a HyPhy script. <span>`BAD_Mutations` </span>was written with Python 2 syntax, but conversion to Python 3 is planned. <span>`BAD_Mutations` </span>is designed to be run from the command line. Running from an interactive Python environment is not recommended nor supported.
 
 <span>`BAD_Mutations` </span>contains five major subcommands: `setup`, `fetch`, `align`, `predict`, and `compile`. Both `setup` and `fetch` are meant to be run once, or very rarely. The `align` subcommand generates phylogenetic trees and multiple sequence alignments for input to the prediction scripts. The `predict` subcommand does the actual variant effect prediction. More information about how to run <span>`BAD_Mutations` </span>is available in the “Usage” section.
 
@@ -232,7 +232,7 @@ And this command will predict the functional impact of variants listed in `subs.
 A Note on Parallel Execution
 ----------------------------
 
-<span>`BAD_Mutations` </span>is designed to run all predictions in a single thread. There is a joke in here somewhere about Python programs and lack of concurrency …For now, all functions and supporting scripts are written for single-thread execution, and parallel execution can be done with a tool like [GNU Parallel](http://www.gnu.org/software/parallel/). Native parallel support is planned for a future release.
+<span>`BAD_Mutations` </span>is designed to run all predictions in a single thread. There is a joke in here somewhere about Python programs and lack of concurrency …For now, all functions and supporting scripts are written for single-thread execution, and parallel execution can be performed with a tool like [GNU Parallel](http://www.gnu.org/software/parallel/). Native parallel support is planned for a future release.
 
 Configuration File Format
 =========================
@@ -260,13 +260,13 @@ Runtimes and Benchmarks
 
 By far, the slowest part of <span>`BAD_Mutations` </span>is fetching CDS sequences and converting them to BLAST databases. This may take up to several hours, depending on your network and disk speeds. The databases and FASTA files take up approximately 4GB, as of October 2015. As more genomes are sequenced and annotated, this figure will increase.
 
-For a typical barley gene (~3000 bp), <span>`BAD_Mutations` </span>can generate a phylogenetic tree and multiple sequence alignment in approximately 5-10 minutes on a desktop computer (Intel i7 2.8GHz). Note, however, that not every gene will have every species represented in the alignment and tree. This is not a problem for <span>`BAD_Mutations` </span>.
+For a typical barley gene (~3,000 bp), <span>`BAD_Mutations` </span>can generate a phylogenetic tree and multiple sequence alignment in approximately 5-10 minutes on a desktop computer (Intel i7 2.8GHz). Note, however, that not every gene will have every species represented in the alignment and tree. This is not a problem for <span>`BAD_Mutations` </span>.
 
-Predictions are generated in two stages: a dN/dS estimation phase and a per-site prediction phase. The dN/dS phase is slow; for the same ~3000bp gene, the average time to estimate dN/dS is 11319.5 CPU-seconds (~3 CPU-hours), with a standard deviation of 10803.9 CPU-seconds (also ~3 CPU-hours). Per-site predictions are much faster, with an average runtime of 73.9 CPU-seconds, and a standard deviation of 67.8 CPU-seconds.
+Predictions are generated in two stages: a dN/dS estimation phase and a per-site prediction phase. The dN/dS phase is slow; for the same ~3,000bp gene, the average time to estimate dN/dS is 11319.5 CPU-seconds (~3 CPU-hours), with a standard deviation of 10803.9 CPU-seconds (also ~3 CPU-hours). Per-site predictions are much faster, with an average runtime of 73.9 CPU-seconds, and a standard deviation of 67.8 CPU-seconds.
 
 In all, BLAST searching and predicting for a single barley gene takes an average of 3-4 CPU-hours to complete. The process is readily parallelizable on a gene-by-gene basis. This makes processing a complete dataset consisting of tens of thousands of genes feasible on a computing cluster.
 
-Note, however, that runtimes will vary depending on the gene being analyzed. Genes that are rapidly evolving will take longer in the BLAST search, alignment, and prediction stages. The max amount of time it took for <span>`BAD_Mutations` </span>to calcuate dN/dS was ~46 CPU-hours, for instance.
+Note, however, that runtimes will vary depending on the gene being analyzed. Genes that are rapidly evolving will take longer in the BLAST search, alignment, and prediction stages. The max amount of time it took for <span>`BAD_Mutations` </span>to calculate dN/dS for a single genes was ~46 CPU-hours.
 
 Methods
 =======
