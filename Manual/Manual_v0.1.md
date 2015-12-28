@@ -56,13 +56,13 @@ Input files should be plain text with UNIX line endings (LF). <span>`BAD_Mutatio
 
 There is no programmatic means of enforcing the consistency of directionality between the FASTA file and the substitutions file. This means it is possible to submit them in the reverse order, but keep in mind that the coordinates must match in order for the predictions to be valid.
 
-The FASTA input should look like this:
+The FASTA input should look like this (we will use `CoolGene.fasta` from here on):
 
-    >Gene_1
+    >CoolGene
     ATGCCAGTGCAG...
     ...
 
-And the substitutions file should look like this:
+And the substitutions file should look like this (for example, `CoolGene.subs`):
 
     4   SNP_1
     10  SNP_2
@@ -229,7 +229,7 @@ This command will run BLAST against all the available databases using `CoolGene.
                          -f CoolGene.fasta \
                          -o Output_Dir 2> CoolGene_Predictions.log
 
-And this command will predict the functional impact of the variants listed in `subs.txt` using the multiple sequence alignment and phylogenetic tree for `CoolGene.fasta`, saving the HyPhy report in `Predictions_Dir`:
+And this command will predict the functional impact of the variants listed in `CoolGene.subs` using the multiple sequence alignment and phylogenetic tree for `CoolGene.fasta`, saving the HyPhy report in `Predictions_Dir`:
 
     $ ./BAD_Mutations.py -v DEBUG \
                          predict \
@@ -237,7 +237,7 @@ And this command will predict the functional impact of the variants listed in `s
                          -f CoolGene.fasta \
                          -a CoolGene_MSA.fasta \
                          -r CoolGene_Tree.tree \
-                         -s subs.txt 
+                         -s CoolGene.subs \
                          -o Predictions_Dir 2> CoolGene_Predictions.log
 
 A Note on Parallel Execution
