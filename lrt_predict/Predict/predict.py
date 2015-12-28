@@ -59,7 +59,7 @@ class LRTPredict(object):
         #   Parse the alignment object and get the list of aligned positions
         #   that need to be predicted.
         self.mainlog.debug(
-            'Searching for positions: ' + \
+            'Searching for positions: ' +
             ', '.join([str(i) for i in self.substitutions]))
         self.aligned_pos = []
         real_position = 1
@@ -71,7 +71,7 @@ class LRTPredict(object):
                 real_position += 1
             if real_position % 3 == 0:
                 if real_position / 3 in self.substitutions:
-                    self.aligned_pos.append(index/3)
+                    self.aligned_pos.append((index+1)/3)
         self.mainlog.debug(
             'Aligned Pos: ' + ', '.join([str(i) for i in self.aligned_pos]))
         return
