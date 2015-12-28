@@ -149,7 +149,7 @@ The `fetch` subcommand accepts the following options:
 | `--fetch-only`   | NA       | If supplied, do not convert CDS FASTA files into BLAST databases.                                   |
 | `--convert-only` | NA       | If supplied, only unzip and convert FASTA files into BLAST databases. Do not download.              |
 
-\(^*\): If this value is supplied on the command line, it will override the value set in the configuration file.
+*: If this value is supplied on the command line, it will override the value set in the configuration file.
 
 The `align` Subcommand
 ----------------------
@@ -166,7 +166,7 @@ The `align` subcommand accepts the following options:
 | `-f/--fasta`    | \[FILE\]  | Path to FASTA file with query sequence. Required.                                       |
 | `-o/--output`   | \[DIR\]   | Directory for output. Defaults to current directory.                                    |
 
-\(^*\): If this value is supplied on the command line, it will override the value set in the configuration file.
+*: If this value is supplied on the command line, it will override the value set in the configuration file.
 
 The `predict` Subcommand
 ------------------------
@@ -183,7 +183,7 @@ The `predict` subcommand accepts the following options:
 | `-s/--substitutions` | \[FILE\] | Path to substitutions file. Required                             |
 | `-o/--output`        | \[DIR\]  | Directory for output. Defaults to current directory.             |
 
-\(^*\): If this value is supplied on the command line, it will override the value set in the configuration file.
+^*: If this value is supplied on the command line, it will override the value set in the configuration file.
 
 The `compile` Subcommand
 ------------------------
@@ -210,7 +210,7 @@ This command will set up the environment for predicting in barley (*Hordeum vulg
                          -d /scratch/BAD_Mutations_Deps \
                          -t 'Hordeum_vulgare' \
                          -e 0.05 \
-                         -m 0.2 \
+                         -m 10 \
                          -c BAD_Mutations_Config.txt 2> Setup.log
 
 This command will download all of the necessary CDS sequences from both Phytozome and Ensembl Plants and convert them into BLAST databases:
@@ -221,13 +221,24 @@ This command will download all of the necessary CDS sequences from both Phytozom
                          -u 'user@domain.com' \
                          -p 'ReallyGoodPassword123' 2> Fetch.log
 
-And this command will predict the functional impact of variants listed in `subs.txt` using `CoolGene.fasta` as a query:
+This command will run BLAST against all the available databases using `CoolGene.fasta` as a query, translate the sequences into amino acids, align them with `PASTA`, estimate a phylogeny, and save the results into `Output_Dir`.
+
+    $ ./BAD_Mutations.py -v DEBUG \
+                         align \
+                         -c BAD_Mutations_Config.txt \
+                         -f CoolGene.fasta \
+                         -o Output_Dir 2> CoolGene_Predictions.log
+
+And this command will predict the functional impact of the variants listed in `subs.txt` using the multiple sequence alignment and phylogenetic tree for `CoolGene.fasta`, saving the HyPhy report in `Predictions_Dir`:
 
     $ ./BAD_Mutations.py -v DEBUG \
                          predict \
                          -c BAD_Mutations_Config.txt \
                          -f CoolGene.fasta \
-                         -s subs.txt 2> CoolGene_Predictions.log
+                         -a CoolGene_MSA.fasta \
+                         -r CoolGene_Tree.tree \
+                         -s subs.txt 
+                         -o Predictions_Dir 2> CoolGene_Predictions.log
 
 A Note on Parallel Execution
 ----------------------------
