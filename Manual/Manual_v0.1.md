@@ -5,7 +5,7 @@ Overview
 
 <span>`BAD_Mutations` </span>contains five major subcommands: `setup`, `fetch`, `align`, `predict`, and `compile`. Both `setup` and `fetch` are meant to be run once, or very rarely. The `align` subcommand generates phylogenetic trees and multiple sequence alignments for input to the prediction scripts. The `predict` subcommand does the actual variant effect prediction. More information about how to run <span>`BAD_Mutations` </span>is available in the “Usage” section.
 
-Briefly, <span>`BAD_Mutations` </span>predicts deleterious variants using a sequence constraint approach. For a given query gene sequence and list of nonsynonmyous SNPs, a multiple sequence alignment among orthologues is produced, and the given codons are tested for conservation. Variants that alter a codon with a high degree of conservation are inferred to be deleterious. More details on the procedure in <span>`BAD_Mutations` </span>is available in the “Methods” section.
+Briefly, <span>`BAD_Mutations` </span>predicts deleterious variants using a sequence constraint approach. For a given query gene sequence and list of nonsynonmyous SNPs, a multiple sequence alignment among homologues is produced, and the given codons are tested for conservation. Variants that alter a codon with a high degree of conservation are inferred to be deleterious. More details on the procedure in <span>`BAD_Mutations` </span>is available in the “Methods” section.
 
 Citation
 ========
@@ -130,13 +130,13 @@ The `setup` subcommand takes the following options:
 | `-b/--base`      | \[DIR\]      | Directory to store the BLAST databases. Defaults to the current directory.                                                                                                                 |
 | `-d/--deps-dir`  | \[DIR\]      | Directory to download and store the dependencies. Defaults to current directory.                                                                                                           |
 | `-t/--target`    | \[SP\_NAME\] | Target species name. Must be one of the species (case sensitive) given by `--list-species`. This species will be excluded from the prediction pipeline to avoid reference bias. No default. |
-| `-e/--evalue`    | \[FLOAT\]    | E-value threshold for accepting TBLASTX hits as putative orthologues. Defaults to 0.05.                                                                                                    |
+| `-e/--evalue`    | \[FLOAT\]    | E-value threshold for accepting TBLASTX hits as putative homologues. Defaults to 0.05.                                                                                                    |
 | `-m/--missing`   | \[INT\]      | Minimum number of gapped (missing) sites in the multiple species alignment (MSA) to be considered for prediction.                                                                          |
 
 The `fetch` Subcommand
 ----------------------
 
-The `fetch` subcommand creates the necessary BLAST databases for identifying orthologues. It will fetch gzipped CDS FASTA files from both Phytozome 10 and Ensembl Plants, unzip them, and convert them into BLAST databases. Fetching data from Phytozome requires a (free) account with the [JGI Genome Portal](http://genome.jgi.doe.gov/). Note that not every genome sequence in Phytozome is available to be used for this analysis. Check the species info page on Phytozome for specific data usage policies.
+The `fetch` subcommand creates the necessary BLAST databases for identifying homologues. It will fetch gzipped CDS FASTA files from both Phytozome 10 and Ensembl Plants, unzip them, and convert them into BLAST databases. Fetching data from Phytozome requires a (free) account with the [JGI Genome Portal](http://genome.jgi.doe.gov/). Note that not every genome sequence in Phytozome is available to be used for this analysis. Check the species info page on Phytozome for specific data usage policies.
 
 The `fetch` subcommand accepts the following options:
 
@@ -154,7 +154,7 @@ The `fetch` subcommand accepts the following options:
 The `align` Subcommand
 ----------------------
 
-The `align` subcommand will run BLAST to identify putative orthologues against each species’ CDS sequence database. The putative orthologues are aligned with PASTA, and a phylogenetic tree is estimated from the alignment.
+The `align` subcommand will run BLAST to identify putative homologues against each species’ CDS sequence database. The putative homologues are aligned with PASTA, and a phylogenetic tree is estimated from the alignment.
 
 The `align` subcommand accepts the following options:
 
@@ -162,7 +162,7 @@ The `align` subcommand accepts the following options:
 |:---------------|:----------|:----------------------------------------------------------------------------------------|
 | `-b/--base`\*   | \[DIR\]   | Directory to store the BLAST databases. Defaults to the current directory.              |
 | `-c/--config`   | \[FILE\]  | Path to configuration file. Defaults to `LRTPredict_Config.txt`.                        |
-| `-e/--evalue`\* | \[FLOAT\] | E-value threshold for accepting TBLASTX hits as putative orthologues. Defaults to 0.05. |
+| `-e/--evalue`\* | \[FLOAT\] | E-value threshold for accepting TBLASTX hits as putative homologues. Defaults to 0.05. |
 | `-f/--fasta`    | \[FILE\]  | Path to FASTA file with query sequence. Required.                                       |
 | `-o/--output`   | \[DIR\]   | Directory for output. Defaults to current directory.                                    |
 
@@ -286,7 +286,7 @@ Methods
 
 Evaluation of codons uses a likelihood ratio test (LRT) to give the probability that a nonsynonymous SNP is deleterious. First, the ratio of the local synonymous and nonsynonymous substitution rates (dN/dS) is estimated from the gene alignment. Then, using those rates and the estimated phylogenetic relationship among the sequences, the program tests the likelihood of the queried codon evolving under selective constraint against the likelihood of it evolving neutrally. For a full description of the statistical model used, see [Chun and Fay (2009)](http://genome.cshlp.org/content/19/9/1553.abstract).
 
-<span>`BAD_Mutations` </span>makes several assumptions in its prediction pipeline. First, putative orthologues identified with BLAST are assumed to have conserved function across all of the species represented in the alignment. For some gene families, particularly those involved in pathogen recognition and defense, this assumption may not be true. Next, <span>`BAD_Mutations` </span>assumes that the sequences identified as homologous through sequence similarity are *orthologous*. This assumption is manifest in the multiple sequence alignment, as each site in the alignment is then assumed to be orthologous. For gene families that are highly duplicated (either proliferating, or due to a whole genome duplication event), this assumption may also be violated. That is, sequences identified through BLAST searching may be paralogous, and subject to a different mode of selection than purifying selection.
+<span>`BAD_Mutations` </span>makes several assumptions in its prediction pipeline. First, putative homologues identified with BLAST are assumed to have conserved function across all of the species represented in the alignment. For some gene families, particularly those involved in pathogen recognition and defense, this assumption may not be true. Next, <span>`BAD_Mutations` </span>assumes that the sequences identified as homologous through sequence similarity are *orthologous*. This assumption is immanent in the multiple sequence alignment, as each site in the alignment is then assumed to be orthologous. For gene families that are highly duplicated (either proliferating, or due to a whole genome duplication event), this assumption may also be violated. That is, sequences identified through BLAST searching may be paralogous, and subject to a different mode of selection than purifying selection.
 
 As such, exercise caution when interpreting results from <span>`BAD_Mutations` </span>.
 
@@ -338,5 +338,3 @@ As of October 2015, the following Angiosperm genomes (41) are available for use 
 | *Triticum urartu*         | Red wild einkorn     | ASM34745v1       | 1                  | Ensembl Plants |
 | *Vitis vinifera*          | Grape                | Genoscope.12X    | Genoscope.12X      | Phytozome 10   |
 | *Zea mays*                | Maize                | 6a               | 6a                 | Phytozome 10   |
-
-
