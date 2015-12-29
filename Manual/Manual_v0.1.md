@@ -244,7 +244,7 @@ This command will run BLAST against all the available databases using `CoolGene.
                          align \
                          -c BAD_Mutations_Config.txt \
                          -f CoolGene.fasta \
-                         -o Output_Dir 2> CoolGene_Predictions.log
+                         -o Output_Dir 2> CoolGene_Alignment.log
 
 And this command will predict the functional impact of the variants listed in `CoolGene.subs` using the multiple sequence alignment and phylogenetic tree for `CoolGene.fasta`, saving the HyPhy report in `Predictions_Dir`:
 
