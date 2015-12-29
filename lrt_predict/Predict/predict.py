@@ -62,7 +62,7 @@ class LRTPredict(object):
             'Searching for positions: ' +
             ', '.join([str(i) for i in self.substitutions]))
         self.aligned_pos = []
-        real_position = 1
+        real_position = 0
         self.mainlog.debug(self.msa_obj[self.query_pos].seq)
         for index, column in enumerate(self.msa_obj[self.query_pos].seq):
             if column == '-':
