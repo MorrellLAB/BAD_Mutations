@@ -292,7 +292,7 @@ Predictions are generated in two stages: a dN/dS estimation phase and a per-site
 
 In all, BLAST searching and predicting for a single barley gene takes an average of 3-4 CPU-hours to complete. The process is readily parallelizable on a gene-by-gene basis. This makes processing a complete dataset consisting of tens of thousands of genes feasible on a computing cluster.
 
-Note, however, that runtimes will vary depending on the gene being analyzed. Genes that are rapidly evolving will take longer in the BLAST search, alignment, and prediction stages. The max amount of time it took for <span>`BAD_Mutations` </span>to calculate dN/dS for a single genes was ~46 CPU-hours.
+Note, however, that runtimes will vary depending on the gene being analyzed. Genes that are rapidly evolving will take longer in the BLAST search, alignment, and prediction stages.
 
 [Return to TOC](#toc)
 
