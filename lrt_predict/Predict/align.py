@@ -15,7 +15,6 @@ from Bio import SeqRecord
 from Bio.Seq import Seq
 
 #   Import our helper scripts here
-from lrt_predict.General import parse_input
 from lrt_predict.General import set_verbosity
 from lrt_predict.General import check_modules
 
@@ -34,6 +33,9 @@ class PastaAlign(object):
         self.input_dict = {}
         self.query = query_sequence
         self.pasta_path = check_modules.check_executable(pasta_path)
+        self.protein_input = None
+        self.aln_out = None
+        self.tree_out = None
         return
 
     def prepare_sequences(self):
@@ -82,13 +84,21 @@ class PastaAlign(object):
         self.mainlog.debug(len(tl_seqs))
         #   Then, we have to iterate through the translated sequences and
         #   check for sequences ending in stop codons. Pasta hates these, so
-        #   we will prune them.
+        #   we will prune them. We also check for those with internal stop
+        #   codons, and skip those.
         fixed_tl_seqs = []
         for i in tl_seqs:
-            if i.seq.endswith('*'):
-                fixed_tl_seqs.append(SeqRecord.SeqRecord(i.seq[:-1], id=i.id))
+            #   If we find an internal stop codon
+            if re.match('.+\*[^$]', i.seq):
+                continue
             else:
-                fixed_tl_seqs.append(i)
+                #   Otherwise, just strip the stop codon off the end and save
+                if i.seq.endswith('*'):
+                    fixed_tl_seqs.append(
+                        SeqRecord.SeqRecord(i.seq[:-1], id=i.id)
+                        )
+                else:
+                    fixed_tl_seqs.append(i)
         #   Then, we open another temporary file to hold our amino acid
         #   sequences.
         self.protein_input = tempfile.NamedTemporaryFile(
