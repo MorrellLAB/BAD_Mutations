@@ -36,6 +36,7 @@ class PastaAlign(object):
         self.protein_input = None
         self.aln_out = None
         self.tree_out = None
+        self.final_aln = None
         return
 
     def prepare_sequences(self):
@@ -78,7 +79,7 @@ class PastaAlign(object):
                         re.I))
                 new_seq = SeqRecord.SeqRecord(
                     sub_seq,
-                    id=i.id)
+                    id=i.id.replace(':', '_'))
             self.mainlog.debug(new_seq.id + '\t' + str(new_seq.seq))
             tl_seqs.append(new_seq)
         self.mainlog.debug(len(tl_seqs))
@@ -89,7 +90,7 @@ class PastaAlign(object):
         fixed_tl_seqs = []
         for i in tl_seqs:
             #   If we find an internal stop codon
-            if re.match('.+\*[^$]', i.seq):
+            if re.match(r'.+\*[^$]', str(i.seq)):
                 continue
             else:
                 #   Otherwise, just strip the stop codon off the end and save
@@ -145,10 +146,12 @@ class PastaAlign(object):
         final_seqs = tempfile.NamedTemporaryFile(
             mode='w+t',
             prefix='BAD_Mutations_BackTranslated_',
-            suffix='.fasta')
+            suffix='.fasta',
+            delete=False)
         SeqIO.write(bt_seqs, final_seqs, 'fasta')
         final_seqs.flush()
-        return final_seqs
+        self.final_aln = final_seqs.name
+        return
 
     def pasta_align(self):
         """Align the amino acid sequences with Pasta."""
@@ -200,3 +203,30 @@ class PastaAlign(object):
         self.aln_out = aln_out
         self.tree_out = tree_out
         return (out, err)
+
+    def sanitize_outputs(self):
+        """Remove troublesome characters from the PASTA output files that
+        cause HyPhy to crash, or the Biopython Newick parser to fail."""
+        #   Get the base directory of the LRT package
+        lrt_path = os.path.realpath(__file__).rsplit(os.path.sep, 3)[0]
+        #   Then build the path to the pasta script
+        santize_script = os.path.join(
+            lrt_path,
+            'Shell_Scripts',
+            'Prepare_HyPhy.sh')
+        #   Create the command line
+        cmd = [
+            'bash',
+            santize_script,
+            self.final_aln,
+            self.tree_out]
+        #   Run it
+        self.mainlog.debug('Sanitizing alignment in ' + self.final_aln)
+        self.mainlog.debug('Sanitizing tree in ' + self.tree_out)
+        p = subprocess.Popen(
+            cmd,
+            shell=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+        out, err = p.communicate()
+        return(out, err)

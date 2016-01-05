@@ -184,10 +184,36 @@ def align(arg, unaligned, log):
     stdout, stderr = aln.pasta_align()
     log.debug('stdout: \n' + stdout)
     log.debug('stderr: \n' + stderr)
-    #   Get the output aligment and the tree
-    alignment = aln.back_translate()
-    tree = aln.tree_out
-    return (alignment, tree)
+    #   Backtranslate the alignment
+    aln.back_translate()
+    #   Then sanitize the alignment and tree
+    aln.sanitize_outputs()
+    #   Then copy them over
+    log.info('Nucleotide alignment in ' + aln.final_aln)
+    log.info('Tree in ' + aln.tree_out)
+    new_nuc = os.path.join(
+        arg['output'],
+        os.path.basename(
+            arg['fasta'].replace(
+                '.fasta',
+                '_MSA.fasta')
+            )
+        )
+    new_tree = os.path.join(
+        arg['output'],
+        os.path.basename(
+            arg['fasta'].replace('.fasta', '.tree')
+            )
+        )
+    open(new_nuc, 'w').close()
+    open(new_tree, 'w').close()
+    shutil.copy2(aln.final_aln, new_nuc)
+    shutil.copy2(aln.tree_out, new_tree)
+    log.info('MSA copied to ' + new_nuc)
+    log.info('Tree copied to ' + new_tree)
+    #   Cleanup the temporary file
+    os.remove(aln.final_aln)
+    return
 
 
 def predict(arg, log):
@@ -281,32 +307,10 @@ def main():
             #   sequences, as we will use these as inputs for pasta
             unaligned_seqs = blast(arguments_valid, loglevel)
             #   Then add the query sequence and align them
-            alignment, tree_file = align(
+            align(
                 arguments_valid,
                 unaligned_seqs,
                 loglevel)
-            loglevel.info('Nucleotide alignment in ' + alignment.name)
-            loglevel.info('Tree in ' + tree_file)
-            new_nuc = os.path.join(
-                arguments_valid['output'],
-                os.path.basename(
-                    arguments_valid['fasta'].replace(
-                        '.fasta',
-                        '_MSA.fasta')
-                    )
-                )
-            new_tree = os.path.join(
-                arguments_valid['output'],
-                os.path.basename(
-                    arguments_valid['fasta'].replace('.fasta', '.tree')
-                    )
-                )
-            open(new_nuc, 'w').close()
-            open(new_tree, 'w').close()
-            shutil.copy2(alignment.name, new_nuc)
-            shutil.copy2(tree_file, new_tree)
-            loglevel.info('MSA copied to ' + new_nuc)
-            loglevel.info('Tree copied to ' + new_tree)
         elif arguments_valid['action'] == 'predict':
             out = predict(arguments_valid, loglevel)
             #   copy the output file into the destination directory
