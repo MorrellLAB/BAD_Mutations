@@ -117,16 +117,18 @@ class SetupEnv(object):
     def get_deps(self):
         """Download the dependencies that are missing. Uses the instance
         attribute `missing_progs' as a list of arguments to a shell script."""
+        #   If we don't have any missing dependencies skip this part
         if not self.missing_progs:
             self.mainlog.info('No missing dependencies :D')
             return
+        #   Start downloading any missing dependencies
         self.mainlog.warning('Missing the following dependencies: ' + ', '.join(self.missing_progs))
         download_script = './Shell_Scripts/get_dependencies.sh'
         download_command = ['bash', download_script, self.deps] + self.missing_progs
         download_shell = subprocess.Popen(download_command, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         out, err = download_shell.communicate()
         self.mainlog.info(out)
-        self.mainlog.error
+        self.mainlog.error(err)
         if 'PASTA' in self.missing_progs:
             self.pasta_path = self.deps + '/pasta-master/run_pasta.py'
         if 'tBLASTx' in self.missing_progs:
@@ -145,13 +147,14 @@ class SetupEnv(object):
         BAD_Mutations_Config.set(config_section, "BASH", self.bash_path)
         BAD_Mutations_Config.set(config_section, "GZIP", self.gzip_path)
         BAD_Mutations_Config.set(config_section, "SUM", self.sum_path)
-        BAD_Mutations_Config.set(config_section, "TBlastX", self.tblastx_path)
-        BAD_Mutations_Config.set(config_section, "HyPhy", self.hyphy_path)
-        BAD_Mutations_Config.set(config_section, "Base", self.base)
-        BAD_Mutations_Config.set(config_section, "Target", self.target_species)
-        BAD_Mutations_Config.set(config_section, "Evalue", self.eval_thresh)
-        BAD_Mutations_Config.set(config_section, "Missing", self.miss_thresh)
+        BAD_Mutations_Config.set(config_section, "TBLASTX", self.tblastx_path)
+        BAD_Mutations_Config.set(config_section, "HYPHY", self.hyphy_path)
+        BAD_Mutations_Config.set(config_section, "BASE", self.base)
+        BAD_Mutations_Config.set(config_section, "TARGET_SPECIES", self.target_species)
+        BAD_Mutations_Config.set(config_section, "EVAL_THRESHOLD", self.eval_thresh)
+        BAD_Mutations_Config.set(config_section, "MISSING_THRESHOLD", self.miss_thresh)
         cfile = open(self.config_file, 'w')
         BAD_Mutations_Config.write(cfile)
-        self.mainlog.info('Write configuration into ' + self.config_file)
+        cfile.close()
+        self.mainlog.info('Configuration written to ' + self.config_file)
         return

@@ -6,10 +6,8 @@
 #	This script requires Git, Wget, and CMake v3.0
 #	or higher to run.
 
-#	Make directory for dependencies
-
-set -e
-set -o pipefail
+# set -e
+# set -o pipefail
 
 #	Set our variables from input
 #	The first variable is the dependencies diretory, and everything else
@@ -34,6 +32,7 @@ function getPip() {
 	fi
 }
 
+#   Begin downloading programs
 for prog in "${MISSING[@]}"
 do
 	case "${prog}" in
@@ -64,6 +63,7 @@ do
 				#	Cleanup tarball
 			cd "${DEPSDIR}"
 			rm ncbi*tar.gz
+            continue
 			;;
 		"PRANK" )
 			cd "${DEPSDIR}"
@@ -84,6 +84,7 @@ do
 				#	Cleanup tarball and robots.txt
 			cd "${DEPSDIR}"
 			rm prank*.tgz robots.txt
+            continue
 			;;
 		"PASTA" )
 			cd "${DEPSDIR}"
@@ -111,6 +112,7 @@ do
 			cd pasta-master
 			python setup.py develop --user
 			cd "${DEPSDIR}"
+            continue
 			;;
 		"requests" )
 			cd "${DEPSDIR}"
@@ -119,6 +121,7 @@ do
 				#	Install Requests using Pip
 			getPip
 			pip install --user requests
+            continue
 			;;
 		"HyPhy" )
 			cd "${DEPSDIR}"
@@ -138,6 +141,7 @@ do
 				#	Install HyPhy
 			make install
 			cd "${DEPSDIR}"
+            continue
 			;;
 		"Bio" )
 			cd "${DEPSDIR}"
@@ -145,7 +149,8 @@ do
 				#	Check for Pip
 				#	Install BioPython using Pip
 			getPip
-			pip install biopython
+			pip install --user biopython
+            continue
 			;;
 		* )
 			continue

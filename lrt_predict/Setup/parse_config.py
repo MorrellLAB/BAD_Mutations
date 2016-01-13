@@ -118,8 +118,7 @@ class ConfigHandler(object):
         configuration file."""
         #   List of keys that we do not want to clobber if they are not
         #   passed on the command line
-        # do_not_clobber = ['base']
-        do_not_clobber = ['Base']
+        do_not_clobber = ['base']
         #   This takes up a bit of extra memory, but it will preserve the two
         #   dictionaries as separate variables.
         configs = self.config_vars.copy()
