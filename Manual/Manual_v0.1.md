@@ -22,7 +22,7 @@
 - [Data Sources](#databases)
 
 # <a name="overview"></a>Overview
-<span>`BAD_Mutations` </span>(**B**LAST-**A**ligned-**D**eleterious?) performs a likelihood ratio test (LRT) for the prediction of deleterious variants. The package is comprised of Python and Bourne Again Shell (BASH) scripts. The LRT is handled by a HyPhy script. <span>`BAD_Mutations` </span>was written with Python 2 syntax, but conversion to Python 3 is planned. <span>`BAD_Mutations` </span>is designed to be run from the command line. Running from an interactive Python environment is not recommended nor supported.
+<span>`BAD_Mutations` </span>(**B**LAST-**A**ligned-**D**eleterious?) performs a likelihood ratio test (LRT) for the prediction of deleterious variants. The package is comprised of Python and Bourne Again Shell (BASH) scripts. The LRT uses a [HyPhy](http://hyphy.org/w/index.php/Main_Page) script. <span>`BAD_Mutations` </span>was written with Python 2 syntax, but conversion to Python 3 is planned. <span>`BAD_Mutations` </span>is designed to be run from the command line. Running from an interactive Python environment is not recommended nor supported.
 
 <span>`BAD_Mutations` </span>contains five major subcommands: `setup`, `fetch`, `align`, `predict`, and `compile`. Both `setup` and `fetch` are meant to be run once, or very rarely. The `align` subcommand generates phylogenetic trees and multiple sequence alignments for input to the prediction scripts. The `predict` subcommand does the actual variant effect prediction. More information about how to run <span>`BAD_Mutations` </span>is available in the “Usage” section.
 
@@ -31,9 +31,9 @@ Briefly, <span>`BAD_Mutations` </span>predicts deleterious variants using a sequ
 [Return to TOC](#toc)
 
 # <a name="citation"></a>Citation
-The model used to estimate codon conservation and predict which variants are deleterious is reported in Chun and Fay (2009). The actual software package is first used in Kono *et al.* (In Prep.). <span>`BAD_Mutations` </span>will have a formal publication after the Kono *et al.* manuscript is published.
+The model used to estimate codon conservation and predict which variants are deleterious is reported in Chun and Fay (2009). The actual software package is first used in [Kono *et al.*] (http://biorxiv.org/content/early/2016/01/01/033175). <span>`BAD_Mutations` </span>will have a formal publication after the Kono *et al.* manuscript is published.
 
-<span>`BAD_Mutations` </span>was primarily written by Thomas JY Kono and Paul J Hoffman. The HYPHY script for estimating codon conservation was written by Justin C Fay. Testing was performed by Chaochih Liu, Felipe Reyes, and Skylar Wyant.
+<span>`BAD_Mutations` </span>was primarily written by Thomas J.Y. Kono and Paul J. Hoffman. The HYPHY script for estimating codon conservation was written by Justin C. Fay. Testing was performed by Chaochih Liu, Felipe Reyes, and Skylar Wyant.
 
 [Return to TOC](#toc)
 
@@ -61,19 +61,19 @@ Note that if you plan to run many analyses in parallel, you should use a **singl
 [Return to TOC](#toc)
 
 ## <a name="msi"></a>Instructions for UMN MSI
-This section is specific to using <span>`BAD_Mutations` </span>on the [University of Minnesoa Super Computing Institue](http://msi.umn.edu/) cluser. Our cluster uses the `module` command to add and remove certain programs from the user’s environment. The following commands should be run for <span>`BAD_Mutations` </span>on the cluster:
+This section is specific to using <span>`BAD_Mutations` </span>on the [University of Minnesoa Super Computing Institue](http://msi.umn.edu/) cluster. Our cluster uses the `module` command to add and remove certain programs from the user’s environment. The following commands should be run for <span>`BAD_Mutations` </span>on the cluster:
 
     $ module load python2
     $ module load biopython
     $ module load ncbi_blast+
     $ module load hyphy/2.2.6_smp
 
-You will have to install `PASTA` as its user manual instructs. cURL should be available on MSI.
+You will have to install the `PASTA` sequence alignment tool. Follow the instructions in the [PASTA](https://github.com/smirarab/pasta/blob/master/README.md) user manual. cURL should be available on MSI.
 
 [Return to TOC](#toc)
 
 # <a name="inputs"></a>Input Files
-Input files should be plain text with UNIX line endings (LF). <span>`BAD_Mutations` </span>takes a FASTA file containing the query coding sequence, and a text file with the list of codons to predict. The coding sequence does not have to start with ATG, but it should be supplied in the 5\(^{\prime}\) to 3\(^{\prime}\) direction, and its length should be a multiple of 3. The codons should be supplied as numerical offsets with respect to the provided FASTA file, with counting starting from 1 and one codon per line. The substitutions file may optionally have a second field with a SNP identifier.
+Input files should be plain text with UNIX line endings (LF). <span>`BAD_Mutations` </span>takes a FASTA file containing the query coding sequence, and a text file with the list of codons to predict. The coding sequence does not have to start with ATG, but it should be supplied in the 5\(^{\prime}\) to 3\(^{\prime}\) direction, and its length should be a multiple of 3. The codons should be supplied as numerical offsets with respect to the provided FASTA file, with counting starting from 1 and one codon listed per line. The substitutions file may optionally have a second field with a SNP identifier.
 
 There is no programmatic means of enforcing the consistency of directionality between the FASTA file and the substitutions file. This means it is possible to submit them in the reverse order, but keep in mind that the coordinates must match in order for the predictions to be valid.
 
@@ -238,7 +238,7 @@ This command will download all of the necessary CDS sequences from both Phytozom
                          -u 'user@domain.com' \
                          -p 'ReallyGoodPassword123' 2> Fetch.log
 
-This command will run BLAST against all the available databases using `CoolGene.fasta` as a query, translate the sequences into amino acids, align them with `PASTA`, estimate a phylogeny, and save the results into `Output_Dir`.
+This command will run BLAST against all the available databases using `CoolGene.fasta` as a query, translate the sequences into amino acids, align them using `PASTA`, estimate a phylogeny, and save the results into `Output_Dir`.
 
     $ ./BAD_Mutations.py -v DEBUG \
                          align \
@@ -246,7 +246,7 @@ This command will run BLAST against all the available databases using `CoolGene.
                          -f CoolGene.fasta \
                          -o Output_Dir 2> CoolGene_Alignment.log
 
-And this command will predict the functional impact of the variants listed in `CoolGene.subs` using the multiple sequence alignment and phylogenetic tree for `CoolGene.fasta`, saving the HyPhy report in `Predictions_Dir`:
+The following command will predict the functional impact of the variants listed in `CoolGene.subs` using the multiple sequence alignment and phylogenetic tree for `CoolGene.fasta`, saving the HyPhy report in `Predictions_Dir`:
 
     $ ./BAD_Mutations.py -v DEBUG \
                          predict \
