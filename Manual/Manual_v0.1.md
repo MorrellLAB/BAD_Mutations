@@ -56,7 +56,7 @@ The model used to estimate codon conservation and predict which variants are del
 -   [HyPhy](http://hyphy.org/) 2.2.x
 -   [cURL](http://curl.haxx.se/)
 
-Note that if you plan to run many analyses in parallel, you should use a **single-threaded** version of HyPhy.
+Refer to each software's README or installation notes for installation instructions. Bash, Python, and cURL are usually standard on *Nix systems, but some environments may not have these available by default. Note that if you plan to run many analyses in parallel, you should use a **single-threaded** version of HyPhy.
 
 [Return to TOC](#toc)
 
