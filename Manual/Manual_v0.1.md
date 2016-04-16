@@ -56,7 +56,7 @@ The model used to estimate codon conservation and predict which variants are del
 -   [HyPhy](http://hyphy.org/) 2.2.x
 -   [cURL](http://curl.haxx.se/)
 
-Refer to each software's README or installation notes for installation instructions. Bash, Python, and cURL are usually standard on *Nix systems, but some environments may not have these available by default. Note that if you plan to run many analyses in parallel, you should use a **single-threaded** version of HyPhy.
+Refer to each software's README or installation notes for installation instructions. Bash, Python, and cURL are usually standard on \*Nix systems, but some environments may not have these available by default. Note that if you plan to run many analyses in parallel, you should use a **single-threaded** version of HyPhy.
 
 [Return to TOC](#toc)
 
@@ -225,10 +225,16 @@ This command will set up the environment for predicting in barley (*Hordeum vulg
                          setup \
                          -b /scratch/BAD_Mutations_Data \
                          -d /scratch/BAD_Mutations_Deps \
-                         -t 'Hordeum_vulgare' \
+                         -t 'hordeum_vulgare' \
                          -e 0.05 \
                          -m 10 \
                          -c BAD_Mutations_Config.txt 2> Setup.log
+
+Note that the species name is listed in all lowercase and with an underscore. This is because Ensembl stores information for barley under that name. Phytozome has its own naming scheme. You can run 
+
+    $ ./BAD_Mutations.py setup --list-species
+
+to view a list of all species that are supported. The name given to the `-t` arugment must take the same form as the text printed by `--list-species`, including capitalization.
 
 This command will download all of the necessary CDS sequences from both Phytozome and Ensembl Plants and convert them into BLAST databases:
 
