@@ -29,6 +29,7 @@ class LRTPredict(object):
         self.mainlog = set_verbosity.verbosity('LRT_Prediction', verbose)
         self.hyphy_path = check_modules.check_executable(hyphy_path)
         self.nmsa = AlignIO.read(open(nuc_aln, 'r'), 'fasta')
+        self.nmsa_path = os.path.abspath(nuc_aln)
         self.phylogenetic = treefile
         self.query = SeqIO.read(query, 'fasta')
         self.substitutions = parse_input.parse_subs(substitutions, self.mainlog)
@@ -99,7 +100,7 @@ class LRTPredict(object):
         #   We write the paths of the MSA, the tree, the positions, and the
         #   query name into the input file. But we need to put the full paths
         #   into the file.
-        infile.write(os.path.abspath(self.nmsa) + '\n')
+        infile.write(self.nmsa_path + '\n')
         infile.write(os.path.abspath(self.phylogenetic) + '\n')
         infile.write(alignedsubs.name + '\n')
         infile.write(self.query.id.replace(':', '_'))
