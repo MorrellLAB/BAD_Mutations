@@ -6,6 +6,8 @@
 - [UMN MSI Instructions](#msi)
 - [Input Files](#inputs)
 - [Output Files](#outputs)
+    - [HyPhy Report Format](#hyphyreport)
+    - [Making Deleterious Predictions](#predictions)
 - [Usage](#usage)
     - [Basic Invocation](#basic)
     - [Subcommands](#subcommands)
@@ -22,30 +24,30 @@
 - [Data Sources](#databases)
 
 # <a name="overview"></a>Overview
-<span>`BAD_Mutations` </span>(**B**LAST-**A**ligned-**D**eleterious?) performs a likelihood ratio test (LRT) for the prediction of deleterious variants. The package is comprised of Python and Bourne Again Shell (BASH) scripts. The LRT uses a [HyPhy](http://hyphy.org/w/index.php/Main_Page) script. <span>`BAD_Mutations` </span>was written with Python 2 syntax, but conversion to Python 3 is planned. <span>`BAD_Mutations` </span>is designed to be run from the command line. Running from an interactive Python environment is not recommended nor supported.
+`BAD_Mutations` (**B**LAST-**A**ligned-**D**eleterious?) performs a likelihood ratio test (LRT) for the prediction of deleterious variants. The package is comprised of Python and Bourne Again Shell (BASH) scripts. The LRT uses a [HyPhy](http://hyphy.org/w/index.php/Main_Page) script. `BAD_Mutations` was written with Python 2 syntax, but conversion to Python 3 is planned. `BAD_Mutations` is designed to be run from the command line. Running from an interactive Python environment is not recommended nor supported.
 
-<span>`BAD_Mutations` </span>contains five major subcommands: `setup`, `fetch`, `align`, `predict`, and `compile`. Both `setup` and `fetch` are meant to be run once, or very rarely. The `align` subcommand generates phylogenetic trees and multiple sequence alignments for input to the prediction scripts. The `predict` subcommand does the actual variant effect prediction. More information about how to run <span>`BAD_Mutations` </span>is available in the “Usage” section.
+`BAD_Mutations` contains five major subcommands: `setup`, `fetch`, `align`, `predict`, and `compile`. Both `setup` and `fetch` are meant to be run once, or very rarely. The `align` subcommand generates phylogenetic trees and multiple sequence alignments for input to the prediction scripts. The `predict` subcommand does the actual variant effect prediction. More information about how to run `BAD_Mutations` is available in the “Usage” section.
 
-Briefly, <span>`BAD_Mutations` </span>predicts deleterious variants using a sequence constraint approach. For a given query gene sequence and list of nonsynonmyous SNPs, a multiple sequence alignment among homologues is produced, and the given codons are tested for conservation. Variants that alter a codon with a high degree of conservation are inferred to be deleterious. More details on the procedure in <span>`BAD_Mutations` </span>is available in the “Methods” section.
+Briefly, `BAD_Mutations` predicts deleterious variants using a sequence constraint approach. For a given query gene sequence and list of nonsynonmyous SNPs, a multiple sequence alignment among homologues is produced, and the given codons are tested for conservation. Variants that alter a codon with a high degree of conservation are inferred to be deleterious. More details on the procedure in `BAD_Mutations` is available in the “Methods” section.
 
 [Return to TOC](#toc)
 
 # <a name="citation"></a>Citation
-The model used to estimate codon conservation and predict which variants are deleterious is reported in Chun and Fay (2009). The actual software package is first used in [Kono *et al.*] (http://biorxiv.org/content/early/2016/01/01/033175). <span>`BAD_Mutations` </span>will have a formal publication after the Kono *et al.* manuscript is published.
+The model used to estimate codon conservation and predict which variants are deleterious is reported in Chun and Fay (2009). The actual software package is first used in [Kono *et al.*](http://biorxiv.org/content/early/2016/01/01/033175). `BAD_Mutations` will have a formal publication after the Kono *et al.* manuscript is published.
 
-<span>`BAD_Mutations` </span>was primarily written by Thomas J.Y. Kono and Paul J. Hoffman. The HYPHY script for estimating codon conservation was written by Justin C. Fay. Testing was performed by Chaochih Liu, Felipe Reyes, and Skylar Wyant.
+`BAD_Mutations` was primarily written by Thomas J.Y. Kono and Paul J. Hoffman. The HYPHY script for estimating codon conservation was written by Justin C. Fay. Testing was performed by Chaochih Liu, Felipe Reyes, and Skylar Wyant.
 
 [Return to TOC](#toc)
 
 # <a name="downloading"></a>Downloading
-<span>`BAD_Mutations` </span>is distributed through a [GitHub repository](https://github.com/MorrellLAB/BAD_Mutations). You can use [Git](https://git-scm.com/) to clone the repository, or download a ZIP archive from GitHub.
+`BAD_Mutations` is distributed through a [GitHub repository](https://github.com/MorrellLAB/BAD_Mutations). You can use [Git](https://git-scm.com/) to clone the repository, or download a ZIP archive from GitHub.
 
 [Return to TOC](#toc)
 
 # <a name="dependencies"></a>Dependencies
-<span>`BAD_Mutations` </span>is written to run in a UNIX-like environment. It has been successfully run on both Apple OS X and GNU/Linux. It is not supported on Microsoft Windows. It has not been tested on other variants of commercial UNIX.
+`BAD_Mutations` is written to run in a UNIX-like environment. It has been successfully run on both Apple OS X and GNU/Linux. It is not supported on Microsoft Windows. It has not been tested on other variants of commercial UNIX.
 
-<span>`BAD_Mutations` </span>requires that the following software is installed and available in your `$PATH` or `sys.path` in Python:
+`BAD_Mutations` requires that the following software is installed and available in your `$PATH` or `sys.path` in Python:
 
 -   [GNU Bash](https://www.gnu.org/software/bash/) >= 3.2
 -   [Python](https://www.python.org/) >= 2.6.x
@@ -61,7 +63,7 @@ Refer to each software's README or installation notes for installation instructi
 [Return to TOC](#toc)
 
 ## <a name="msi"></a>Instructions for UMN MSI
-This section is specific to using <span>`BAD_Mutations` </span>on the [University of Minnesoa Super Computing Institue](http://msi.umn.edu/) cluster. Our cluster uses the `module` command to add and remove certain programs from the user’s environment. The following commands should be run for <span>`BAD_Mutations` </span>on the cluster:
+This section is specific to using `BAD_Mutations` on the [University of Minnesoa Super Computing Institue](http://msi.umn.edu/) cluster. Our cluster uses the `module` command to add and remove certain programs from the user’s environment. The following commands should be run for `BAD_Mutations` on the cluster:
 
     $ module load python2
     $ module load biopython
@@ -73,7 +75,7 @@ You will have to install the `PASTA` sequence alignment tool. Follow the instruc
 [Return to TOC](#toc)
 
 # <a name="inputs"></a>Input Files
-Input files should be plain text with UNIX line endings (LF). <span>`BAD_Mutations` </span>takes a FASTA file containing the query coding sequence, and a text file with the list of codons to predict. The coding sequence does not have to start with ATG, but it should be supplied in the 5\(^{\prime}\) to 3\(^{\prime}\) direction, and its length should be a multiple of 3. The codons should be supplied as numerical offsets with respect to the provided FASTA file, with counting starting from 1 and one codon listed per line. The substitutions file may optionally have a second field with a SNP identifier.
+Input files should be plain text with UNIX line endings (LF). `BAD_Mutations` takes a FASTA file containing the query coding sequence, and a text file with the list of codons to predict. The coding sequence does not have to start with ATG, but it should be supplied in the 5\(^{\prime}\) to 3\(^{\prime}\) direction, and its length should be a multiple of 3. The codons should be supplied as numerical offsets with respect to the provided FASTA file, with counting starting from 1 and one codon listed per line. The substitutions file may optionally have a second field with a SNP identifier.
 
 There is no programmatic means of enforcing the consistency of directionality between the FASTA file and the substitutions file. This means it is possible to submit them in the reverse order, but keep in mind that the coordinates must match in order for the predictions to be valid.
 
@@ -99,28 +101,44 @@ For compiling the raw HyPhy outputs (one per gene) into a final report, you must
 [Return to TOC](#toc)
 
 # <a name="outputs"></a>Output
-<span>`BAD_Mutations` </span>returns a report with information for each queried position. Information in the report includes the number of species in the alignment, the alignment column for the queried codon, a constraint score, a _p_-value associated with the LRT, and a constraint score and _p_-value with the query sequence masked from the alignment to reduce reference bias. Information is also available in the multiple sequence alignment, phylogenetic tree, and raw HyPhy output, which are all kept as intermediate files.
+`BAD_Mutations` returns a report with information for each queried position. Information in the report includes the number of species in the alignment, the alignment column for the queried codon, a constraint score, a _p_-value associated with the LRT, and a constraint score and _p_-value with the query sequence masked from the alignment to reduce reference bias. Information is also available in the multiple sequence alignment, phylogenetic tree, and raw HyPhy output, which are all kept as intermediate files.
+
+[Return to TOC](#toc)
+
+## <a name="hyphyreport"></a>HyPhy Report Format
+The HyPhy report contains three sections: a summary of the input alignment and tree, test statistics for each codon in the alignment, and runtime statistics for the alignment being analyzed. The first section is mostly of diagnostic interest. You may examine it to check that the alignment and tree are being read by HyPhy correctly. The final section is mostly of bookkeeping interest, and is useful to estimate how long it may take to analyze a set of genes. The codon test statistics section is what the user will have to parse to make predictions. A description of the codon test section follows.
+
+Because the HyPhy script traverses the alignment from end-to-end, the test section has codons that are both tested and those that are not tested. Tested and untested codons can be distinguished by the ending field in untested codons - if a line ends in `NOSNP` then it is not tested, can be ignored for prediction. Codons that are tested will have ___ fields, and end in a floating point number. When a codon has been tested, the fields printed correspond to the following information:
+
+| Header      | Value Type  | Description   |
+|:------------|:------------|:--------------|
+|             |             |               |
+
+[Return to TOC](#toc)
+
+## <a name="predictions"></a>Making Deleterious Predictions
+`BAD_Mutations` merely implements a likelihood ratio test, and does not generate hard predictions on whether or not individual variants are deleterious. Criteria for determining significance, such as site filtering and correction for multiple testing, are left for the user to decide. For example, one simple method for multiple test correction is to apply a Bonferroni correction, with the number of codons with nonsynonymous variants as the number of tests performed. An additional heuristic could be the number of non-gap amino acid residues in the multiple sequence alignment must be greater than 10 for a site to be considered for prediction. Since these specific procedures and criteria will vary from study to study, we do not make any assumptions as to how the user will filter and interpret results.
 
 [Return to TOC](#toc)
 
 # <a name="usage"></a>Usage
 ## <a name="basic"></a>Basic Invocation
-<span>`BAD_Mutations` </span>can be called from command line in a manner similar to UNIX programs. You must either set the executable flag on the script `BAD_Mutations.py`, or pass the script to the Python interpreter.
+`BAD_Mutations` can be called from command line in a manner similar to UNIX programs. You must either set the executable flag on the script `BAD_Mutations.py`, or pass the script to the Python interpreter.
 
     $ chmod +x BAD_Mutations.py
     $ ./BAD_Mutations.py [Options] [Subcommand] [More Options ... ]
     --OR--
     $ python BAD_Mutations.py [Options] [Subcommand] [More Options ... ]
 
-<span>`BAD_Mutations` </span>offers five subcommands, `setup`, `fetch`, `align`, `predict`, and `compile`. They are summarized below. As of the current version, `setup` and `compile` are not fully implemented.
+`BAD_Mutations` offers five subcommands, `setup`, `fetch`, `align`, `predict`, and `compile`. They are summarized below. As of the current version, `setup` and `compile` are not fully implemented.
 
 [Return to TOC](#toc)
 
 ## <a name="subcommands"></a>Subcommands, Options, and Switches
-Note: <span>`BAD_Mutations` </span>example command lines will be provided at the end of the setup, predict and fetch sections below.
+Note: `BAD_Mutations` example command lines will be provided at the end of the setup, predict and fetch sections below.
 
 ### <a name="general"></a>General Options
-<span>`BAD_Mutations` </span>takes the following general options:
+`BAD_Mutations` takes the following general options:
 
 | Option        | Value      | Description                                                                 |
 |:--------------|:-----------|:----------------------------------------------------------------------------|
@@ -134,7 +152,7 @@ Note: <span>`BAD_Mutations` </span>example command lines will be provided at the
 [Return to TOC](#toc)
 
 ### <a name="setup"></a>The `setup` Subcommand
-The `setup` subcommand creates a configuration file that contains paths to required executables, paths to data storage directories, BLAST search parameters, alignment parameters, and prediction parameters. Running `setup` is optional, but recommended as it makes standardizing across genes and analyses much simpler. This subcommand can also download and compile dependencies for <span>`BAD_Mutations` </span>.
+The `setup` subcommand creates a configuration file that contains paths to required executables, paths to data storage directories, BLAST search parameters, alignment parameters, and prediction parameters. Running `setup` is optional, but recommended as it makes standardizing across genes and analyses much simpler. This subcommand can also download and compile dependencies for `BAD_Mutations` .
 
 **NOTE:** This subcommand is currently being developed. The function prototypes are present, but they currently do not work.
 
@@ -217,7 +235,7 @@ The `compile` subcommand accepts the following options:
 [Return to TOC](#toc)
 
 ## <a name="examples"></a>Example Command Lines
-The following command line demonstrates the typical usage of <span>`BAD_Mutations` </span>.
+The following command line demonstrates the typical usage of `BAD_Mutations`.
 
 This command will set up the environment for predicting in barley (*Hordeum vulgare*), with very verbose output:
 
@@ -266,7 +284,7 @@ The following command will predict the functional impact of the variants listed 
 [Return to TOC](#toc)
 
 ### A Note on Parallel Execution
-<span>`BAD_Mutations` </span>is designed to run all predictions in a single thread. There is a joke in here somewhere about Python programs and lack of concurrency …For now, all functions and supporting scripts are written for single-thread execution, and parallel execution can be performed with a tool like [GNU Parallel](http://www.gnu.org/software/parallel/). Native parallel support is planned for a future release.
+`BAD_Mutations` is designed to run all predictions in a single thread. There is a joke in here somewhere about Python programs and lack of concurrency …For now, all functions and supporting scripts are written for single-thread execution, and parallel execution can be performed with a tool like [GNU Parallel](http://www.gnu.org/software/parallel/). Native parallel support is planned for a future release.
 
 # <a name="config"></a>Configuration File Format
 **NOTE:** The configuration file format is under revision (in a new git branch) and is planned to change soon. This section of the manual will be updated when the new file format is deployed. The format will follow the specifications used by the Python [ConfigParser](https://docs.python.org/2/library/configparser.html) module.
@@ -290,9 +308,9 @@ The configuration file is modeled after the configuration file of STRUCTURE \[Pr
 [Return to TOC](#toc)
 
 # <a name="runtime"></a>Runtimes and Benchmarks
-By far, the slowest part of <span>`BAD_Mutations` </span>is fetching CDS sequences and converting them to BLAST databases. This may take up to several hours, depending on your network and disk speeds. The databases and FASTA files take up approximately 4GB, as of October 2015. As more genomes are sequenced and annotated, this figure will increase.
+By far, the slowest part of `BAD_Mutations` is fetching CDS sequences and converting them to BLAST databases. This may take up to several hours, depending on your network and disk speeds. The databases and FASTA files take up approximately 4GB, as of October 2015. As more genomes are sequenced and annotated, this figure will increase.
 
-For a typical barley gene (~3,000 bp), <span>`BAD_Mutations` </span>can generate a phylogenetic tree and multiple sequence alignment in approximately 5-10 minutes on a desktop computer (Intel i7 2.8GHz). Note, however, that not every gene will have every species represented in the alignment and tree. This is not a problem for <span>`BAD_Mutations` </span>.
+For a typical barley gene (~3,000 bp), `BAD_Mutations` can generate a phylogenetic tree and multiple sequence alignment in approximately 5-10 minutes on a desktop computer (Intel i7 2.8GHz). Note, however, that not every gene will have every species represented in the alignment and tree. This is not a problem for `BAD_Mutations`.
 
 Predictions are generated in two stages: a dN/dS estimation phase and a per-site prediction phase. The dN/dS phase is slow; for the same ~3,000bp gene, the average time to estimate dN/dS is 11319.5 CPU-seconds (~3 CPU-hours), with a standard deviation of 10803.9 CPU-seconds (also ~3 CPU-hours). Per-site predictions are much faster, with an average runtime of 73.9 CPU-seconds, and a standard deviation of 67.8 CPU-seconds.
 
@@ -303,13 +321,13 @@ Note, however, that runtimes will vary depending on the gene being analyzed. Gen
 [Return to TOC](#toc)
 
 # <a name="methods"></a>Methods
-<span>`BAD_Mutations` </span>uses TBLASTX to identify genes that are homologous to the query sequence based on translated similarity. Hits that are above the user-supplied E-value threshold are excluded. Once a list of orthlogues is identified, <span>`BAD_Mutations` </span>translates the sequences into amino acids, and aligns them with PASTA. A phylogenetic tree of the species is also estimated from the alignment. The alignment is then back-translated using the original nucleotide sequence hits from their respective BLAST databases. This alignment is then supplied to the prediction script, where the query codons are evaluated using HyPhy.
+`BAD_Mutations` uses TBLASTX to identify genes that are homologous to the query sequence based on translated similarity. Hits that are above the user-supplied E-value threshold are excluded. Once a list of orthlogues is identified, `BAD_Mutations` translates the sequences into amino acids, and aligns them with PASTA. A phylogenetic tree of the species is also estimated from the alignment. The alignment is then back-translated using the original nucleotide sequence hits from their respective BLAST databases. This alignment is then supplied to the prediction script, where the query codons are evaluated using HyPhy.
 
 Evaluation of codons uses a likelihood ratio test (LRT) to give the probability that a nonsynonymous SNP is deleterious. First, the ratio of the local synonymous and nonsynonymous substitution rates (dN/dS) is estimated from the gene alignment. Then, using those rates and the estimated phylogenetic relationship among the sequences, the program tests the likelihood of the queried codon evolving under selective constraint against the likelihood of it evolving neutrally. For a full description of the statistical model used, see [Chun and Fay (2009)](http://genome.cshlp.org/content/19/9/1553.abstract).
 
-<span>`BAD_Mutations` </span>makes several assumptions in its prediction pipeline. First, putative homologues identified with BLAST are assumed to have conserved function across all of the species represented in the alignment. For some gene families, particularly those involved in pathogen recognition and defense, this assumption may not be true. Next, <span>`BAD_Mutations` </span>assumes that the sequences identified as homologous through sequence similarity are *orthologous*. This assumption is immanent in the multiple sequence alignment, as each site in the alignment is then assumed to be orthologous. For gene families that are highly duplicated (either proliferating, or due to a whole genome duplication event), this assumption may also be violated. That is, sequences identified through BLAST searching may be paralogous, and subject to a different mode of selection than purifying selection.
+`BAD_Mutations` makes several assumptions in its prediction pipeline. First, putative homologues identified with BLAST are assumed to have conserved function across all of the species represented in the alignment. For some gene families, particularly those involved in pathogen recognition and defense, this assumption may not be true. Next, `BAD_Mutations` assumes that the sequences identified as homologous through sequence similarity are *orthologous*. This assumption is immanent in the multiple sequence alignment, as each site in the alignment is then assumed to be orthologous. For gene families that are highly duplicated (either proliferating, or due to a whole genome duplication event), this assumption may also be violated. That is, sequences identified through BLAST searching may be paralogous, and subject to a different mode of selection than purifying selection.
 
-As such, exercise caution when interpreting results from <span>`BAD_Mutations` </span>.
+As such, exercise caution when interpreting results from `BAD_Mutations`.
 
 [Return to TOC](#toc)
 
