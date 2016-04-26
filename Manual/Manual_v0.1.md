@@ -174,7 +174,7 @@ The `setup` subcommand takes the following options:
 | `-d/--deps-dir`  | \[DIR\]      | Directory to download and store the dependencies. Defaults to current directory.                                                                                                           |
 | `-t/--target`    | \[SP\_NAME\] | Target species name. Must be one of the species (case sensitive) given by `--list-species`. This species will be excluded from the prediction pipeline to avoid reference bias. No default. |
 | `-e/--evalue`    | \[FLOAT\]    | E-value threshold for accepting TBLASTX hits as putative homologues. Defaults to 0.05.                                                                                                    |
-| `-m/--missing`   | \[INT\]      | Minimum number of gapped (missing) sites in the multiple species alignment (MSA) to be considered for prediction.                                                                          |
+| `-m/--missing`   | \[INT\]      | Maximum number of gapped (missing) sites in the multiple species alignment (MSA) to be considered for prediction.                                                                          |
 
 [Return to TOC](#toc)
 
