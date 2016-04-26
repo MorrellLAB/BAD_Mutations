@@ -108,11 +108,21 @@ For compiling the raw HyPhy outputs (one per gene) into a final report, you must
 ## <a name="hyphyreport"></a>HyPhy Report Format
 The HyPhy report contains three sections: a summary of the input alignment and tree, test statistics for each codon in the alignment, and runtime statistics for the alignment being analyzed. The first section is mostly of diagnostic interest. You may examine it to check that the alignment and tree are being read by HyPhy correctly. The final section is mostly of bookkeeping interest, and is useful to estimate how long it may take to analyze a set of genes. The codon test statistics section is what the user will have to parse to make predictions. A description of the codon test section follows.
 
-Because the HyPhy script traverses the alignment from end-to-end, the test section has codons that are both tested and those that are not tested. Tested and untested codons can be distinguished by the ending field in untested codons - if a line ends in `NOSNP` then it is not tested, can be ignored for prediction. Codons that are tested will have ___ fields, and end in a floating point number. When a codon has been tested, the fields printed correspond to the following information:
+Because the HyPhy script traverses the alignment from end-to-end, the test section has codons that are both tested and those that are not tested. Tested and untested codons can be distinguished by the ending field in untested codons - if a line ends in `NOSNP` then it is not tested, can be ignored for prediction. Codons that are tested will have 11 fields, and end in a floating point number. When a codon has been tested, the fields printed correspond to the following information:
 
-| Header      | Value Type  | Description   |
-|:------------|:------------|:--------------|
-|             |             |               |
+| Header           | Value Type  | Description                                                                          |
+|:-----------------|:------------|:-------------------------------------------------------------------------------------|
+| Position         | Integer     | Nucleotide position in the MSA                                                       |
+| L0               | Float       | Likelihood of null hypothesis - codon evolving neutrally                             |
+| L1               | Float       | Likelihood of alt hypothesis - codon evolving under selective constraint             |
+| Constraint       | Float       | A constraint value for the codon across the phylogeny                                |
+| ChiSquared       | Float       | |
+| P-value          | Float       | A _p_-value for the likelihood ratio test                                            |
+| SeqCount         | Integer     | Number of non-gap amino acid residues in the alignment at that position              |
+| Alignment        | String      | Alignment column, showing amino acids and gaps                                       |
+| RefereceAA       | String      | Amino acid state in reference species                                                |
+| MaskedConstraint | Float       | A constraint value for the codon across the phylogeny, without the reference species |
+| MaskedP-value    | Float       | A _p_-value for the likelihood ratio test, without the reference species             |
 
 [Return to TOC](#toc)
 
@@ -218,7 +228,7 @@ The `predict` subcommand accepts the following options:
 | `-s/--substitutions` | \[FILE\] | Path to substitutions file. Required                             |
 | `-o/--output`        | \[DIR\]  | Directory for output. Defaults to current directory.             |
 
-^*: If this value is supplied on the command line, it will override the value set in the configuration file.
+*: If this value is supplied on the command line, it will override the value set in the configuration file.
 
 [Return to TOC](#toc)
 
@@ -235,7 +245,14 @@ The `compile` subcommand accepts the following options:
 [Return to TOC](#toc)
 
 ## <a name="examples"></a>Example Command Lines
-The following command line demonstrates the typical usage of `BAD_Mutations`.
+The following command line demonstrates the typical usage of `BAD_Mutations`. They will use the files that are present in the `Test_Data/` directory. The commands will assume you are running from the top-level of the cloned `BAD_Mutations` directory. Replace the paths to example files according to your current working directory.
+
+First, we will make the diretories necessary to hold output files
+
+    $ mkdir Output_Dir
+    $ mkdir Predictions_Dir
+    $ mkdir /scratch/BAD_Mutations_Data
+    $ mkdir /scratch/BAD_Mutations_Deps
 
 This command will set up the environment for predicting in barley (*Hordeum vulgare*), with very verbose output:
 
@@ -262,24 +279,26 @@ This command will download all of the necessary CDS sequences from both Phytozom
                          -u 'user@domain.com' \
                          -p 'ReallyGoodPassword123' 2> Fetch.log
 
-This command will run BLAST against all the available databases using `CoolGene.fasta` as a query, translate the sequences into amino acids, align them using `PASTA`, estimate a phylogeny, and save the results into `Output_Dir`.
+This command will run BLAST against all the available databases using `CBF3.fasta` as a query, translate the sequences into amino acids, align them using `PASTA`, estimate a phylogeny, and save the results into `Output_Dir`.
 
     $ ./BAD_Mutations.py -v DEBUG \
                          align \
                          -c BAD_Mutations_Config.txt \
-                         -f CoolGene.fasta \
-                         -o Output_Dir 2> CoolGene_Alignment.log
+                         -f Test_Data/CBF3.fasta \
+                         -o Output_Dir 2> CBF3_Alignment.log
 
-The following command will predict the functional impact of the variants listed in `CoolGene.subs` using the multiple sequence alignment and phylogenetic tree for `CoolGene.fasta`, saving the HyPhy report in `Predictions_Dir`:
+The following command will predict the functional impact of the variants listed in `CBF3.subs` using the multiple sequence alignment and phylogenetic tree for `CBF3.fasta`, saving the HyPhy report in `Predictions_Dir`:
 
     $ ./BAD_Mutations.py -v DEBUG \
                          predict \
                          -c BAD_Mutations_Config.txt \
-                         -f CoolGene.fasta \
-                         -a CoolGene_MSA.fasta \
-                         -r CoolGene_Tree.tree \
-                         -s CoolGene.subs \
+                         -f Test_Data/CBF3.fasta \
+                         -a Output_Dir/CBF3_MSA.fasta \
+                         -r Output_Dir/CBF3_tree.tree \
+                         -s Test_Data/BCF3.subs \
                          -o Predictions_Dir 2> CoolGene_Predictions.log
+
+You may then parse the predictions out of the HyPhy report, and apply your chosen significance criteria to the variants.
 
 [Return to TOC](#toc)
 
