@@ -293,7 +293,7 @@ The following command will predict the functional impact of the variants listed 
                          -f Test_Data/CBF3.fasta \
                          -a Output_Dir/CBF3_MSA.fasta \
                          -r Output_Dir/CBF3_tree.tree \
-                         -s Test_Data/BCF3.subs \
+                         -s Test_Data/CBF3.subs \
                          -o Predictions_Dir 2> CoolGene_Predictions.log
 
 You may then parse the predictions out of the HyPhy report, and apply your chosen significance criteria to the variants.
