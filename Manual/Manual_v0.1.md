@@ -79,20 +79,18 @@ Input files should be plain text with UNIX line endings (LF). `BAD_Mutations` ta
 
 There is no programmatic means of enforcing the consistency of directionality between the FASTA file and the substitutions file. This means it is possible to submit them in the reverse order, but keep in mind that the coordinates must match in order for the predictions to be valid.
 
-The FASTA input should look like this (we will use `CoolGene.fasta` from here on):
+The FASTA input should look like this (we will use `CBF3.fasta` from here on):
 
-    >CoolGene
-    ATGCCAGTGCAG...
+    >CBF3_Morex
+    ATGTCTCCCAC...
     ...
 
-And the substitutions file should look like this (for example, `CoolGene.subs`):
+And the substitutions file should look like this (for example, `CBF3.subs`):
 
-    4   SNP_1
-    10  SNP_2
-    25  SNP_3
-    100 SNP_4
+    21	SNP_1
+    45	SNP_2
 
-This pair of files would describe four nonsynonymous variants to predict in a single coding sequence. The variants occur at residue numbers 4, 10, 25, and 100 in the **amino acid** sequence, with the first residue being treated as position 1. Their identifiers are `SNP_1`, `SNP_2`, `SNP_3`, and `SNP_4`, respectively. These may be any non-whitespace text, and may be internal identifiers for bookkeeping, or rs numbers, or some other SNP identification system.
+This pair of files would describe two nonsynonymous variants to predict in a single coding sequence. The variants occur at residue numbers 21 and 45 in the **amino acid** sequence, with the first residue being treated as position 1. Their identifiers are `SNP_1` and `SNP_2`, respectively. These may be any non-whitespace text, and may be internal identifiers for bookkeeping, or rs numbers, or some other SNP identification system. Please note that these variants are not real. They are provided only for testing and demonstration purposes.
 
 Note that while the FASTA file contains **nucleotide** sequence, the substitutions file contains positions in the **amino acid** sequence. Support for nucleotide offsets is planned for a future version.
 
