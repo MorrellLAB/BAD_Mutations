@@ -10,6 +10,8 @@ TABLE OF CONTENTS
 -   UMN MSI Instructions
 -   Input Files
 -   Output Files
+    -   HyPhy Report Format
+    -   Making Deleterious Predictions
 -   Usage
     -   Basic Invocation
     -   Subcommands
@@ -32,11 +34,11 @@ OVERVIEW
 
 BAD_Mutations (BLAST-Aligned-Deleterious?) performs a likelihood ratio
 test (LRT) for the prediction of deleterious variants. The package is
-comprised of Python and Bourne Again Shell (BASH) scripts. The LRT is
-handled by a HyPhy script. BAD_Mutations was written with Python 2
-syntax, but conversion to Python 3 is planned. BAD_Mutations is designed
-to be run from the command line. Running from an interactive Python
-environment is not recommended nor supported.
+comprised of Python and Bourne Again Shell (BASH) scripts. The LRT uses
+a HyPhy script. BAD_Mutations was written with Python 2 syntax, but
+conversion to Python 3 is planned. BAD_Mutations is designed to be run
+from the command line. Running from an interactive Python environment is
+not recommended nor supported.
 
 BAD_Mutations contains five major subcommands: setup, fetch, align,
 predict, and compile. Both setup and fetch are meant to be run once, or
@@ -63,13 +65,12 @@ CITATION
 
 The model used to estimate codon conservation and predict which variants
 are deleterious is reported in Chun and Fay (2009). The actual software
-package is first used in Kono _et al._ (In Prep.). BAD_Mutations will
-have a formal publication after the Kono _et al._ manuscript is
-published.
+package is first used in Kono _et al._. BAD_Mutations will have a formal
+publication after the Kono _et al._ manuscript is published.
 
-BAD_Mutations was primarily written by Thomas JY Kono and Paul J
+BAD_Mutations was primarily written by Thomas J.Y. Kono and Paul J.
 Hoffman. The HYPHY script for estimating codon conservation was written
-by Justin C Fay. Testing was performed by Chaochih Liu, Felipe Reyes,
+by Justin C. Fay. Testing was performed by Chaochih Liu, Felipe Reyes,
 and Skylar Wyant.
 
 Return to TOC
@@ -106,6 +107,9 @@ available in your $PATH or sys.path in Python:
 -   HyPhy 2.2.x
 -   cURL
 
+Refer to each software's README or installation notes for installation
+instructions. Bash, Python, and cURL are usually standard on *Nix
+systems, but some environments may not have these available by default.
 Note that if you plan to run many analyses in parallel, you should use a
 SINGLE-THREADED version of HyPhy.
 
@@ -115,7 +119,7 @@ Return to TOC
 Instructions for UMN MSI
 
 This section is specific to using BAD_Mutations on the University of
-Minnesoa Super Computing Institue cluser. Our cluster uses the module
+Minnesoa Super Computing Institue cluster. Our cluster uses the module
 command to add and remove certain programs from the user’s environment.
 The following commands should be run for BAD_Mutations on the cluster:
 
@@ -124,8 +128,8 @@ The following commands should be run for BAD_Mutations on the cluster:
     $ module load ncbi_blast+
     $ module load hyphy/2.2.6_smp
 
-You will have to install PASTA as its user manual instructs. cURL should
-be available on MSI.
+You will have to install the PASTA sequence alignment tool. Follow the
+instructions in the PASTA user manual. cURL should be available on MSI.
 
 Return to TOC
 
@@ -137,12 +141,12 @@ INPUT FILES
 Input files should be plain text with UNIX line endings (LF).
 BAD_Mutations takes a FASTA file containing the query coding sequence,
 and a text file with the list of codons to predict. The coding sequence
-does not have to start with ATG, but it should be supplied in the 5(^{})
-to 3(^{}) direction, and its length should be a multiple of 3. The
-codons should be supplied as numerical offsets with respect to the
-provided FASTA file, with counting starting from 1 and one codon per
-line. The substitutions file may optionally have a second field with a
-SNP identifier.
+does not have to start with ATG, but it should be supplied in the 5′ to
+3′ direction, and its length should be a multiple of 3. The codons
+should be supplied as numerical offsets with respect to the provided
+FASTA file, with counting starting from 1 and one codon listed per line.
+The substitutions file may optionally have a second field with a SNP
+identifier.
 
 There is no programmatic means of enforcing the consistency of
 directionality between the FASTA file and the substitutions file. This
@@ -150,32 +154,41 @@ means it is possible to submit them in the reverse order, but keep in
 mind that the coordinates must match in order for the predictions to be
 valid.
 
-The FASTA input should look like this (we will use CoolGene.fasta from
-here on):
+The FASTA input should look like this (we will use CBF3.fasta from here
+on):
 
-    >CoolGene
-    ATGCCAGTGCAG...
+    >CBF3_Morex
+    ATGTCTCCCAC...
     ...
 
 And the substitutions file should look like this (for example,
-CoolGene.subs):
+CBF3.subs):
 
-    4   SNP_1
-    10  SNP_2
-    25  SNP_3
-    100 SNP_4
+    21  SNP_1
+    45  SNP_2
 
-This pair of files would describe four nonsynonymous variants to predict
-in a single coding sequence. The variants occur at residue numbers 4,
-10, 25, and 100 in the AMINO ACID sequence, with the first residue being
-treated as position 1. Their identifiers are SNP_1, SNP_2, SNP_3, and
-SNP_4, respectively. These may be any non-whitespace text, and may be
-internal identifiers for bookkeeping, or rs numbers, or some other SNP
-identification system.
+This pair of files would describe two nonsynonymous variants to predict
+in a single coding sequence. The variants occur at residue numbers 21
+and 45 in the AMINO ACID sequence, with the first residue being treated
+as position 1. Their identifiers are SNP_1 and SNP_2, respectively.
+These may be any non-whitespace text, and may be internal identifiers
+for bookkeeping, or rs numbers, or some other SNP identification system.
+Please note that these variants are not real. They are provided only for
+testing and demonstration purposes.
 
 Note that while the FASTA file contains NUCLEOTIDE sequence, the
 substitutions file contains positions in the AMINO ACID sequence.
 Support for nucleotide offsets is planned for a future version.
+
+
+A Note on Transcript Names
+
+Due to the way that HyPhy parses phylogentic trees and alignments, the
+sequence names in both the MSA and the tree must contain only
+alphanumeric (A-Z, a-z, 0-9) characters, or an underscores. Any other
+special characters are not allowed; they will cause HyPhy to throw a
+segmentation fault. Currently, this is not enforced by BAD_Mutations,
+but it will be added soon.
 
 For compiling the raw HyPhy outputs (one per gene) into a final report,
 you must also supply an effects table as generated by
@@ -199,6 +212,61 @@ _p_-value with the query sequence masked from the alignment to reduce
 reference bias. Information is also available in the multiple sequence
 alignment, phylogenetic tree, and raw HyPhy output, which are all kept
 as intermediate files.
+
+Return to TOC
+
+
+HyPhy Report Format
+
+The HyPhy report contains three sections: a summary of the input
+alignment and tree, test statistics for each codon in the alignment, and
+runtime statistics for the alignment being analyzed. The first section
+is mostly of diagnostic interest. You may examine it to check that the
+alignment and tree are being read by HyPhy correctly. The final section
+is mostly of bookkeeping interest, and is useful to estimate how long it
+may take to analyze a set of genes. The codon test statistics section is
+what the user will have to parse to make predictions. A description of
+the codon test section follows.
+
+Because the HyPhy script traverses the alignment from end-to-end, the
+test section has codons that are both tested and those that are not
+tested. Tested and untested codons can be distinguished by the ending
+field in untested codons - if a line ends in NOSNP then it is not
+tested, can be ignored for prediction. Codons that are tested will have
+11 fields, and end in a floating point number. When a codon has been
+tested, the fields printed correspond to the following information:
+
+  Header              Value Type     Description
+  ------------------- -------------- ---------------------------------------------------------------------------------------
+  Position            Integer        Nucleotide position in the MSA
+  L0                  Float          Likelihood of null hypothesis - codon evolving neutrally
+  L1                  Float          Likelihood of alt hypothesis - codon evolving under selective constraint
+  Constraint          Float          A constraint value for the codon across the phylogeny
+  ChiSquared          Float          
+  P-value             Float          A _p_-value for the likelihood ratio test
+  SeqCount            Integer        Number of non-gap amino acid residues in the alignment at that position
+  Alignment           String         Alignment column, showing amino acids and gaps
+  RefereceAA          String         Amino acid state in reference species
+  MaskedConstraint    Float          A constraint value for the codon across the phylogeny, without the reference species
+  MaskedP-value       Float          A _p_-value for the likelihood ratio test, without the reference species
+
+Return to TOC
+
+
+Making Deleterious Predictions
+
+BAD_Mutations merely implements a likelihood ratio test, and does not
+generate hard predictions on whether or not individual variants are
+deleterious. Criteria for determining significance, such as site
+filtering and correction for multiple testing, are left for the user to
+decide. For example, one simple method for multiple test correction is
+to apply a Bonferroni correction, with the number of codons with
+nonsynonymous variants as the number of tests performed. An additional
+heuristic could be the number of non-gap amino acid residues in the
+multiple sequence alignment must be greater than 10 for a site to be
+considered for prediction. Since these specific procedures and criteria
+will vary from study to study, we do not make any assumptions as to how
+the user will filter and interpret results.
 
 Return to TOC
 
@@ -259,15 +327,30 @@ prototypes are present, but they currently do not work.
 
 The setup subcommand takes the following options:
 
+  --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   Option             Value           Description
   ------------------ --------------- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   --list-species     NA              Show all species databases available.
-  -c/--config        [FILE]          Where to store the configuration file. Defaults to LRTPredict_Config.txt.
-  -b/--base          [DIR]           Directory to store the BLAST databases. Defaults to the current directory.
-  -d/--deps-dir      [DIR]           Directory to download and store the dependencies. Defaults to current directory.
-  -t/--target        [SP_NAME]       Target species name. Must be one of the species (case sensitive) given by --list-species. This species will be excluded from the prediction pipeline to avoid reference bias. No default.
-  -e/--evalue        [FLOAT]         E-value threshold for accepting TBLASTX hits as putative homologues. Defaults to 0.05.
-  -m/--missing       [INT]           Minimum number of gapped (missing) sites in the multiple species alignment (MSA) to be considered for prediction.
+
+  -c/--config        _F__I__L__E_    Where to store the configuration file. Defaults to LRTPredict_Config.txt.
+                                     
+
+  -b/--base          _D__I__R_       Directory to store the BLAST databases. Defaults to the current directory.
+                                     
+
+  -d/--deps-dir      _D__I__R_       Directory to download and store the dependencies. Defaults to current directory.
+                                     
+
+  -t/--target        _S__P___N__A__M Target species name. Must be one of the species (case sensitive) given by --list-species. This species will be excluded from the prediction pipeline to avoid reference bias. No default.
+                     __E_            
+                                     
+
+  -e/--evalue        _F__L__O__A__T_ E-value threshold for accepting TBLASTX hits as putative homologues. Defaults to 0.05.
+                                     
+
+  -m/--missing       _I__N__T_       Maximum number of gapped (missing) sites in the multiple species alignment (MSA) to be considered for prediction.
+                                     
+  --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Return to TOC
 
@@ -283,14 +366,26 @@ on Phytozome for specific data usage policies.
 
 The fetch subcommand accepts the following options:
 
+  -------------------------------------------------------------------------------------------------------------------------------------
   Option             Value       Description
   ------------------ ----------- ------------------------------------------------------------------------------------------------------
-  -c/--config        [FILE]      Path to configuration file. Defaults to LRTPredict_Config.txt.
-  -b/--base*         [DIR]       Directory to store the BLAST databases. Defaults to the current directory.
-  -u/--user          [STR]       Username for JGI Genome Portal. Required.
-  -p/--password      [STR]       Password for JGI Genome Portal. If not supplied on command line, will prompt user for the password.
+  -c/--config        _F__I__L__E Path to configuration file. Defaults to LRTPredict_Config.txt.
+                     _           
+                                 
+
+  -b/--base*         _D__I__R_   Directory to store the BLAST databases. Defaults to the current directory.
+                                 
+
+  -u/--user          _S__T__R_   Username for JGI Genome Portal. Required.
+                                 
+
+  -p/--password      _S__T__R_   Password for JGI Genome Portal. If not supplied on command line, will prompt user for the password.
+                                 
+
   --fetch-only       NA          If supplied, do not convert CDS FASTA files into BLAST databases.
+
   --convert-only     NA          If supplied, only unzip and convert FASTA files into BLAST databases. Do not download.
+  -------------------------------------------------------------------------------------------------------------------------------------
 
 *: If this value is supplied on the command line, it will override the
 value set in the configuration file.
@@ -306,13 +401,25 @@ alignment.
 
 The align subcommand accepts the following options:
 
+  -------------------------------------------------------------------------------------------------------------------------
   Option            Value        Description
   ----------------- ------------ ------------------------------------------------------------------------------------------
-  -b/--base*        [DIR]        Directory to store the BLAST databases. Defaults to the current directory.
-  -c/--config       [FILE]       Path to configuration file. Defaults to LRTPredict_Config.txt.
-  -e/--evalue*      [FLOAT]      E-value threshold for accepting TBLASTX hits as putative homologues. Defaults to 0.05.
-  -f/--fasta        [FILE]       Path to FASTA file with query sequence. Required.
-  -o/--output       [DIR]        Directory for output. Defaults to current directory.
+  -b/--base*        _D__I__R_    Directory to store the BLAST databases. Defaults to the current directory.
+                                 
+
+  -c/--config       _F__I__L__E_ Path to configuration file. Defaults to LRTPredict_Config.txt.
+                                 
+
+  -e/--evalue*      _F__L__O__A_ E-value threshold for accepting TBLASTX hits as putative homologues. Defaults to 0.05.
+                    _T_          
+                                 
+
+  -f/--fasta        _F__I__L__E_ Path to FASTA file with query sequence. Required.
+                                 
+
+  -o/--output       _D__I__R_    Directory for output. Defaults to current directory.
+                                 
+  -------------------------------------------------------------------------------------------------------------------------
 
 *: If this value is supplied on the command line, it will override the
 value set in the configuration file.
@@ -329,15 +436,30 @@ each query codon.
 
 The predict subcommand accepts the following options:
 
+  ------------------------------------------------------------------------------------------------------
   Option                 Value       Description
   ---------------------- ----------- -------------------------------------------------------------------
-  -a/--alignment         [FILE]      Path to the multiple sequence alignment file. Required.
-  -c/--config            [FILE]      Path to configuration file. Defaults to LRTPredict_Config.txt.
-  -r/--tree              [FILE]      Path to the phylogenetic tree. Required.
-  -s/--substitutions     [FILE]      Path to substitutions file. Required
-  -o/--output            [DIR]       Directory for output. Defaults to current directory.
+  -a/--alignment         _F__I__L__E Path to the multiple sequence alignment file. Required.
+                         _           
+                                     
 
-^*: If this value is supplied on the command line, it will override the
+  -c/--config            _F__I__L__E Path to configuration file. Defaults to LRTPredict_Config.txt.
+                         _           
+                                     
+
+  -r/--tree              _F__I__L__E Path to the phylogenetic tree. Required.
+                         _           
+                                     
+
+  -s/--substitutions     _F__I__L__E Path to substitutions file. Required
+                         _           
+                                     
+
+  -o/--output            _D__I__R_   Directory for output. Defaults to current directory.
+                                     
+  ------------------------------------------------------------------------------------------------------
+
+*: If this value is supplied on the command line, it will override the
 value set in the configuration file.
 
 Return to TOC
@@ -354,10 +476,16 @@ requires the companion Python class defined in gff_parse.py).
 
 The compile subcommand accepts the following options:
 
+  -------------------------------------------------------------------------------------------
   Option             Value       Description
   ------------------ ----------- ------------------------------------------------------------
-  -S/--long-subs     [FILE]      Path to the SNP effect table. Required.
-  -p/--pred-dir      [DIR]       Output directory from the predict subcommand. Required.
+  -S/--long-subs     _F__I__L__E Path to the SNP effect table. Required.
+                     _           
+                                 
+
+  -p/--pred-dir      _D__I__R_   Output directory from the predict subcommand. Required.
+                                 
+  -------------------------------------------------------------------------------------------
 
 Return to TOC
 
@@ -365,7 +493,17 @@ Return to TOC
 Example Command Lines
 
 The following command line demonstrates the typical usage of
-BAD_Mutations .
+BAD_Mutations. They will use the files that are present in the
+Test_Data/ directory. The commands will assume you are running from the
+top-level of the cloned BAD_Mutations directory. Replace the paths to
+example files according to your current working directory.
+
+First, we will make the diretories necessary to hold output files
+
+    $ mkdir Output_Dir
+    $ mkdir Predictions_Dir
+    $ mkdir /scratch/BAD_Mutations_Data
+    $ mkdir /scratch/BAD_Mutations_Deps
 
 This command will set up the environment for predicting in barley
 (_Hordeum vulgare_), with very verbose output:
@@ -374,10 +512,20 @@ This command will set up the environment for predicting in barley
                          setup \
                          -b /scratch/BAD_Mutations_Data \
                          -d /scratch/BAD_Mutations_Deps \
-                         -t 'Hordeum_vulgare' \
+                         -t 'hordeum_vulgare' \
                          -e 0.05 \
                          -m 10 \
                          -c BAD_Mutations_Config.txt 2> Setup.log
+
+Note that the species name is listed in all lowercase and with an
+underscore. This is because Ensembl stores information for barley under
+that name. Phytozome has its own naming scheme. You can run
+
+    $ ./BAD_Mutations.py setup --list-species
+
+to view a list of all species that are supported. The name given to the
+-t arugment must take the same form as the text printed by
+--list-species, including capitalization.
 
 This command will download all of the necessary CDS sequences from both
 Phytozome and Ensembl Plants and convert them into BLAST databases:
@@ -389,29 +537,32 @@ Phytozome and Ensembl Plants and convert them into BLAST databases:
                          -p 'ReallyGoodPassword123' 2> Fetch.log
 
 This command will run BLAST against all the available databases using
-CoolGene.fasta as a query, translate the sequences into amino acids,
-align them with PASTA, estimate a phylogeny, and save the results into
+CBF3.fasta as a query, translate the sequences into amino acids, align
+them using PASTA, estimate a phylogeny, and save the results into
 Output_Dir.
 
     $ ./BAD_Mutations.py -v DEBUG \
                          align \
                          -c BAD_Mutations_Config.txt \
-                         -f CoolGene.fasta \
-                         -o Output_Dir 2> CoolGene_Alignment.log
+                         -f Test_Data/CBF3.fasta \
+                         -o Output_Dir 2> CBF3_Alignment.log
 
-And this command will predict the functional impact of the variants
-listed in CoolGene.subs using the multiple sequence alignment and
-phylogenetic tree for CoolGene.fasta, saving the HyPhy report in
+The following command will predict the functional impact of the variants
+listed in CBF3.subs using the multiple sequence alignment and
+phylogenetic tree for CBF3.fasta, saving the HyPhy report in
 Predictions_Dir:
 
     $ ./BAD_Mutations.py -v DEBUG \
                          predict \
                          -c BAD_Mutations_Config.txt \
-                         -f CoolGene.fasta \
-                         -a CoolGene_MSA.fasta \
-                         -r CoolGene_Tree.tree \
-                         -s CoolGene.subs \
+                         -f Test_Data/CBF3.fasta \
+                         -a Output_Dir/CBF3_MSA.fasta \
+                         -r Output_Dir/CBF3_tree.tree \
+                         -s Test_Data/CBF3.subs \
                          -o Predictions_Dir 2> CoolGene_Predictions.log
+
+You may then parse the predictions out of the HyPhy report, and apply
+your chosen significance criteria to the variants.
 
 Return to TOC
 
@@ -435,8 +586,7 @@ be updated when the new file format is deployed. The format will follow
 the specifications used by the Python ConfigParser module.
 
 The configuration file is modeled after the configuration file of
-STRUCTURE [Pritchard _et al._, (2000)]. A sample configuration file is
-shown below:
+STRUCTURE. A sample configuration file is shown below:
 
     // Generated by 'setup' at 2015-10-07 19:09:09.622228
     #define BASE /scratch/BAD_Mutations_Data
@@ -469,7 +619,7 @@ For a typical barley gene (~3,000 bp), BAD_Mutations can generate a
 phylogenetic tree and multiple sequence alignment in approximately 5-10
 minutes on a desktop computer (Intel i7 2.8GHz). Note, however, that not
 every gene will have every species represented in the alignment and
-tree. This is not a problem for BAD_Mutations .
+tree. This is not a problem for BAD_Mutations.
 
 Predictions are generated in two stages: a dN/dS estimation phase and a
 per-site prediction phase. The dN/dS phase is slow; for the same
@@ -487,9 +637,7 @@ cluster.
 
 Note, however, that runtimes will vary depending on the gene being
 analyzed. Genes that are rapidly evolving will take longer in the BLAST
-search, alignment, and prediction stages. The max amount of time it took
-for BAD_Mutations to calculate dN/dS for a single genes was ~46
-CPU-hours.
+search, alignment, and prediction stages.
 
 Return to TOC
 
@@ -531,7 +679,7 @@ duplication event), this assumption may also be violated. That is,
 sequences identified through BLAST searching may be paralogous, and
 subject to a different mode of selection than purifying selection.
 
-As such, exercise caution when interpreting results from BAD_Mutations .
+As such, exercise caution when interpreting results from BAD_Mutations.
 
 Return to TOC
 
