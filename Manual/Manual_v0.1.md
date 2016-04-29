@@ -8,6 +8,7 @@
 - [Output Files](#outputs)
     - [HyPhy Report Format](#hyphyreport)
     - [Making Deleterious Predictions](#predictions)
+    - [Inferring Ancestral States](#ancestral)
 - [Usage](#usage)
     - [Basic Invocation](#basic)
     - [Subcommands](#subcommands)
@@ -129,6 +130,11 @@ Because the HyPhy script traverses the alignment from end-to-end, the test secti
 
 ## <a name="predictions"></a>Making Deleterious Predictions
 `BAD_Mutations` merely implements a likelihood ratio test, and does not generate hard predictions on whether or not individual variants are deleterious. Criteria for determining significance, such as site filtering and correction for multiple testing, are left for the user to decide. For example, one simple method for multiple test correction is to apply a Bonferroni correction, with the number of codons with nonsynonymous variants as the number of tests performed. An additional heuristic could be the number of non-gap amino acid residues in the multiple sequence alignment must be greater than 10 for a site to be considered for prediction. Since these specific procedures and criteria will vary from study to study, we do not make any assumptions as to how the user will filter and interpret results.
+
+[Return to TOC](#toc)
+
+## <a name="ancestral"></a>Inferring Ancestral States
+`BAD_Mutations` does not infer ancestral states for SNPs, as there are many preexisting tools to perform this operation. The resources available to infer ancestral state will vary by research system, so it is not possible to implement a solution that will work in every case. `BAD_Mutations` may, however, be used to prepare data for inference of ancestral state, once an approach is chosen. Simply remove all species' CDS sequences from the `base` directory except those that will be used to infer ancestral state, and use the `align` subcommand to produce a MSA and tree. These may then be used in heuristic, parismony, or maximum-likelihood ancestral state inference appraoches. An implementation of this may be present in future versions of `BAD_Mutations`, but it is not planned for any upcoming releases.
 
 [Return to TOC](#toc)
 
