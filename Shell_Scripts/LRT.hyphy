@@ -1747,7 +1747,7 @@ for (pos = 0; pos < backgroundData.sites*3; pos = pos + 3) {
     	lnLikDiff = -2(res_null[1][0]-res_alt[1][0]);
     	degFDiff = res_alt[1][1]-res_null[1][1];
     
-    	fprintf (stdout, pos, "\t",res_null[1][0],"\t",res_alt[1][0],"\t",constraint,"\t",lnLikDiff,"\t", 1-CChi2(lnLikDiff,degFDiff),"\t",seq_count,"\t");
+    	/* fprintf (stdout, pos, "\t",res_null[1][0],"\t",res_alt[1][0],"\t",constraint,"\t",lnLikDiff,"\t", 1-CChi2(lnLikDiff,degFDiff),"\t",seq_count,"\t"); */
     	fprintf (stdout, constraint, "\t",1-CChi2(lnLikDiff,degFDiff),"\n");
     }
 
