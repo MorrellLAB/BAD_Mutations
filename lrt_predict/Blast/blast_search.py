@@ -208,6 +208,17 @@ class BlastSearch(object):
                     seqid[0])
                 self.mainlog.debug('Stdout:\n' + fasta)
                 self.mainlog.debug('Stderr:\n' + error)
+                #   If the sequence has ambiguous nucleotides (WRKYSMVBDHN),
+                #   then we exclude it.
+                db_seq = ''.join(fasta.split('\n')[1:])
+                #   Then, search for the ambiguous nucleotides, skip if they are
+                #   found.
+                if re.search('S|W|R|K|Y|M|V|B|D|H|N', db_seq, re.I):
+                    self.mainlog.warning(
+                        'Removing sequence from ' +
+                        os.path.basename(database) +
+                        ' due to ambiguous nucleotides.')
+                    continue
                 #   We will use the name of the assembly as the species name
                 spname = os.path.basename(database)
                 #   Then split on . and take the first part
@@ -219,6 +230,15 @@ class BlastSearch(object):
             self.mainlog.debug('Using regex')
             for database, seqid in self.orthologues.iteritems():
                 fasta = sequence_fetch.get_seq_by_regex(database, seqid[1])
+                #   Perform the same check here for ambiguous nucleotides.
+                db_seq = ''.join(fasta.split('\n')[1:])
+                #   Then, search for the ambiguous nucleotides, skip if they are
+                #   found.
+                if re.search('S|W|R|K|Y|M|V|B|D|H|N', db_seq, re.I):
+                    self.mainlog.warning(
+                        'Removing sequence from ' +
+                        os.path.basename(database) +
+                        ' due to ambiguous nucleotides.')
                 #   We will use the name of the assembly as the species name
                 spname = os.path.basename(database)
                 #   Then split on . and take the first part
