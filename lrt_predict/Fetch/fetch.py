@@ -43,7 +43,7 @@ class Fetcher(object):
             #   If it is empty, then populate it with all of them
             fname_list = file_funcs.get_file_by_ext(
                 self.base,
-                '.cds.fa.gz',
+                '.fa.gz',
                 self.mainlog)
         else:
             fname_list = self.to_convert
