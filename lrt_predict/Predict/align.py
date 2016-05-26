@@ -57,6 +57,10 @@ class PastaAlign(object):
                 #   Tack on the original sequence, with some appended Ns so we
                 #   can recreate the nucleotide alignment later.
                 self.input_dict[i.id] = str(i.seq) + to_add*'N'
+                self.mainlog.debug(
+                    'Length of sequence ' + i.id + ' is not a mulitple of 3. ' +
+                    'Adding ' + str(to_add) + ' Ns to the end.'
+                    )
                 #   Create the new sequence. Pasta chokes on ambiguous
                 #   amino acids that aren't X, so we replace them all with X.
                 fixed_seq = Seq(str(i.seq) + to_add*'N').translate()
@@ -82,7 +86,7 @@ class PastaAlign(object):
                     id=i.id.replace(':', '_'))
             self.mainlog.debug(new_seq.id + '\t' + str(new_seq.seq))
             tl_seqs.append(new_seq)
-        self.mainlog.debug(len(tl_seqs))
+        self.mainlog.debug('Number of species aligned: ' + str(len(tl_seqs)))
         #   Then, we have to iterate through the translated sequences and
         #   check for sequences ending in stop codons. Pasta hates these, so
         #   we will prune them. We also check for those with internal stop
@@ -91,6 +95,9 @@ class PastaAlign(object):
         for i in tl_seqs:
             #   If we find an internal stop codon
             if re.match(r'.+\*[^$]', str(i.seq)):
+                self.mainlog.debug(
+                    'Sequence ' + i.id + ' has internal stop. Skipping.'
+                    )
                 continue
             else:
                 #   Otherwise, just strip the stop codon off the end and save
