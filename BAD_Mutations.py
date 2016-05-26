@@ -252,6 +252,25 @@ def predict(arg, log):
     return outputfile
 
 
+def compile_preds(arg, log):
+    """A function to compile a directory full of HyPhy reports, and write a
+    single report with all the necessary prediction information."""
+    #   Import the HyPhyParser class source file
+    import lrt_predict.Predict.hyphy_parser as hyphyparser
+    #   Start a new hyphy parser object. We only need the directory containing
+    #   the predictions.
+    comp = hyphyparser.HyPhyParser(arg['pred_dir'], arg['loglevel'])
+    #   Get all the HyPhy reports
+    reports = comp.get_prediction_files()
+    log.info('Found a total of ' + str(len(reports)) + ' reports.')
+    #   Parse them into prediction data
+    parsed_preds = [comp.parse_prediction(rep) for rep in reports]
+    log.info('Found a total of ' + str(len(parsed_preds)) + ' predictions')
+    #   Then write them into the destination file
+    comp.compile_predictions(parsed_preds)
+    return
+
+
 def main():
     """The main function."""
     #   The very first thing we do is do a base check to make sure that we can
@@ -273,7 +292,7 @@ def main():
     #   Pull out the verbosity switch right away
     loglevel = set_verbosity.verbosity('LRT_Predict', arguments['loglevel'])
     #   If the config variable was passed
-    if arguments['config']:
+    if 'config' in arguments:
         #   We ask then if the setup command was not passed
         #   If the user wants to setup, then don't bother trying to validate
         #   the config.
@@ -327,6 +346,9 @@ def main():
             open(out_fname, 'w').close()
             shutil.copy2(out.name, out_fname)
             loglevel.info('Prediction in ' + out_fname)
+        elif arguments_valid['action'] == 'compile':
+            compile_preds(arguments_valid, loglevel)
+            return
     else:
         loglevel.error(msg)
     return

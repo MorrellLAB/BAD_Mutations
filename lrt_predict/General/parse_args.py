@@ -238,16 +238,19 @@ def parse_args():
         required=True,
         help='Directory where HyPhy outputs are stored.'
         )
-    compile_args.add_argument(
-        '--long-subs',
-        '-S',
-        required=True,
-        default=None,
-        help=(
-            'Path to a long substitutions file, listing every SNP that is to '
-            'be predicted. Same format as -s.'
-            )
-        )
+    #####
+    #####   Implement this later.
+    #####
+    # compile_args.add_argument(
+    #     '--long-subs',
+    #     '-S',
+    #     required=True,
+    #     default=None,
+    #     help=(
+    #         'Path to a long substitutions file, listing every SNP that is to '
+    #         'be predicted. Same format as -s.'
+    #         )
+    #    )
 
     #   Add a switch for verbosity
     parser.add_argument(
@@ -271,6 +274,8 @@ def validate_args(args, log):
     on the command line. Validate input files for prediction."""
     #   Check the base argument. If it starts with something other than a /
     #   then it is a relative path, and we should fix it
+    if 'base' not in args:
+        args['base'] = '.'
     if not args['base'].startswith('/'):
         #   Add the cwd onto it, since the script fails otherwise
         args['base'] = os.path.join(os.getcwd(), args['base'])
