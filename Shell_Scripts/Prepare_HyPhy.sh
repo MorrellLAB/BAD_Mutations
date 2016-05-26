@@ -18,6 +18,8 @@ if [ "$(uname)" == "Linux" ]
         sed -i 's/[[:space:]]<unknown description>//g' ${TREE}
         sed -i -r 's/[)][0-9]\.[0-9]+/\)/g' ${TREE}
         sed -i -r "s/'//g" ${TREE}
+        sed -i -r "s/\+//g" ${FASTA}
+        sed -i -r "s/\+//g" ${TREE}
 #   The equivalent is -E in MacOS
 elif [ "$(uname)" == "Darwin" ]
     then
@@ -25,4 +27,6 @@ elif [ "$(uname)" == "Darwin" ]
         sed -i '.bak' 's/[[:space:]]<unknown description>//g' ${TREE}
         sed -i '.bak' -E 's/[)][0-9]\.[0-9]+/\)/g' ${TREE}
         sed -i '.bak' -E "s/'//g" ${TREE}
+        sed -i '.bak' -E "s/\+//g" ${FASTA}
+        sed -i '.bak' -E "s/\+//g" ${TREE}
 fi
