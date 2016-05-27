@@ -21,6 +21,7 @@ Modifications to documentation do not alter version numbers.
 
 ### Removed
 - Unused options `--codon` and `--min-seqs`.
+
 ## 0.2 - 2016-01-05
 ### Modified
 - Sequences with internal stop codons are skipped from PASTA alignment
