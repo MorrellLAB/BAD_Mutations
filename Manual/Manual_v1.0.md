@@ -272,7 +272,6 @@ This command will set up the environment for predicting in barley (*Hordeum vulg
                          -d /scratch/BAD_Mutations_Deps \
                          -t 'hordeum_vulgare' \
                          -e 0.05 \
-                         -m 10 \
                          -c BAD_Mutations_Config.txt 2> Setup.log
 
 Note that the species name is listed in all lowercase and with an underscore. This is because Ensembl stores information for barley under that name. Phytozome has its own naming scheme. You can run 
