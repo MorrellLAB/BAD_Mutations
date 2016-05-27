@@ -6,7 +6,7 @@ Author: Thomas JY Kono and Paul J Hoffman
         2016-05-27
         Saint Paul, MN
 
-Version 0.3
+Version 1.0
 """
 #   Dependencies:
 #       1) argparse https://code.google.com/p/argparse/
