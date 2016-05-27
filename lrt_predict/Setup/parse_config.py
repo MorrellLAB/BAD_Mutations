@@ -16,7 +16,6 @@ class ConfigHandler(object):
     #   variables that the program uses.
     KEYWORDS = {'BASE': 'base',
                 'EVAL_THRESHOLD': 'evalue',
-                'MISSING_THRESHOLD': 'missing_threshold',
                 'TARGET_SPECIES': 'target',
                 'BASH': 'bash_path',
                 'GZIP': 'gzip_path',

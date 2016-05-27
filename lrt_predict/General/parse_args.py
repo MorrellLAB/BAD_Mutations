@@ -83,25 +83,6 @@ def parse_args():
         default=0.05,
         type=float,
         help='E-value threshold for accepting sequences into the alignment.')
-    setup_args.add_argument(
-        '-m',
-        '--min-seqs',
-        required=False,
-        type=int,
-        default=10,
-        help=(
-            'Skip predictions for SNPs with fewer than this number of '
-            'species represented in the multiple sequence alignment.'
-            )
-        )
-    setup_args.add_argument(
-        '--codon',
-        required=False,
-        action='store_const',
-        const='codon',
-        default='translate',
-        help=('Use the codon alignment model for prank-msa, may give more '
-              'accurate branch lengths but is much slower.'))
 
     #   Create a parser for 'fetch'
     fetch_args = subparser.add_parser(
