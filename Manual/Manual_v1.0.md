@@ -331,7 +331,6 @@ The configuration file is modeled after the configuration file of [STRUCTURE](Pr
     #define BASE /scratch/BAD_Mutations_Data
     #define TARGET_SPECIES hordeum_vulgare
     #define EVAL_THRESHOLD 0.05
-    #define MISSING_THRESHOLD 10
 
     // Program paths
     #define BASH /usr/local/bin/bash
