@@ -2,7 +2,6 @@
 #define BASE /home/tom/DataDisk/tmp/LRT_Tests
 #define TARGET_SPECIES hordeum_vulgare
 #define EVAL_THRESHOLD 0.05
-#define MISSING_THRESHOLD 0.25
 
 // Program paths
 #define BASH /usr/local/bin/bash
