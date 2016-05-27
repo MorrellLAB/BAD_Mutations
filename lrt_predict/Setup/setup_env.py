@@ -65,8 +65,7 @@ class SetupEnv(object):
             'Setting variables: \n' +
             '#define BASE ' + self.base + '\n' +
             '#define TARGET_SPECIES ' + self.target_species + '\n' +
-            '#define EVAL_THRESHOLD ' + self.eval_thresh + '\n' +
-            '#define MISSING_THRESHOLD ' + self.miss_thresh + '\n'
+            '#define EVAL_THRESHOLD ' + self.eval_thresh + '\n'
             )
         self.bash_path = spawn.find_executable('bash') or ''
         self.gzip_path = spawn.find_executable('gzip') or ''
@@ -120,7 +119,6 @@ class SetupEnv(object):
         handle.write('#define BASE ' + self.base + '\n')
         handle.write('#define TARGET_SPECIES ' + self.target_species + '\n')
         handle.write('#define EVAL_THRESHOLD ' + self.eval_thresh + '\n')
-        handle.write('#define MISSING_THRESHOLD ' + self.miss_thresh + '\n')
         handle.write('\n// Program paths\n')
         handle.write('#define BASH ' + self.bash_path + '\n')
         handle.write('#define GZIP ' + self.gzip_path + '\n')
