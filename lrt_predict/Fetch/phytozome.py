@@ -2,10 +2,8 @@
 """Defines a class that is used to fetch data from Phytozome 10."""
 
 #   Import python modules here
-import requests
 from xml.etree import ElementTree
 import os
-import re
 import subprocess
 import tempfile
 
