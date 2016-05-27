@@ -23,8 +23,6 @@ class SetupEnv(object):
         TARGET_SPECIES (str)      Query species, omitted from alignments.
         EVAL_THRESHOLD (float)    Max. E-value for accepting hit into the
                                   multiple sequence alignment.
-        MISSING_THRESHOLD (float) Max. missing (gap) for a codon to be
-                                  considered in prediction.
         BASH (str)                Path to bash.
         GZIP (str)                Path to gzip.
         SUM (str)                 Path to sum.
@@ -40,16 +38,13 @@ class SetupEnv(object):
         deps (str)                Directory to hold dependencies
         target_species (str)      Target species.
         eval_thresh (str)         E-value threshold (casted from float).
-        alignment_model (str)     Prank alignment model.
-        miss_thresh (str)         Missing (gap) threshold (casted from float).
         config_file (str)         File to store configuration data.
         missing_progs (list)      Missing executables.
 
     Inherits no attributes and methods from a parent class.
 
     Contains the following methods:
-        __init__(self, base, deps, target, evalue,
-                 model, missingness, cfg, verbose):
+        __init__(self, base, deps, target, evalue, cfg, verbose):
             Set all configuration variables. Create a list of the required
             executables that do not exist.
 
@@ -57,14 +52,12 @@ class SetupEnv(object):
             Write the configuration file with all the user specified variables.
     """
 
-    def __init__(self, base, deps, target, evalue,
-                 model, missingness, cfg, verbose):
+    def __init__(self, base, deps, target, evalue, cfg, verbose):
         self.mainlog = set_verbosity.verbosity('Setup_Env', verbose)
         self.base = base
         self.deps = deps
         self.target_species = target
         self.eval_thresh = str(evalue)
-        self.miss_thresh = str(missingness)
         self.config_file = cfg
         self.missing_progs = []
         self.mainlog.debug(
