@@ -12,6 +12,7 @@ TABLE OF CONTENTS
 -   Output Files
     -   HyPhy Report Format
     -   Making Deleterious Predictions
+    -   Inferring Ancestral States
 -   Usage
     -   Basic Invocation
     -   Subcommands
@@ -166,15 +167,18 @@ CBF3.subs):
 
     21  SNP_1
     45  SNP_2
+    50  SNP_3
+    100_    SNP_4
 
-This pair of files would describe two nonsynonymous variants to predict
-in a single coding sequence. The variants occur at residue numbers 21
-and 45 in the AMINO ACID sequence, with the first residue being treated
-as position 1. Their identifiers are SNP_1 and SNP_2, respectively.
-These may be any non-whitespace text, and may be internal identifiers
-for bookkeeping, or rs numbers, or some other SNP identification system.
-Please note that these variants are not real. They are provided only for
-testing and demonstration purposes.
+The substitutions file must be tab-delimited. This pair of files would
+describe two nonsynonymous variants to predict in a single coding
+sequence. The variants occur at residue numbers 21 and 45 in the AMINO
+ACID sequence, with the first residue being treated as position 1. Their
+identifiers are SNP_1 and SNP_2, respectively. These may be any
+non-whitespace text, and may be internal identifiers for bookkeeping, or
+rs numbers, or some other SNP identification system. Please note that
+these variants are not real. They are provided only for testing and
+demonstration purposes.
 
 Note that while the FASTA file contains NUCLEOTIDE sequence, the
 substitutions file contains positions in the AMINO ACID sequence.
@@ -216,7 +220,7 @@ as intermediate files.
 Return to TOC
 
 
-HyPhy Report Format
+Raw HyPhy Format
 
 The HyPhy report contains three sections: a summary of the input
 alignment and tree, test statistics for each codon in the alignment, and
@@ -253,6 +257,18 @@ tested, the fields printed correspond to the following information:
 Return to TOC
 
 
+Compiled HyPhy Report
+
+The output of the compile command has all of the same information as the
+raw HyPhy report, but also includes columns for transcript ID and amino
+acid position. These additional columns are prepended to the columns
+listed above, and are called GeneID and CDSPos, respectively. The GeneID
+column contains the transcript or gene name, taken from the query FASTA
+file. The CDSPos column contains the 1-BASED amino acid residue number
+that has a nonsynonymous SNP, as calculated from the raw HyPhy output.
+The fields are tab-delimited.
+
+
 Making Deleterious Predictions
 
 BAD_Mutations merely implements a likelihood ratio test, and does not
@@ -267,6 +283,24 @@ multiple sequence alignment must be greater than 10 for a site to be
 considered for prediction. Since these specific procedures and criteria
 will vary from study to study, we do not make any assumptions as to how
 the user will filter and interpret results.
+
+Return to TOC
+
+
+Inferring Ancestral States
+
+BAD_Mutations does not infer ancestral states for SNPs, as there are
+many preexisting tools to perform this operation. The resources
+available to infer ancestral state will vary by research system, so it
+is not possible to implement a solution that will work in every case.
+BAD_Mutations may, however, be used to prepare data for inference of
+ancestral state, once an approach is chosen. Simply remove all species'
+CDS sequences from the base directory except those that will be used to
+infer ancestral state, and use the align subcommand to produce a MSA and
+tree. These may then be used in heuristic, parismony, or
+maximum-likelihood ancestral state inference appraoches. An
+implementation of this may be present in future versions of
+BAD_Mutations, but it is not planned for any upcoming releases.
 
 Return to TOC
 
@@ -346,9 +380,6 @@ The setup subcommand takes the following options:
                                      
 
   -e/--evalue        _F__L__O__A__T_ E-value threshold for accepting TBLASTX hits as putative homologues. Defaults to 0.05.
-                                     
-
-  -m/--missing       _I__N__T_       Maximum number of gapped (missing) sites in the multiple species alignment (MSA) to be considered for prediction.
                                      
   --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -467,22 +498,16 @@ Return to TOC
 The compile Subcommand
 
 The compile subcommand will take an output directory containing HyPhy
-output files, and produce a table with predictions for each variant. The
-script will print _p_-values, but will not assess significance, as a
+output files, and produce a table with LRT metadata for each variant.
+The script will print _p_-values, but will not assess significance, as a
 suitable significance threshold cannot be determined programmatically.
-This is left to the user to interpret. This subcommand requires the
-output from another SNP effect script, SNP_Effect_Predictor.py (NOTE:
-requires the companion Python class defined in gff_parse.py).
+This is left to the user to interpret.
 
 The compile subcommand accepts the following options:
 
   -------------------------------------------------------------------------------------------
   Option             Value       Description
   ------------------ ----------- ------------------------------------------------------------
-  -S/--long-subs     _F__I__L__E Path to the SNP effect table. Required.
-                     _           
-                                 
-
   -p/--pred-dir      _D__I__R_   Output directory from the predict subcommand. Required.
                                  
   -------------------------------------------------------------------------------------------
@@ -536,6 +561,9 @@ Phytozome and Ensembl Plants and convert them into BLAST databases:
                          -u 'user@domain.com' \
                          -p 'ReallyGoodPassword123' 2> Fetch.log
 
+Note that you will need a free JGI Genomes Portal username and password
+to download data from Phytozome.
+
 This command will run BLAST against all the available databases using
 CBF3.fasta as a query, translate the sequences into amino acids, align
 them using PASTA, estimate a phylogeny, and save the results into
@@ -559,10 +587,27 @@ Predictions_Dir:
                          -a Output_Dir/CBF3_MSA.fasta \
                          -r Output_Dir/CBF3_tree.tree \
                          -s Test_Data/CBF3.subs \
-                         -o Predictions_Dir 2> CoolGene_Predictions.log
+                         -o Predictions_Dir 2> CBF3_Predictions.log
 
-You may then parse the predictions out of the HyPhy report, and apply
-your chosen significance criteria to the variants.
+Note that this step is slow! Then, you can compile the HyPhy report into
+a tabular file for generating predictions. Of course, for a single gene
+it is easy to read through the raw HyPhy report and find the relevant
+information.
+
+    $ ./BAD_Mutations.py -v DEBUG \
+                         compile \
+                         -o Predictions_Dir 2> Compile.log
+
+A full set of example data is available in the Test_Data/ directory.
+There are example query FASTA files, substitution files, multiple
+sequence alignments built from Angiosperm sequences, phylogenetic trees,
+raw HyPhy reports, and a compiled HyPhy report. You will use the
+information in the compiled report to generate predictions. The example
+multiple sequence alignment, phylogenetic tree, and HyPhy report files
+were generated with a truncated set of grass species as a target. When
+you predict deleterious SNPs in your dataset, you should use a set of
+species that cover a deeper evolutionary history, to allow adequate
+divergence for dN and dS estimates.
 
 Return to TOC
 
