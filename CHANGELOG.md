@@ -20,7 +20,7 @@ Modifications to documentation do not alter version numbers.
 - Raw HyPhy report output makes sense now
 
 ### Removed
-- Unused options `--codon` and `--missing-threshold`.
+- Unused options `--codon` and `--min-seqs`.
 ## 0.2 - 2016-01-05
 ### Modified
 - Sequences with internal stop codons are skipped from PASTA alignment
