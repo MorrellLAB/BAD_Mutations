@@ -75,8 +75,8 @@ class HyPhyParser(object):
                             tmp = line.strip().split()
                             #   Get the gene ID
                             #   We will assume this is the first part before the
-                            #   file extension.
-                            geneid = os.path.basename(pred_file).rsplit('.')[0]
+                            #   _Predictions suffix.
+                            geneid = os.path.basename(pred_file).rsplit('_')[0]
                             anno = [geneid, str(cds_pos)] + tmp
                             gene_preds.append(anno)
         return gene_preds
