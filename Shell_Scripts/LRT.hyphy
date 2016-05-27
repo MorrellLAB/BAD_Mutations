@@ -1631,6 +1631,7 @@ codonToAAMap = defineCodonToAA();
 fprintf (stdout, "Position\tL0\tL1\tConstraint\tChisquared\tP-value\tSeqCount\tAlignment\tReferenceAA\t","MaskedConstraint\tMaskedP-value\n");
 /*fprintf(stdout,"Fasta: ",filename,"\nTree: ",treefile,"\n");*/
 fscanf (positfile, "Number", testpos);
+testpos = testpos-3;
 for (pos = 0; pos < backgroundData.sites*3; pos = pos + 3) {
     posend = pos + 2;
     range = ""+pos+"-"+posend;
@@ -1740,10 +1741,13 @@ for (pos = 0; pos < backgroundData.sites*3; pos = pos + 3) {
     if (pos == testpos){
     	Optimize (res_alt, lf2);
     	fscanf (positfile, "Number", testpos);
+    	testpos = testpos-3;
     	if (pos == testpos){
-    		fscanf (positfile, "Number", testpos);}
+    		fscanf (positfile, "Number", testpos);
+    		testpos = testpos-3;}
     	if (pos == testpos){
-    		fscanf (positfile, "Number", testpos);}
+    		fscanf (positfile, "Number", testpos);
+    		testpos = testpos-3;}
     	lnLikDiff = -2(res_null[1][0]-res_alt[1][0]);
     	degFDiff = res_alt[1][1]-res_null[1][1];
     
