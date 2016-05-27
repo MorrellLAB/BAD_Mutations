@@ -45,8 +45,6 @@ def setup(arg):
         arg['deps_dir'],
         arg['target'],
         arg['evalue'],
-        arg['codon'],
-        arg['min_seqs'],
         arg['config'],
         arg['loglevel'])
     s_env.write_config()
