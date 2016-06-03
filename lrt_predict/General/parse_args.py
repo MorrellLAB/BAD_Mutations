@@ -148,7 +148,6 @@ def parse_args():
         '--evalue',
         '-e',
         required=False,
-        default=0.05,
         type=float,
         help='E-value threshold for accepting sequences into the alignment.')
     align_args.add_argument(

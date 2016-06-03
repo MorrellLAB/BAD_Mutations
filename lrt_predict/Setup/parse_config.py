@@ -105,7 +105,13 @@ class ConfigHandler(object):
         #   We will iterate through the user-supplied arguments dictionary,
         #   and update those that need to be updated
         for option, val in self.user_args.iteritems():
-            if option not in do_not_clobber:
+            #   Check that the value was specified on the command line
+            if not val:
+                configs.update({option: self.config_vars[option]})
+            elif option not in do_not_clobber:
+                self.mainlog.debug('OPTION: ' + option + '; VALUE: ' + str(val))
                 configs.update({option: val})
+        self.mainlog.debug(
+            'Command line and config options merged. Values: ' + str(configs))
         #   Return them
         return configs
