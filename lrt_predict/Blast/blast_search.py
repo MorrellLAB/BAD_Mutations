@@ -188,6 +188,11 @@ class BlastSearch(object):
         """Define a function to get the hit sequences out of the databses."""
         #   Create a temporary file for holding sequence information while we
         #   collect it
+        if len(self.orthologues) == 0:
+            self.mainlog.critical(
+                'Could not find any BLAST hits! Try raising the E-value '
+                'threshold for homology.')
+            exit(2)
         self.mainlog.debug('Creating named tempfile for homologous sequences.')
         temp_output = tempfile.NamedTemporaryFile(
             mode='w+t',
