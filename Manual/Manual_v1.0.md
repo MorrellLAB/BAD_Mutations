@@ -41,7 +41,11 @@ The model used to estimate codon conservation and predict which variants are del
 [Return to TOC](#toc)
 
 # <a name="downloading"></a>Downloading
-`BAD_Mutations` is distributed through a [GitHub repository](https://github.com/MorrellLAB/BAD_Mutations). You can use [Git](https://git-scm.com/) to clone the repository, or download a ZIP archive from GitHub.
+`BAD_Mutations` is distributed through a [GitHub repository](https://github.com/MorrellLAB/BAD_Mutations). You can use [Git](https://git-scm.com/) to clone the repository:
+
+    $ git clone https://github.com/MorrellLAB/BAD_Mutations.git
+
+or download a stable release as a ZIP file.
 
 [Return to TOC](#toc)
 
