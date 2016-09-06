@@ -39,7 +39,7 @@ The phylogenetic relationships of the gene sequences are shown on the left. The 
 Examples of alignment columns that produce deleterious and 'tolerated' nonsynonymous SNPs are shown below.
 ![Deleterious and tolerated](del_tol.png)
 
-The one-letter amino acid code for the derived state of the variant is shown on the left, and the ancestral state is shown in the center. The alignment column is shown as a string of amino-acid codes on the right. Deleterious SNPs alter columns that have much higher amino acid conservation than tolerated SNPs.
+The one-letter amino acid code for the derived state of the variant is shown on the left, and the ancestral state is shown in the center. The alignment column is shown as a string of amino acid codes on the right, with dashes representing gaps. Deleterious SNPs alter columns that have much higher amino acid conservation than tolerated SNPs.
 
 [Return to TOC](#toc)
 
