@@ -33,10 +33,12 @@ Briefly, `BAD_Mutations` predicts deleterious variants using a sequence constrai
 
 An alignment of phytochrome C (PhyC) used for prediction of a nonsynonymous SNP in barley is shown below.
 ![Alignment](alignment.png)
+
 The phylogenetic relationships of the gene sequences are shown on the left. The consensus sequence is shown at the top. Dots correspond to identity to consensus, and letters show mismatches. Colored boxes behind codon triplets correspond to amino acid residues. The query polymorphism is shown in yellow. The codon is conserved, so the SNP is inferred to be deleterious. This polymorphism is causative for early maturity in barley ([Nishida *et al.* (2013)](http://www.plantphysiol.org/content/early/2013/09/06/pp.113.222570.abstract)).
 
 Examples of alignment columns that produce deleterious and 'tolerated' nonsynonymous SNPs are shown below.
 ![Deleterious and tolerated](del_tol.png)
+
 The one-letter amino acid code for the derived state of the variant is shown on the left, and the ancestral state is shown in the center. The alignment column is shown as a string of amino-acid codes on the right. Deleterious SNPs alter columns that have much higher amino acid conservation than tolerated SNPs.
 
 [Return to TOC](#toc)
