@@ -395,6 +395,5 @@ list of affected codons.
 Dependencies:
     Biopython
     tblastx (NCBI BLAST executables)
-    requests (Python HTTP requests module)
     pasta (Phylogeny-aware sequence alignment)'''
     return
