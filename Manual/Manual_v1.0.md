@@ -31,6 +31,11 @@
 
 Briefly, `BAD_Mutations` predicts deleterious variants using a sequence constraint approach. For a given query gene sequence and list of nonsynonmyous SNPs, a multiple sequence alignment among homologues is produced, and the given codons are tested for conservation. Variants that alter a codon with a high degree of conservation are inferred to be deleterious. More details on the procedure in `BAD_Mutations` is available in the “Methods” section.
 
+An alignment of phytochrome C (PhyC) used for prediction of a nonsynonymous SNP in barley is shown below.
+![Alignment](alignment.png)
+
+The phylogenetic relationships of the gene sequences are shown on the left. The consensus sequence is shown at the top. Dots correspond to identity to consensus, and letters show mismatches. Colored boxes behind codon triplets correspond to amino acid residues. The query polymorphism is shown in yellow. The codon is conserved, so the SNP is inferred to be deleterious. This polymorphism is causative for early maturity in barley [(Nishida *et al.* (2013))](http://www.plantphysiol.org/content/early/2013/09/06/pp.113.222570.abstract).
+
 [Return to TOC](#toc)
 
 # <a name="citation"></a>Citation
