@@ -11,7 +11,7 @@ ensembl_fetch = [
     'brassica_oleracea',
     # 'brassica_rapa',
     # 'chlamydomonas_reinhardtii',
-    'cyanidioschyzon_merolae',
+    # 'cyanidioschyzon_merolae',
     # 'glycine_max',
     'hordeum_vulgare',
     'leersia_perrieri',
