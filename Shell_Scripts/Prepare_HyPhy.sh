@@ -20,6 +20,9 @@ if [ "$(uname)" == "Linux" ]
         sed -i -r "s/'//g" ${TREE}
         sed -i -r "s/\+//g" ${FASTA}
         sed -i -r "s/\+//g" ${TREE}
+        sed -i -r "s/\./_/g" ${TREE}
+        sed -i -r "s/\./_/g" ${FASTA}
+        sed -i -r "s/:\([0-9]\)_/:\1\./g" ${TREE}
 #   The equivalent is -E in MacOS
 elif [ "$(uname)" == "Darwin" ]
     then
