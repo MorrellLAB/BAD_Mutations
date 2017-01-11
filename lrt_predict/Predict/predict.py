@@ -6,6 +6,7 @@
 import subprocess
 import os
 import tempfile
+import re
 
 #   Import Biopython library
 from Bio import AlignIO
@@ -103,8 +104,14 @@ class LRTPredict(object):
         infile.write(self.nmsa_path + '\n')
         infile.write(os.path.abspath(self.phylogenetic) + '\n')
         infile.write(alignedsubs.name + '\n')
-        infile.write(self.query.id.replace(':', '_'))
+        #   Remove all non-allowed characters in sequence name, and replace them
+        #   with underscores
+        safe_name = re.sub('[:\.\+-]', '_', self.query.id)
+        infile.write(safe_name)
         infile.flush()
+        #   Print out the HyPhy input to debug
+        infile.seek(0)
+        self.mainlog.debug('HyPhy input file: \n' + infile.read())
         #   And then we create a name for the HYPHY output file
         outfile = tempfile.NamedTemporaryFile(
             mode='w+t',

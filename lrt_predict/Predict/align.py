@@ -50,6 +50,9 @@ class PastaAlign(object):
         #   alignment input file.
         tl_seqs = []
         for i in input_seqs:
+            #   Fix the names for HyPhy. Names must be alphanumeric, with
+            #   underscores
+            fixed_name = re.sub('[^0-9a-zA-Z]', '_', i.id)
             #   If the length is not a multiple of 3, then we have to add Ns to
             #   make it so.
             if len(i) % 3 != 0:
