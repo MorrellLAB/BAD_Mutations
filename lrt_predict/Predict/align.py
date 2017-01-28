@@ -86,7 +86,7 @@ class PastaAlign(object):
                         re.I))
                 new_seq = SeqRecord.SeqRecord(
                     sub_seq,
-                    id=i.id.replace(':', '_'))
+                    id=fixed_name)
             self.mainlog.debug(new_seq.id + '\t' + str(new_seq.seq))
             tl_seqs.append(new_seq)
         self.mainlog.debug('Number of species aligned: ' + str(len(tl_seqs)))
