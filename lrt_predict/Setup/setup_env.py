@@ -72,7 +72,7 @@ class SetupEnv(object):
         self.sum_path = spawn.find_executable('sum') or ''
         self.tblastx_path = spawn.find_executable('tblastx') or ''
         self.pasta_path = spawn.find_executable('run_pasta.py') or ''
-        self.hyphy_path = spawn.find_executable('HYPHYSP') or ''
+        self.hyphy_path = spawn.find_executable('HYPHYMP') or spawn.find_executable('hyphymp') or ''
         self.mainlog.debug(
             'Setting executable path variables:\n' +
             '#define BASH ' + self.bash_path + '\n' +
