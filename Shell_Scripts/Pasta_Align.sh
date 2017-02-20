@@ -24,6 +24,7 @@ $PASTA \
     --no-return-final-tree-and-alignment\
     --num-cpus=1\
     --job=$JOBNAME\
+    --iter-limit=5\
     --temporaries=${TEMP_DIR}\
     -i $INPUT\
     -o ${TEMP_DIR}

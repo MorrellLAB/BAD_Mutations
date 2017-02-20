@@ -59,7 +59,7 @@ class PastaAlign(object):
                 to_add = 3 - (len(i) % 3)
                 #   Tack on the original sequence, with some appended Ns so we
                 #   can recreate the nucleotide alignment later.
-                self.input_dict[i.id] = str(i.seq) + to_add*'N'
+                self.input_dict[fixed_name] = str(i.seq) + to_add*'N'
                 self.mainlog.debug(
                     'Length of sequence ' + i.id + ' is not a mulitple of 3. ' +
                     'Adding ' + str(to_add) + ' Ns to the end.'
@@ -75,9 +75,10 @@ class PastaAlign(object):
                         re.I))
                 new_seq = SeqRecord.SeqRecord(
                     sub_seq,
-                    id=i.id)
+                    id=i.id,
+                    description='')
             else:
-                self.input_dict[i.id] = str(i.seq)
+                self.input_dict[fixed_name] = str(i.seq)
                 sub_seq = Seq(
                     re.sub(
                         'B|Z|J|O|U',
@@ -86,7 +87,8 @@ class PastaAlign(object):
                         re.I))
                 new_seq = SeqRecord.SeqRecord(
                     sub_seq,
-                    id=fixed_name)
+                    id=fixed_name,
+                    description='')
             self.mainlog.debug(new_seq.id + '\t' + str(new_seq.seq))
             tl_seqs.append(new_seq)
         self.mainlog.debug('Number of species aligned: ' + str(len(tl_seqs)))
@@ -106,7 +108,7 @@ class PastaAlign(object):
                 #   Otherwise, just strip the stop codon off the end and save
                 if i.seq.endswith('*'):
                     fixed_tl_seqs.append(
-                        SeqRecord.SeqRecord(i.seq[:-1], id=i.id)
+                        SeqRecord.SeqRecord(i.seq[:-1], id=i.id, description='')
                         )
                 else:
                     fixed_tl_seqs.append(i)
@@ -147,11 +149,16 @@ class PastaAlign(object):
                     else:
                         rebuilt_seq += in_seq[pos:pos+3]
                         pos += 3
+            else:
+                continue
             #   Then, put in a new SeqRecord with the sequence and the name, so
             #   we can write a fasta file.
-            bt_seqs.append(SeqRecord.SeqRecord(
-                Seq(rebuilt_seq),
-                id=rec.id))
+            bt_seqs.append(
+                SeqRecord.SeqRecord(
+                    Seq(rebuilt_seq),
+                    id=rec.id,
+                    description='')
+                )
         #   And create a new temporary file for them
         final_seqs = tempfile.NamedTemporaryFile(
             mode='w+t',

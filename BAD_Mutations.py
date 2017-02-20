@@ -21,6 +21,7 @@ import sys
 #   To handle file copy
 import shutil
 import os
+import pprint
 
 #   Import the dependency checking script
 import lrt_predict.General.check_modules as check_modules
@@ -264,8 +265,31 @@ def compile_preds(arg, log):
     #   Parse them into prediction data
     parsed_preds = [comp.parse_prediction(rep) for rep in reports]
     log.info('Found a total of ' + str(len(parsed_preds)) + ' predictions')
-    #   Then write them into the destination file
-    comp.compile_predictions(parsed_preds)
+    #   Read the long format substitutions file, keying on the same values as
+    #   the prediction file (gene ID and postion). This file will also have
+    #   the SNP ID in it.
+    subs = arg['long_subs']
+    alts = {}
+    with open(subs, 'r') as f:
+        for index, line in enumerate(f):
+            if index == 0:
+                continue
+            else:
+                tmp = line.strip().split()
+                #   If the fourth field is 'Yes' we skip it. Only nonsyn here.
+                if tmp[3] == 'Yes':
+                    continue
+                else:
+                    key = (tmp[4], tmp[10])
+                    alts[key] = tmp[9]
+    #   Add P-values to the predictions
+    logp_preds = []
+    for genepred in parsed_preds:
+        for snppred in genepred:
+            a = alts.get((snppred[0], snppred[1]), 'NA')
+            logp_preds.append(comp.add_regression(a, snppred))
+        #   Then write them into the destination file
+    comp.compile_predictions(logp_preds)
     return
 
 
