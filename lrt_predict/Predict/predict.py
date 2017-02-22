@@ -42,7 +42,7 @@ class LRTPredict(object):
 
     def get_query_position(self):
         """Get the index of the query sequence in the Pasta alignment."""
-        qname = self.query.id.replace(':', '_')
+        qname = re.sub('[^0-9a-zA-Z]', '_', self.query.id)
         #   And step through it, saving the position of the query
         for index, sequence in enumerate(self.nmsa):
             if sequence.id == qname:
