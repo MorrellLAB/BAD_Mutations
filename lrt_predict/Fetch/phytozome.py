@@ -71,7 +71,7 @@ class Phytozome(fetch.Fetcher):
     #   They should not change from instance to instance
     JGI_LOGIN = 'https://signon.jgi.doe.gov/signon/create'
     DL_BASE = 'http://genome.jgi.doe.gov'
-    XML_URL = 'http://genome.jgi.doe.gov/ext-api/downloads/get-directory?organism=PhytozomeV11'
+    XML_URL = 'http://genome.jgi.doe.gov/ext-api/downloads/get-directory?organism=Phytozome'
     FAILED_LOGIN = 'Login and password do not match'
     EXPIRED_ACCOUNT = 'Sorry, your password has expired'
     TO_FETCH = phytozome_species.phyto_fetch
