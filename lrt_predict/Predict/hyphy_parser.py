@@ -7,6 +7,7 @@ by Thomas Kono."""
 
 #   Import standard library modules here
 import os
+import math
 #   Import our helper scripts here
 from lrt_predict.General import set_verbosity
 
@@ -34,6 +35,57 @@ class HyPhyParser(object):
             if fname.endswith('_Predictions.txt')]
         return pred_files
 
+
+    def logistic_p_values(self, unmasked, masked, constraint, ref, alt, aln):
+        """Calculate a p-value for the test, based on a logistic regression
+        reported in the accompanying manuscript. The equations are as follows:
+
+log(p/(1-p)) = -2.407-0.2139*LRT(unmasked)-0.2056*constraint+0.07368*Rn-0.1236*An
+log(p/(1-p)) = -2.453-0.1904*LRT(masked)-0.1459*constraint+0.2199*max(Rn,An)-0.2951*abs(Rn-An)
+
+        where LRT is the log10(LRT p-value), constraint is conservation of the alignment
+        column, Rn is the number of "reference" amino acids, and "An" is the
+        number of alternate amino acids. We will report both the masked and
+        the unmasked versions. The p-values will not be Bonferroni-adjusted.
+        """
+        #   Cast the variables to float
+        try:
+            #   Sometimes the values we pass are so small, they are 0. We set
+            #   these to very small.
+            if unmasked == '0':
+                unmasked = 1e-15
+            if masked == '0':
+                masked = 1e-15
+            unmasked_p = math.log10(float(unmasked))
+            masked_p = math.log10(float(masked))
+            con = float(constraint)
+        except ValueError:
+            self.mainlog.error('Non-numeric data passed to compile.')
+            exit(1)
+        #   Calculate the Rn and An values. These are easy, we just have to
+        #   count the number of times it shows up
+        rn = aln.count(ref)
+        an = aln.count(alt)
+        #   Then, calculate the p-values. We will calculate the right hand side
+        #   of the equation first.
+        unmasked_rhs = -2.407 - (0.2139*unmasked_p) - (0.2056*con) + (0.07368*rn) - (0.1236*an)
+        masked_rhs = -2.453 - (0.1904*masked_p) - (0.1459*con) + (0.2199*max([rn, an])) - (0.2951*abs(rn-an))
+        #   Solve for p
+        #   Protect the denominator calculation. Sometimes it overlfows. If it
+        #   does, set it to Inf
+        try:
+            u_K = math.exp(-unmasked_rhs)
+        except OverflowError:
+            u_K = float('inf')
+        try:
+            m_K = math.exp(-masked_rhs)
+        except OverflowError:
+            m_K = float('inf')
+        unmasked_log_p = 1 / (u_K + 1)
+        masked_log_p = 1 / (m_K + 1)
+        #   Return it
+        return (unmasked_log_p, masked_log_p)
+
     def parse_prediction(self, pred_file):
         """Parse a single prediction file. Return the lines that have prediction
         information for them, along with a gene identifier."""
@@ -43,6 +95,7 @@ class HyPhyParser(object):
         in_aln = False
         #   And an empty list to store the prediction info
         gene_preds = []
+        geneseq = ''
         with open(os.path.join(self.preddir, pred_file), 'r') as f:
             for line in f:
                 #   The header for the actual predictions starts with 'Position'
@@ -54,8 +107,10 @@ class HyPhyParser(object):
                     continue
                 #   Then, if we are in the alignment, check for predicton data
                 if in_aln:
+                    self.mainlog.debug(str(cds_pos) + ' ' + line.strip())
                     #   The prediction lines are ones that do NOT end in 'NOSNP'
                     if 'NOSNP' in line:
+                        geneseq += line.strip().split()[2]
                         #   Check the third field in the 'NOSNP' line - if it is
                         #   not '-', then we increment the CDS position
                         #   counter.
@@ -69,6 +124,7 @@ class HyPhyParser(object):
                         if line.startswith('Alignment'):
                             return gene_preds
                         else:
+                            geneseq += line.strip().split()[8]
                             #   Increment the CDS position counter. There has to
                             #   be a non-gap character at the query positions
                             cds_pos += 1
@@ -80,6 +136,32 @@ class HyPhyParser(object):
                             anno = [geneid, str(cds_pos)] + tmp
                             gene_preds.append(anno)
         return gene_preds
+
+    def add_regression(self, alt, prediction):
+        """Use the information in a long format substitutions file and the
+        SNP prediction information to calculate a logistic P-value. The data we
+        need from the substitutions file is the alternate amino acid state."""
+        #   Call the function that calculates the p-value. We send the data in
+        #   the following order:
+        #       Unmasked p-value
+        #       Masked p-value
+        #       Constraint
+        #       Reference AA
+        #       Alt AA
+        #   First check the alt. If it's NA, we return NA as well
+        if alt == 'NA':
+            return prediction + ['NA', 'NA']
+        u, m = self.logistic_p_values(
+            prediction[7],
+            prediction[12],
+            prediction[5],
+            prediction[10],
+            alt,
+            prediction[9])
+        #   Just tack them on to the prediction data and return it
+        u = str(u)
+        m = str(m)
+        return prediction + [u, m]
 
     def compile_predictions(self, pred_data):
         """Put all the prediction data into a nice report."""
@@ -97,7 +179,9 @@ class HyPhyParser(object):
             'Alignment',
             'ReferenceAA',
             'MaskedConstraint',
-            'MaskedP-value']
+            'MaskedP-value',
+            'LogisticP_Unmasked',
+            'LogisticP_Masked']
         #   Define an output filename, in the predictions directory.
         self.mainlog.info(
             'Trying to use filename ' +
@@ -109,9 +193,8 @@ class HyPhyParser(object):
                 ' exists! Will overwrite!')
         handle = open(os.path.join(self.preddir, 'Combined_Report.txt'), 'w')
         handle.write('\t'.join(header) + '\n')
-        for gene_prediction in pred_data:
-            for snp_prediction in gene_prediction:
-                handle.write('\t'.join(snp_prediction) + '\n')
+        for snp_prediction in pred_data:
+            handle.write('\t'.join(snp_prediction) + '\n')
         handle.flush()
         handle.close()
         return

@@ -218,19 +218,16 @@ def parse_args():
         required=True,
         help='Directory where HyPhy outputs are stored.'
         )
-    #####
-    #####   Implement this later.
-    #####
-    # compile_args.add_argument(
-    #     '--long-subs',
-    #     '-S',
-    #     required=True,
-    #     default=None,
-    #     help=(
-    #         'Path to a long substitutions file, listing every SNP that is to '
-    #         'be predicted. Same format as -s.'
-    #         )
-    #    )
+    compile_args.add_argument(
+        '--long-subs',
+        '-S',
+        required=True,
+        default=None,
+        help=(
+            'Path to a long substitutions file, listing every SNP that is to '
+            'be predicted. Same format as -s.'
+            )
+       )
 
     #   Add a switch for verbosity
     parser.add_argument(
