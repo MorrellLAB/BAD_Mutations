@@ -280,13 +280,16 @@ def compile_preds(arg, log):
                 if tmp[3] == 'Yes':
                     continue
                 else:
-                    key = (tmp[4], tmp[10])
-                    alts[key] = tmp[9]
+                    uscore_tx = tmp[4].replace('.', '_')
+                    aapos = tmp[9]
+                    alt_aa = tmp[9]
+                    key = (uscore_tx, aapos)
+                    alts[key] = alt_aa
     #   Add P-values to the predictions
     logp_preds = []
     for genepred in parsed_preds:
         for snppred in genepred:
-            a = alts.get((snppred[0], snppred[1]), 'NA')
+            a = alts.get((uscore_tx, aapos), 'NA')
             logp_preds.append(comp.add_regression(a, snppred))
         #   Then write them into the destination file
     comp.compile_predictions(logp_preds)
