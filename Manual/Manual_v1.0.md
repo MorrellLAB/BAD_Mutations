@@ -44,7 +44,7 @@ The one-letter amino acid code for the derived state of the variant is shown on 
 [Return to TOC](#toc)
 
 # <a name="citation"></a>Citation
-The model used to estimate codon conservation and predict which variants are deleterious is reported in Chun and Fay (2009). The actual software package is first used in [Kono *et al.* (2016)](http://mbe.oxfordjournals.org/content/33/9/2307), with the [preprint](http://biorxiv.org/content/early/2016/05/12/033175) available in BioRxiv. `BAD_Mutations` has a formal publication in preparation.
+The model used to estimate codon conservation and predict which variants are deleterious is reported in Chun and Fay (2009). The actual software package is first used in [Kono *et al.* (2016)](http://mbe.oxfordjournals.org/content/33/9/2307), with the [preprint](http://biorxiv.org/content/early/2016/05/12/033175) available in BioRxiv. `BAD_Mutations` has a formal publication with [preprint version](https://www.biorxiv.org/content/early/2017/02/27/112318).
 
 `BAD_Mutations` was primarily written by Thomas J.Y. Kono and Paul J. Hoffman. The HYPHY script for estimating codon conservation was written by Justin C. Fay. Testing was performed by Chaochih Liu, Felipe Reyes, and Skylar Wyant. Rigorous comparison to related software was performed by Justin C. Fay and Li Lei.
 
