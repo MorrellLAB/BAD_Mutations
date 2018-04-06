@@ -15,10 +15,9 @@ For more information, see the user manual.
 
 Citing BAD_Mutations
 --------------------
-`BAD_Mutations` has a formal publication in preparation. For now, the most
-appropriate citation is the
+`BAD_Mutations` has a formal publication in [preprint](https://www.biorxiv.org/content/early/2017/02/27/112318). For now, the most appropriate citation is the
 [Kono et al. (2016)](http://mbe.oxfordjournals.org/content/33/9/2307.full)
-MBE paper.
+MBE paper and [Kono et al. (2017)](https://www.biorxiv.org/content/early/2017/02/27/112318).
 
 TODO
 ----
