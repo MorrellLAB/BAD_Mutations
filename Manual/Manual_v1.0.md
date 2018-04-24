@@ -327,7 +327,7 @@ Note that this step is slow! Then, you can compile the HyPhy report into a tabul
 
     $ ./BAD_Mutations.py -v DEBUG \
                          compile \
-                         -o Predictions_Dir 2> Compile.log
+                         -P Predictions_Dir 2> Compile.log
 
 A full set of example data is available in the `Test_Data/` directory. There are example query FASTA files, substitution files, multiple sequence alignments built from Angiosperm sequences, phylogenetic trees, raw HyPhy reports, and a compiled HyPhy report. You will use the information in the compiled report to generate predictions. The example multiple sequence alignment, phylogenetic tree, and HyPhy report files were generated with a truncated set of grass species as a target. When you predict deleterious SNPs in your dataset, you should use a set of species that cover a deeper evolutionary history, to allow adequate divergence for dN and dS estimates.
 
