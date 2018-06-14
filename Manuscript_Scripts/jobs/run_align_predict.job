@@ -1,0 +1,17 @@
+#!/bin/sh
+
+#PBS -l mem=15gb,nodes=1:ppn=4,walltime=24:00:00 
+#PBS -m abe 
+#PBS -M llei@umn.edu 
+#PBS -q lab
+
+module load python2
+module load biopython
+module load ncbi_blast+
+module load hyphy/2.2.6_smp
+FASTAFILES=$(cat /home/morrellp/llei/Deleterious_mutation_project/LTR_BAD_mutation/A_thaliana_BAD_Mutation/both_manual_fasta_file.list)
+CURRENT_FASTAFILES=${FASTAFILES[${PBS_ARRAYID}]}
+GENES=$(awk -F"/" '{print $NF}' /home/morrellp/llei/Deleterious_mutation_project/LTR_BAD_mutation/A_thaliana_BAD_Mutation/both_manual_fasta_file.list|awk -F"." '{print $1}')
+CURRENT_GENES=${GENES[${PBS_ARRAYID}]}
+
+python /home/morrellp/llei/BAD_Mutations/BAD_Mutations.py -v DEBUG align -c /home/morrellp/llei/Deleterious_mutation_project/LTR_BAD_mutation/A_thaliana_BAD_Mutation/BAD_Mutations_Config_Ath.txt  -f ${CURRENT_FASTAFILES} -o /home/morrellp/llei/Deleterious_mutation_project/LTR_BAD_mutation/A_thaliana_BAD_Mutation/out_Ath 2> /home/morrellp/llei/Deleterious_mutation_project/LTR_BAD_mutation/A_thaliana_BAD_Mutation/log_files/${CURRENT_GENES}_Alignment.log 

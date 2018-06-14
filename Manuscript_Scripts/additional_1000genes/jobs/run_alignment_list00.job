@@ -1,0 +1,23 @@
+#!/bin/sh
+
+#PBS -l mem=40gb,nodes=1:ppn=4,walltime=24:00:00 
+#PBS -m abe 
+#PBS -M lileichinaus@gmail.com
+#PBS -q small
+#PBS -e /panfs/roc/groups/9/morrellp/llei/Deleterious_mutation_project/LRT_BAD_mutation/A_thaliana_BAD_Mutation/Additional1000genes/script/MSA_tree_list00
+#PBS -o /panfs/roc/groups/9/morrellp/llei/Deleterious_mutation_project/LRT_BAD_mutation/A_thaliana_BAD_Mutation/Additional1000genes/script/MSA_tree_list00
+
+module load bad_mutations/1.0
+
+FASTAFILES=($(cat /panfs/roc/groups/9/morrellp/llei/Deleterious_mutation_project/LRT_BAD_mutation/A_thaliana_BAD_Mutation/Additional1000genes/file_list/fasta.list00))
+CURRENT_FASTAFILES=${FASTAFILES[${PBS_ARRAYID}]}
+GENES=($(awk -F"/" '{print $NF}' /panfs/roc/groups/9/morrellp/llei/Deleterious_mutation_project/LRT_BAD_mutation/A_thaliana_BAD_Mutation/Additional1000genes/file_list/fasta.list00|awk -F"." '{print $1}'))
+CURRENT_GENES=${GENES[${PBS_ARRAYID}]}
+
+python /home/morrellp/llei/BAD_Mutations/BAD_Mutations.py -v DEBUG\
+		align \
+		-c /panfs/roc/groups/9/morrellp/llei/Deleterious_mutation_project/LRT_BAD_mutation/A_thaliana_BAD_Mutation/Config/BAD_Mutations_Config_Ath.txt\
+		-f ${CURRENT_FASTAFILES} \
+		-o /panfs/roc/groups/9/morrellp/llei/Deleterious_mutation_project/LRT_BAD_mutation/A_thaliana_BAD_Mutation/Additional1000genes/MSA_tree/list00\
+		 2> /panfs/roc/groups/9/morrellp/llei/Deleterious_mutation_project/LRT_BAD_mutation/A_thaliana_BAD_Mutation/Additional1000genes/log_MSA_tree/list00/${CURRENT_GENES}_Alignment.log 
+
