@@ -1,2 +1,1 @@
-# BAD_mutation_Ath
-This is for BAD_mutation for A.thaliana prediction
+This directory included all the scripts related to the manuscript "Kono TJY, Lei L, Shih C, Hoffman PJ, Morrell PL, Fay JC (preprint). [Comparative genomics approaches accurately predict deleterious variants in plants](https://www.biorxiv.org/content/early/2017/02/27/112318)". BioRxiv.
