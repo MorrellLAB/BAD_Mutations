@@ -69,7 +69,7 @@ log(p/(1-p)) = -2.453-0.1904*LRT(masked)-0.1459*constraint+0.2199*max(Rn,An)-0.2
         #   Then, calculate the p-values. We will calculate the right hand side
         #   of the equation first.
         unmasked_rhs = -2.407 - (0.2139*unmasked_p) - (0.2056*con) + (0.07368*rn) - (0.1236*an)
-        masked_rhs = -2.453 - (0.1904*masked_p) - (0.1459*con) + (0.2199*max([rn, an])) - (0.2951*abs(rn-an))
+        masked_rhs = -2.453 - (0.1904*masked_p) - (0.1459*con) + (0.2199*max(rn, an)) - (0.2951*abs(rn-an))
         #   Solve for p
         #   Protect the denominator calculation. Sometimes it overlfows. If it
         #   does, set it to Inf
