@@ -364,7 +364,7 @@ def validate_args(args, log):
 #   Python 3+.
 def usage():
     """Print a usage message."""
-    print '''Usage: BAD_Mutations.py <subcommand> <arguments>
+    print('''Usage: BAD_Mutations.py <subcommand> <arguments>
 
 where <subcommand> is one of 'setup', 'fetch', or 'predict.' This script will
 download the necessary data to perform the likelihood ratio test (LRT) for
@@ -392,5 +392,5 @@ list of affected codons.
 Dependencies:
     Biopython
     tblastx (NCBI BLAST executables)
-    pasta (Phylogeny-aware sequence alignment)'''
+    pasta (Phylogeny-aware sequence alignment)''')
     return

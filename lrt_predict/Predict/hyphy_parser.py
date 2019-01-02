@@ -36,7 +36,7 @@ class HyPhyParser(object):
         return pred_files
 
 
-    def logistic_p_values(self, unmasked, masked, constraint, ref, alt, aln):
+    def logistic_p_values(self, unmasked, masked, cons, m_cons, ref, alt, aln):
         """Calculate a p-value for the test, based on a logistic regression
         reported in the accompanying manuscript. The equations are as follows:
 
@@ -53,23 +53,30 @@ log(p/(1-p)) = -2.453-0.1904*LRT(masked)-0.1459*constraint+0.2199*max(Rn,An)-0.2
             #   Sometimes the values we pass are so small, they are 0. We set
             #   these to very small.
             if unmasked == '0':
-                unmasked = 1e-15
+                unmasked = 1e-16
             if masked == '0':
-                masked = 1e-15
+                masked = 1e-16
             unmasked_p = math.log10(float(unmasked))
             masked_p = math.log10(float(masked))
-            con = float(constraint)
+            con = float(cons)
+            m_con = float(m_cons)
+            if con > 10:
+                con = 10.0
+            if m_con > 10:
+                m_con = 10.0
         except ValueError:
             self.mainlog.error('Non-numeric data passed to compile.')
             exit(1)
         #   Calculate the Rn and An values. These are easy, we just have to
         #   count the number of times it shows up
-        rn = aln.count(ref)
-        an = aln.count(alt)
+        rn = float(aln.count(ref))
+        an = float(aln.count(alt))
         #   Then, calculate the p-values. We will calculate the right hand side
         #   of the equation first.
+        m_rn_an = float(max(rn, an))
+        a_rn_an = float(abs(rn - an))
         unmasked_rhs = -2.407 - (0.2139*unmasked_p) - (0.2056*con) + (0.07368*rn) - (0.1236*an)
-        masked_rhs = -2.453 - (0.1904*masked_p) - (0.1459*con) + (0.2199*max(rn, an)) - (0.2951*abs(rn-an))
+        masked_rhs = -2.453 - (0.1904*masked_p) - (0.1459*m_con) + (0.2199*m_rn_an) - (0.2951*a_rn_an)
         #   Solve for p
         #   Protect the denominator calculation. Sometimes it overlfows. If it
         #   does, set it to Inf
@@ -151,10 +158,12 @@ log(p/(1-p)) = -2.453-0.1904*LRT(masked)-0.1459*constraint+0.2199*max(Rn,An)-0.2
         #   First check the alt. If it's NA, we return NA as well
         if alt == 'NA':
             return prediction + ['NA', 'NA']
+        print([str(i) + ' ' + j for i,j in enumerate(prediction)])
         u, m = self.logistic_p_values(
             prediction[7],
             prediction[12],
             prediction[5],
+            prediction[11],
             prediction[10],
             alt,
             prediction[9])
