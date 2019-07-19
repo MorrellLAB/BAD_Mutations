@@ -107,10 +107,10 @@ def fetch(arg, log):
         ens.get_ftp_urls()
         ens.download_files()
         log.debug('Downloading and converting files.')
-        phy.get_xml_urls()
-        phy.fetch_cds()
+        #phy.get_xml_urls()
+        #phy.fetch_cds()
         ens.convert()
-        phy.convert()
+        #phy.convert()
     return
 
 

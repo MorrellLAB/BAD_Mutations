@@ -4,6 +4,7 @@
 #   Import python modules here
 import ftplib
 import os
+import fnmatch
 from StringIO import StringIO
 
 #   Import our helper scripts here
@@ -101,13 +102,22 @@ class EnsemblPlants(fetch.Fetcher):
         for d in self.session.nlst():
             #   If it's in our list of species to download...
             if d in self.ENSEMBL_TO_FETCH:
+                pattern = d + '/'
+                path = self.ENSEMBL_PLANT_BASE
+                result = []
+                for root, dirs, files in os.walk(path):
+                    for name in files:
+                        if fnmatch.fnmatch(name, pattern):
+                            result.append(os.path.join(root, name))
                 self.mainlog.debug(
                     'Attempting to cd into ' +
-                    self.ENSEMBL_PLANT_BASE +
-                    d +
+                    #self.ENSEMBL_PLANT_BASE +
+                    #d +
+                    result +
                     '/cds/')
                 #   cd into the CDS directory there
-                self.session.cwd(self.ENSEMBL_PLANT_BASE + d + '/cds/')
+                #self.session.cwd(self.ENSEMBL_PLANT_BASE + d + '/cds/')
+                self.session.cwd(result + '/cds/')
                 #   Get the contents
                 listing = self.session.nlst()
                 #   Then find the one that ends in .fa.gz
