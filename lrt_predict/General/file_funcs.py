@@ -42,8 +42,10 @@ def ensembl_species_name(fname):
     #   Ensembl filenames are like
     #   Genus_species.blahlblah.blahblah ... .fa.gz
     #   We want to match the genus_species part
-    binomial = re.match('^[a-zA-Z]+(_[a-zA-Z]+)?', lfile)
-    return binomial.group()
+    #binomial = re.match('^[a-zA-Z]+(_[a-zA-Z]+)?', lfile)
+    #return binomial.group()
+    sfile = lfile.split(".")
+    return sfile[0]
 
 
 #   A function to calculate md5

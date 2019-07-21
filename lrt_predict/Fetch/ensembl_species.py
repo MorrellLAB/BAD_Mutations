@@ -3,6 +3,7 @@
 #   We build this list by using species that are not in Phytozome.
 #   It would be better to programmatically generate this, probably...
 ensembl_fetch = [
+    'gca_000002545',
     'gca_001661345',
     'gca_001661335',
     'gca_000259595',

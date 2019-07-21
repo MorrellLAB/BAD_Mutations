@@ -59,8 +59,9 @@ class EnsemblPlants(fetch.Fetcher):
     """
 
     ENSEMBL_URL = 'ftp.ensemblgenomes.org'
-    ENSEMBL_PLANT_BASE = '/pub/plants/current/fasta/'
+    ENSEMBL_PLANT_BASE = '/pub/fungi/current/fasta/'
     ENSEMBL_TO_FETCH = ensembl_species.ensembl_fetch
+    ENSEMBL_SUBDIRECTORIES = ['fungi_ascomycota1_collection', 'fungi_ascomycota2_collection', 'fungi_ascomycota3_collection', 'fungi_ascomycota4_collection', 'fungi_basidiomycota1_collection', 'fungi_blastocladiomycota1_collection', 'fungi_chytridiomycota1_collection', 'fungi_entomophthoromycota1_collection', 'fungi_microsporidia1_collection', 'fungi_mucoromycota1_collection', 'fungi_neocallimastigomycota1_collection', 'fungi_rozellomycota1_collection']
 
     def __init__(self, base, convertonly, verbose):
         fetch.Fetcher.__init__(self, base, verbose)
@@ -96,59 +97,59 @@ class EnsemblPlants(fetch.Fetcher):
         files listed in a CDS directory. Also reads the CRC sums out of
         the CHECKSUMS file in each FTP directory. Save the URL in the
         `urls' attribute, and the checksums in the `cksums' attribute."""
-        #   nlst() returns a listing of the directory contents
-        #   We are going to assume that each of these are directories, since
-        #   that is the way Ensembl has their server set up...
-        for d in self.session.nlst():
-            #   If it's in our list of species to download...
-            if d in self.ENSEMBL_TO_FETCH:
-                pattern = d + '/'
-                path = self.ENSEMBL_PLANT_BASE
+        #   Ensembl fungi doesn't have a consistent directory structure.
+        #   For each GCA ID that we want to fetch, iterate through the
+        #   subdirectories and find the directory that matches the ID
+        for d in self.ENSEMBL_TO_FETCH:
+            for sub in self.ENSEMBL_SUBDIRECTORIES:
+                print sub
+                self.session.cwd(self.ENSEMBL_PLANT_BASE + sub + '/')
+                #   The pattern to look for is the GCA ID
+                pattern = '*' + d + '*'
                 result = []
-                for root, dirs, files in os.walk(path):
-                    for name in files:
-                        if fnmatch.fnmatch(name, pattern):
-                            result.append(os.path.join(root, name))
-                self.mainlog.debug(
-                    'Attempting to cd into ' +
-                    #self.ENSEMBL_PLANT_BASE +
-                    #d +
-                    result +
-                    '/cds/')
-                #   cd into the CDS directory there
-                #self.session.cwd(self.ENSEMBL_PLANT_BASE + d + '/cds/')
-                self.session.cwd(result + '/cds/')
-                #   Get the contents
-                listing = self.session.nlst()
-                #   Then find the one that ends in .fa.gz
-                for l in listing:
-                    if l.endswith('.fa.gz'):
-                        #   Tack the full path onto the list of URLS
-                        self.mainlog.debug(
-                            'Appending ' +
-                            self.session.pwd() +
-                            '/' +
-                            l +
-                            ' onto list of files to fetch.')
-                        self.urls.append(self.session.pwd() + '/' + l)
-                    #   get the checksum
-                    elif l == 'CHECKSUMS':
-                        #   We create a new StringIO instance, which can
-                        #   read/write string data like file data
-                        c = StringIO()
-                        self.session.retrbinary('RETR ' + l, c.write)
-                        #   Then we get the contents of the CHECKSUMS file
-                        #   Split on newlines, since there is one line per
-                        #   file entry
-                        c_str = c.getvalue()
-                        c.close()
-                        lines = c_str.strip().split('\n')
-                        #   Check for the file that ends with .fa.gz
-                        for line in lines:
-                            if line.endswith('.fa.gz'):
-                                #   The first field is the 16-bit checksum
-                                #   Cast to integer
-                                self.cksums.append(int(line.split()[0]))
+                #   Search each subdirectory and find a pattern match
+                dirs = self.session.nlst()
+                for name in dirs:
+                    if fnmatch.fnmatch(name, pattern):
+                        result.append(self.ENSEMBL_PLANT_BASE + sub + '/' + name)
+                #   Only proceed if a match is found
+                if len(result) > 0:
+                    result = result[0]
+                    self.mainlog.info('Attempting to cd into ' + result + '/cds/')
+                    #   cd into the CDS directory there
+                    self.session.cwd(result + '/cds/')
+                    #   Get the contents
+                    listing = self.session.nlst()
+                    #   Then find the one that ends in .fa.gz
+                    for l in listing:
+                        if l.endswith('.fa.gz'):
+                            #   Tack the full path onto the list of URLS
+                            self.mainlog.debug(
+                                'Appending ' +
+                                self.session.pwd() +
+                                '/' +
+                                l +
+                                ' onto list of files to fetch.')
+                            self.urls.append(self.session.pwd() + '/' + l)
+                        #   get the checksum
+                        elif l == 'CHECKSUMS':
+                            #   We create a new StringIO instance, which can
+                            #   read/write string data like file data
+                            c = StringIO()
+                            self.session.retrbinary('RETR ' + l, c.write)
+                            #   Then we get the contents of the CHECKSUMS file
+                            #   Split on newlines, since there is one line per
+                            #   file entry
+                            c_str = c.getvalue()
+                            c.close()
+                            lines = c_str.strip().split('\n')
+                            #   Check for the file that ends with .fa.gz
+                            for line in lines:
+                                if line.endswith('.fa.gz'):
+                                    #   The first field is the 16-bit checksum
+                                    #   Cast to integer
+                                    self.cksums.append(int(line.split()[0]))
+                    break
         return
 
     def download_files(self):

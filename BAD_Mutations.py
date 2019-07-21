@@ -93,15 +93,15 @@ def fetch(arg, log):
     if arg['convert_only']:
         log.debug('Only converting files.')
         ens.convert()
-        phy.convert()
+        #phy.convert()
     elif arg['fetch_only']:
         log.debug('Only downloading files.')
         log.info('Fetching from Ensembl Plants...')
         ens.get_ftp_urls()
         ens.download_files()
-        log.info('Fetching from Phytozome...')
-        phy.get_xml_urls()
-        phy.fetch_cds()
+        #log.info('Fetching from Phytozome...')
+        #phy.get_xml_urls()
+        #phy.fetch_cds()
     else:
         log.debug('Downloading and converting Ensembl Plants files...')
         ens.get_ftp_urls()
