@@ -1,0 +1,8 @@
+name: bad_mutations
+dependencies:
+    - python=3.*
+    - biopython=1.72
+    - blast=2.9.0
+    - pasta=1.7.8
+    - mafft=7.407
+    - hyphy=2.5.0

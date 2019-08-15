@@ -104,7 +104,7 @@ class ConfigHandler(object):
         configs = self.config_vars.copy()
         #   We will iterate through the user-supplied arguments dictionary,
         #   and update those that need to be updated
-        for option, val in self.user_args.iteritems():
+        for option, val in self.user_args.items():
             if option not in configs:
                 configs[option] = val
             #   Check that the value was specified on the command line

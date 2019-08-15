@@ -1,20 +1,10 @@
 #!/usr/bin/env python
-"""
-Script to perform LRT from Chun and Fay (2009) to predict deleterious SNPs in
-plants. Requires a user name and password for the JGI phyotzome portal (Free)
-Author: Thomas JY Kono and Paul J Hoffman
-        2016-05-27
-        Saint Paul, MN
+"""Perform a likelihood ratio test from Chun and Fay (2009) for deleterious
+SNP prediction in plants.
 
-Version 1.0
+Authors: Thomas JY Kono and Paul J Hoffman
+Paper: https://doi.org/10.1534/g3.118.200563
 """
-#   Dependencies:
-#       1) argparse https://code.google.com/p/argparse/
-#           (Not required for Python 3 and Python 2 >= 2.7)
-#       2) Biopython http://biopython.org/
-#       3) BLAST+ executables from NCBI
-#       4) PASTA phylogeny-aware alignment https://github.com/smirarab/pasta
-#       5) cURL http://curl.haxx.se/
 
 #   to check arguments
 import sys
@@ -181,8 +171,8 @@ def align(arg, unaligned, log):
     aln.prepare_sequences()
     #   Then align them
     stdout, stderr = aln.pasta_align()
-    log.debug('stdout: \n' + stdout)
-    log.debug('stderr: \n' + stderr)
+    log.debug('stdout: \n' + stdout.decode('utf-8'))
+    log.debug('stderr: \n' + stderr.decode('utf-8'))
     #   Backtranslate the alignment
     aln.back_translate()
     #   Then sanitize the alignment and tree
@@ -378,5 +368,5 @@ def main():
         loglevel.error(msg)
     return
 
-#   Do the work here
+
 main()

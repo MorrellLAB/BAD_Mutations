@@ -4,7 +4,7 @@
 #   Import python modules here
 import ftplib
 import os
-from StringIO import StringIO
+import io
 
 #   Import our helper scripts here
 import lrt_predict.Fetch.fetch as fetch
@@ -125,12 +125,12 @@ class EnsemblPlants(fetch.Fetcher):
                     elif l == 'CHECKSUMS':
                         #   We create a new StringIO instance, which can
                         #   read/write string data like file data
-                        c = StringIO()
+                        c = io.BytesIO()
                         self.session.retrbinary('RETR ' + l, c.write)
                         #   Then we get the contents of the CHECKSUMS file
                         #   Split on newlines, since there is one line per
                         #   file entry
-                        c_str = c.getvalue()
+                        c_str = c.getvalue().decode('utf-8')
                         c.close()
                         lines = c_str.strip().split('\n')
                         #   Check for the file that ends with .fa.gz

@@ -60,7 +60,7 @@ class BlastSearch(object):
         """Initialize the class with base directory, query sequence, e-value
         threshold and verbosity level."""
         self.query = query
-        self.evalue = evalue
+        self.evalue = float(evalue)
         self.orthologues = {}
         self.mainlog = set_verbosity.verbosity('BLAST_Search', verbose)
         self.basedir = base
@@ -206,16 +206,17 @@ class BlastSearch(object):
         blastdbcmd_path = check_modules.check_executable('blastdbcmd')
         if blastdbcmd_path:
             self.mainlog.debug('Using ' + blastdbcmd_path)
-            for database, seqid in self.orthologues.iteritems():
+            for database, seqid in self.orthologues.items():
                 fasta, error = sequence_fetch.blastdbcmd(
                     blastdbcmd_path,
                     database,
                     seqid[0])
-                self.mainlog.debug('Stdout:\n' + fasta)
-                self.mainlog.debug('Stderr:\n' + error)
+                self.mainlog.debug('Stdout:\n' + fasta.decode('utf-8'))
+                self.mainlog.debug('Stderr:\n' + error.decode('utf-8'))
+                fasta_str = fasta.decode('utf-8')
                 #   If the sequence has ambiguous nucleotides (WRKYSMVBDHN),
                 #   then we exclude it.
-                db_seq = ''.join(fasta.split('\n')[1:])
+                db_seq = ''.join(fasta_str.split('\n')[1:])
                 #   Then, search for the ambiguous nucleotides, skip if they are
                 #   found.
                 if re.search('S|W|R|K|Y|M|V|B|D|H|N', db_seq, re.I):
@@ -229,11 +230,11 @@ class BlastSearch(object):
                 #   Then split on . and take the first part
                 spname = '>' + spname.split('.')[0]
                 #   Then replace the weird ID with the species name
-                fasta = re.sub('>.+', spname, fasta)
-                towrite += fasta
+                fasta_str = re.sub('>.+', spname, fasta_str)
+                towrite += fasta_str
         else:
             self.mainlog.debug('Using regex')
-            for database, seqid in self.orthologues.iteritems():
+            for database, seqid in self.orthologues.items():
                 fasta = sequence_fetch.get_seq_by_regex(database, seqid[1])
                 #   Perform the same check here for ambiguous nucleotides.
                 db_seq = ''.join(fasta.split('\n')[1:])

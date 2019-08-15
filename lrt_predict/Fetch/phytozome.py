@@ -69,9 +69,9 @@ class Phytozome(fetch.Fetcher):
     """
     #   These are common variables for every new Phytozome class
     #   They should not change from instance to instance
-    JGI_LOGIN = 'https://signon.jgi.doe.gov/signon/create'
-    DL_BASE = 'http://genome.jgi.doe.gov'
-    XML_URL = 'http://genome.jgi.doe.gov/ext-api/downloads/get-directory?organism=Phytozome'
+    JGI_LOGIN = 'https://signon-old.jgi.doe.gov/signon/create'
+    DL_BASE = 'https://genome.jgi.doe.gov'
+    XML_URL = 'https://genome.jgi.doe.gov/portal/ext-api/downloads/get-directory?organism=Phytozome'
     FAILED_LOGIN = 'Login and password do not match'
     EXPIRED_ACCOUNT = 'Sorry, your password has expired'
     TO_FETCH = phytozome_species.phyto_fetch
@@ -138,6 +138,7 @@ class Phytozome(fetch.Fetcher):
             prefix='BAD_Mutations_JGI_XML_',
             suffix='.xml',
             delete=False)
+        self.mainlog.debug('XML will be stored in ' + xml_out.name)
         #   Use cURL to download the XML, passing the cookies we generated
         #   earlier to authenticate.
         cmd = [
@@ -155,6 +156,8 @@ class Phytozome(fetch.Fetcher):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
         out, err = p.communicate()
+        self.mainlog.debug('cURL stdout: ' + out.decode('utf-8'))
+        self.mainlog.debug('cURL stderr: ' + err.decode('utf-8'))
         #   Then, read the XML back from the file
         xml = xml_out.read()
         #   This suffix is what we want the filenames ending with
