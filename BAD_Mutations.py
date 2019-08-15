@@ -281,7 +281,7 @@ def compile_preds(arg, log):
                     continue
                 else:
                     uscore_tx = tmp[4].replace('.', '_')
-                    aapos = tmp[9]
+                    aapos = tmp[11]
                     alt_aa = tmp[9]
                     key = (uscore_tx, aapos)
                     alts[key] = alt_aa
@@ -289,7 +289,7 @@ def compile_preds(arg, log):
     logp_preds = []
     for genepred in parsed_preds:
         for snppred in genepred:
-            a = alts.get((uscore_tx, aapos), 'NA')
+            a = alts.get((snppred[0], snppred[1]), 'NA')
             logp_preds.append(comp.add_regression(a, snppred))
         #   Then write them into the destination file
     comp.compile_predictions(logp_preds)

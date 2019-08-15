@@ -29,8 +29,8 @@ def missing_mods(modules):
     """Function to print a nice message about modules that are required."""
     msg = '''Some of the required modules were not found on your system. Please
 install them and try again. The following modules were not found:'''
-    print msg
-    print '\n'.join(modules)
+    print(msg)
+    print('\n'.join(modules))
     return
 
 

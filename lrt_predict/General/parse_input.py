@@ -13,8 +13,8 @@ from Bio import Phylo
 from Bio.Phylo.NewickIO import NewickError
 
 #   Our helper scripts
-import set_verbosity
-import file_funcs
+import lrt_predict.General.set_verbosity
+import lrt_predict.General.file_funcs
 
 
 def valid_tree(f, log):
