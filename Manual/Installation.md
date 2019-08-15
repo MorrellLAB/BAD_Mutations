@@ -49,4 +49,14 @@ unset PASTA_TOOLS_DEVDIR
 Deactivate and re-activate the Conda environment set the environment variable. You should not be able to run `BAD_Mutations` with all its dependencies.
 
 ### Without Conda
-Withou Conda, you must 
+Withou Conda, you must install the following, and make sure they are in your `$PATH`:
+
+- Python 3.x
+- [PASTA](https://github.com/smirarab/pasta)
+- [HyPhy](http://hyphy.org/resources/)
+- [BLAST+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download)
+- [MAFFT](https://mafft.cbrc.jp/alignment/software/)
+- [FastTree](http://www.microbesonline.org/fasttree/)
+- [BioPython](https://biopython.org/)
+
+If you are on MacOS, then the [Homebrew](https://brew.sh/) package manager should have build scripts for these tools.
