@@ -4,20 +4,16 @@ BAD_Mutations
 Overview
 --------
 `BAD_Mutations` (**B**LAST-**A**ligned-**D**eleterious?) performs a likelihood
-ratio test (LRT) for the prediction of deleterious variants, as described in 
-[Chun and Fay (2009)](http://genome.cshlp.org/content/19/9/1553.abstract). The
+ratio test (LRT) for the prediction of deleterious variants, as described in
+[Chun and Fay (2009)](https://doi.org/10.1101/gr.092619.109). The
 package is designed to identify deleterious variants in plant species.
-`BAD_Mutations` is first used in
-[Kono et al. (2016)](http://mbe.oxfordjournals.org/content/33/9/2307.full),
-with publication detailing features of the software to follow.
+`BAD_Mutations` is first used in [Kono et al. (2016)](https://doi.org/10.1093/molbev/msw102), with publication detailing features of the software to follow.
 
 For more information, see the user manual.
 
 Citing BAD_Mutations
 --------------------
-`BAD_Mutations` has a formal publication in [preprint](https://www.biorxiv.org/content/early/2017/02/27/112318). For now, the most appropriate citation is the
-[Kono et al. (2016)](http://mbe.oxfordjournals.org/content/33/9/2307.full)
-MBE paper and [Kono et al. (2017)](https://www.biorxiv.org/content/early/2017/02/27/112318).
+Please cite [Kono et al. (2016)](http://mbe.oxfordjournals.org/content/33/9/2307.full) and [Kono et al. (2018)](https://doi.org/10.1534/g3.118.200563).
 
 TODO
 ----
