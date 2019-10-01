@@ -35,7 +35,6 @@ class HyPhyParser(object):
             if fname.endswith('_Predictions.txt')]
         return pred_files
 
-
     def logistic_p_values(self, unmasked, masked, cons, m_cons, ref, alt, aln):
         """Calculate a p-value for the test, based on a logistic regression
         reported in the accompanying manuscript. The equations are as follows:

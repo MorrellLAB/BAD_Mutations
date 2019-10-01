@@ -254,7 +254,6 @@ def compile_preds(arg, log):
     log.info('Found a total of ' + str(len(reports)) + ' reports.')
     #   Parse them into prediction data
     parsed_preds = [comp.parse_prediction(rep) for rep in reports]
-    log.info('Found a total of ' + str(len(parsed_preds)) + ' predictions')
     #   Read the long format substitutions file, keying on the same values as
     #   the prediction file (gene ID and postion). This file will also have
     #   the SNP ID in it.
@@ -265,16 +264,17 @@ def compile_preds(arg, log):
             if index == 0:
                 continue
             else:
-                tmp = line.strip().split()
-                #   If the fourth field is 'Yes' we skip it. Only nonsyn here.
-                if tmp[3] == 'Yes':
-                    continue
-                else:
-                    uscore_tx = tmp[4].replace('.', '_')
-                    aapos = tmp[11]
-                    alt_aa = tmp[9]
-                    key = (uscore_tx, aapos)
-                    alts[key] = alt_aa
+                tmp = line.strip().split('\t')
+                # Unpack the values.
+                txid = tmp[0]
+                aapos = tmp[1]
+                alt_aa = tmp[2]
+                snpid = tmp[3]
+                # The HyPhy predictions are keyed on (txid, pos), but we have
+                # to replace dot (.) with underscore because dots crash the
+                # HyPhy sequence parser.
+                key = (txid.replace('.', '_'), aapos)
+                alts[key] = alt_aa
     #   Add P-values to the predictions
     logp_preds = []
     for genepred in parsed_preds:
