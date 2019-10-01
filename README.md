@@ -11,6 +11,8 @@ package is designed to identify deleterious variants in plant species.
 
 For more information, see the [Wiki](https://github.com/MorrellLAB/BAD_Mutations/wiki) and [user manual](https://github.com/MorrellLAB/BAD_Mutations/wiki/Manual).
 
+For the latest untested changes, including support for Python3, see the [dev branch](https://github.com/MorrellLAB/BAD_Mutations/tree/dev).
+
 Citing BAD_Mutations
 --------------------
 Please cite [Kono et al. (2016)](http://mbe.oxfordjournals.org/content/33/9/2307.full) and [Kono et al. (2018)](https://doi.org/10.1534/g3.118.200563).
