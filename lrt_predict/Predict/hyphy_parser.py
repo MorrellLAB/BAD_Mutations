@@ -157,7 +157,6 @@ log(p/(1-p)) = -2.453-0.1904*LRT(masked)-0.1459*constraint+0.2199*max(Rn,An)-0.2
         #   First check the alt. If it's NA, we return NA as well
         if alt == 'NA':
             return prediction + ['NA', 'NA']
-        print([str(i) + ' ' + j for i,j in enumerate(prediction)])
         u, m = self.logistic_p_values(
             prediction[7],
             prediction[12],
