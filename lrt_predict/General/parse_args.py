@@ -302,7 +302,7 @@ def validate_args(args, log):
                     'Username is not a valid e-mail address.')
         #   Username not supplied, and we need to access JGI
         elif not args['convert_only']:
-            args['user'] = raw_input('Username for JGI Genomes Portal: ')
+            args['user'] = input('Username for JGI Genomes Portal: ')
         #   Else, we only want to convert
         else:
             pass
