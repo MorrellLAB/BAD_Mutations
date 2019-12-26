@@ -69,7 +69,7 @@ class Phytozome(fetch.Fetcher):
     """
     #   These are common variables for every new Phytozome class
     #   They should not change from instance to instance
-    JGI_LOGIN = 'https://signon-old.jgi.doe.gov/signon/create'
+    JGI_LOGIN = 'https://signon.jgi.doe.gov/signon/create'
     DL_BASE = 'https://genome.jgi.doe.gov'
     XML_URL = 'https://genome.jgi.doe.gov/portal/ext-api/downloads/get-directory?organism=Phytozome'
     FAILED_LOGIN = 'Login and password do not match'
