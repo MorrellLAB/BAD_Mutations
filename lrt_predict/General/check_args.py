@@ -28,7 +28,7 @@ def valid_dir(dname):
 def valid_email(email):
     #   This matches one or more non-whitespace, followed by @,
     #   followed by .-separated non-whitespace, and ending in non-whitespace
-    email_regex = '\S+@(\S+\.)+\S'
+    email_regex = r'\S+@(\S+\.)+\S'
     if re.match(email_regex, email):
         return True
     else:
