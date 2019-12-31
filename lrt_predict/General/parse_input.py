@@ -122,5 +122,5 @@ def parse_subs(f, log):
         str(index+1) +
         ' positions to predict.')
     # Sort the substitutions
-    subs_data = sorted(subs_data, key=lambda x: x[0])
+    subs_data.sort()
     return subs_data
