@@ -59,7 +59,7 @@ except (OSError, PermissionError) as e:
 # to disk.
 SNPID = '#Uploaded_variation'
 TXID = 'Feature'
-CDSPOS = 'CDS_position'
+PROTPOS = 'Protein_position'
 AA_STATE = 'Amino_acids'
 subs = {}
 with gzip.open(vep, 'rt') as f:
@@ -75,8 +75,8 @@ with gzip.open(vep, 'rt') as f:
                     save_cols['snp_id'] = i
                 if h == TXID:
                     save_cols['tx_id'] = i
-                if h == CDSPOS:
-                    save_cols['cds_pos'] = i
+                if h == PROTPOS:
+                    save_cols['prot_pos'] = i
                 if h == AA_STATE:
                     save_cols['aa_state'] = i
                 if h == 'Consequence':
@@ -88,7 +88,7 @@ with gzip.open(vep, 'rt') as f:
             if impact == 'missense_variant':
                 snpid = tmp[save_cols['snp_id']]
                 txid = tmp[save_cols['tx_id']]
-                cds = tmp[save_cols['cds_pos']]
+                cds = tmp[save_cols['prot_pos']]
                 aa = tmp[save_cols['aa_state']]
                 altaa = aa.split('/')[1]
                 # Key them on transcript
