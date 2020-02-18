@@ -44,7 +44,7 @@ The one-letter amino acid code for the derived state of the variant is shown on 
 [Return to TOC](#toc)
 
 # <a name="citation"></a>Citation
-The model used to estimate codon conservation and predict which variants are deleterious is reported in Chun and Fay (2009). The actual software package is first used in [Kono *et al.* (2016)](http://mbe.oxfordjournals.org/content/33/9/2307), with the [preprint](http://biorxiv.org/content/early/2016/05/12/033175) available in BioRxiv. `BAD_Mutations` has a formal publication (Kono et al., 2017) with [preprint version](https://www.biorxiv.org/content/early/2017/02/27/112318).
+The model used to estimate codon conservation and predict which variants are deleterious is reported in Chun and Fay (2009). The actual software package is first used in [Kono *et al.* (2016)](https://doi.org/10.1093/molbev/msw102), with the [preprint](http://biorxiv.org/content/early/2016/05/12/033175) available in BioRxiv. `BAD_Mutations` has a formal publication [Kono *et al.* (2018)](https://doi.org/10.1534/g3.118.200563) with [preprint version](https://www.biorxiv.org/content/early/2017/02/27/112318).
 
 `BAD_Mutations` was primarily written by Thomas J.Y. Kono and Paul J. Hoffman. The HYPHY script for estimating codon conservation was written by Justin C. Fay. Testing was performed by Chaochih Liu, Felipe Reyes, and Skylar Wyant. Rigorous comparison to related software was performed by Justin C. Fay and Li Lei.
 
@@ -78,7 +78,7 @@ Refer to each software's README or installation notes for installation instructi
 [Return to TOC](#toc)
 
 ## <a name="msi"></a>Instructions for UMN MSI
-This section is specific to using `BAD_Mutations` on the [University of Minnesoa Super Computing Institue](http://msi.umn.edu/) cluster. Our cluster uses the `module` command to add and remove certain programs from the user’s environment. The following commands should be run for `BAD_Mutations` on the cluster:
+This section is specific to using `BAD_Mutations` on the [University of Minnesota Super Computing Institute](http://msi.umn.edu/) cluster. Our cluster uses the `module` command to add and remove programs from the user’s environment. The following commands should be run for `BAD_Mutations` on the cluster:
 
     $ module load python2
     $ module load biopython
@@ -90,7 +90,7 @@ You will have to install the `PASTA` sequence alignment tool. Follow the instruc
 [Return to TOC](#toc)
 
 # <a name="inputs"></a>Input Files
-Input files should be plain text with UNIX line endings (LF). `BAD_Mutations` takes a FASTA file containing the query coding sequence, and a text file with the list of codons to predict. The coding sequence does not have to start with ATG, but it should be supplied in the 5\(^{\prime}\) to 3\(^{\prime}\) direction, and its length should be a multiple of 3. The codons should be supplied as numerical offsets with respect to the provided FASTA file, with counting starting from 1 and one codon listed per line. The substitutions file may optionally have a second field with a SNP identifier.
+Input files should be plain text with UNIX line endings (LF). `BAD_Mutations` takes a FASTA file containing the query coding sequence, and a text file with the list of codons to predict. The coding sequence does not have to start with ATG, but it should be supplied in the 5ʹ to 3ʹ direction, and its length should be a multiple of 3. The codons should be supplied as numerical offsets with respect to the provided FASTA file, with counting starting from 1 and one codon listed per line. The substitutions file may optionally have a second field with a SNP identifier.
 
 There is no programmatic means of enforcing the consistency of directionality between the FASTA file and the substitutions file. This means it is possible to submit them in the reverse order, but keep in mind that the coordinates must match in order for the predictions to be valid.
 
@@ -288,7 +288,7 @@ This command will set up the environment for predicting in barley (*Hordeum vulg
                          -e 0.05 \
                          -c BAD_Mutations_Config.txt 2> Setup.log
 
-Note that the species name is listed in all lowercase and with an underscore. This is because Ensembl stores information for barley under that name. Phytozome has its own naming scheme. You can run 
+Note that the species name is listed in all lowercase and with an underscore. This is because Ensembl stores information for barley under that name. Phytozome has its own naming scheme. You can run
 
     $ ./BAD_Mutations.py setup --list-species
 
