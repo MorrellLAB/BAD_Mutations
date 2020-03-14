@@ -25,18 +25,18 @@
 - [Data Sources](#databases)
 
 # <a name="overview"></a>Overview
-`BAD_Mutations` (**B**LAST-**A**ligned-**D**eleterious?) performs a likelihood ratio test (LRT) for the prediction of deleterious variants. The package is comprised of Python and Bourne Again Shell (BASH) scripts. The LRT uses a [HyPhy](http://hyphy.org/w/index.php/Main_Page) script. `BAD_Mutations` was written with Python 2 syntax, but conversion to Python 3 is planned. `BAD_Mutations` is designed to be run from the command line. Running from an interactive Python environment is not recommended nor supported.
+`BAD_Mutations` (**B**LAST-**A**ligned-**D**eleterious?) performs a likelihood ratio test (LRT) for the prediction of deleterious variants. The package is comprised of Python and Bourne Again Shell (BASH) scripts. The LRT uses a [HyPhy](http://hyphy.org/w/index.php/Main_Page) script. `BAD_Mutations` was written with Python 2 syntax, but conversion to Python 3 is planned. `BAD_Mutations` is designed to run from the command line. Running from an interactive Python environment is not recommended nor supported.
 
 `BAD_Mutations` contains five major subcommands: `setup`, `fetch`, `align`, `predict`, and `compile`. Both `setup` and `fetch` are meant to be run once, or very rarely. The `align` subcommand generates phylogenetic trees and multiple sequence alignments for input to the prediction scripts. The `predict` subcommand does the actual variant effect prediction. More information about how to run `BAD_Mutations` is available in the “Usage” section.
 
 Briefly, `BAD_Mutations` predicts deleterious variants using a sequence constraint approach. For a given query gene sequence and list of nonsynonmyous SNPs, a multiple sequence alignment among homologues is produced, and the given codons are tested for conservation. Variants that alter a codon with a high degree of conservation are inferred to be deleterious. More details on the procedure in `BAD_Mutations` is available in the “Methods” section.
 
-An alignment of phytochrome C (PhyC) used for prediction of a nonsynonymous SNP in barley is shown below.
+An alignment of phytochrome C (*PhyC*) used for prediction of a nonsynonymous SNP in barley is shown below.
 ![Alignment](alignment.png)
 
 The phylogenetic relationships of the gene sequences are shown on the left. The consensus sequence is shown at the top. Dots correspond to identity to consensus, and letters show mismatches. Colored boxes behind codon triplets correspond to amino acid residues. The query polymorphism is shown in yellow. The codon is conserved, so the SNP is inferred to be deleterious. This polymorphism is causative for early maturity in barley ([Nishida *et al.* (2013)](http://www.plantphysiol.org/content/early/2013/09/06/pp.113.222570.abstract)).
 
-Examples of alignment columns that produce deleterious and 'tolerated' predictions are shown below.
+Examples of alignment columns that produce 'deleterious' and 'tolerated' predictions are shown below.
 ![Deleterious and tolerated](del_tol.png)
 
 The one-letter amino acid code for the derived state of the variant is shown on the left, and the ancestral state is shown in the center. The alignment column is shown as a string of amino acid codes on the right, with dashes representing gaps. Deleterious SNPs alter columns that have much higher amino acid conservation than tolerated SNPs.
@@ -44,7 +44,7 @@ The one-letter amino acid code for the derived state of the variant is shown on 
 [Return to TOC](#toc)
 
 # <a name="citation"></a>Citation
-The model used to estimate codon conservation and predict which variants are deleterious is reported in Chun and Fay (2009). The actual software package is first used in [Kono *et al.* (2016)](http://mbe.oxfordjournals.org/content/33/9/2307), with the [preprint](http://biorxiv.org/content/early/2016/05/12/033175) available in BioRxiv. `BAD_Mutations` has a formal publication (Kono et al., 2017) with [preprint version](https://www.biorxiv.org/content/early/2017/02/27/112318).
+The model used to estimate codon conservation and predict which variants are deleterious is reported in Chun and Fay (2009). The actual software package is first used in [Kono *et al.* (2016)](http://mbe.oxfordjournals.org/content/33/9/2307), with the [preprint](http://biorxiv.org/content/early/2016/05/12/033175) available in BioRxiv. `BAD_Mutations` has a formal publication (Kono *et al.* 2017) with [preprint version](https://www.biorxiv.org/content/early/2017/02/27/112318).
 
 `BAD_Mutations` was primarily written by Thomas J.Y. Kono and Paul J. Hoffman. The HYPHY script for estimating codon conservation was written by Justin C. Fay. Testing was performed by Chaochih Liu, Felipe Reyes, and Skylar Wyant. Rigorous comparison to related software was performed by Justin C. Fay and Li Lei.
 
@@ -90,7 +90,7 @@ You will have to install the `PASTA` sequence alignment tool. Follow the instruc
 [Return to TOC](#toc)
 
 # <a name="inputs"></a>Input Files
-Input files should be plain text with UNIX line endings (LF). `BAD_Mutations` takes a FASTA file containing the query coding sequence, and a text file with the list of codons to predict. The coding sequence does not have to start with ATG, but it should be supplied in the 5\(^{\prime}\) to 3\(^{\prime}\) direction, and its length should be a multiple of 3. The codons should be supplied as numerical offsets with respect to the provided FASTA file, with counting starting from 1 and one codon listed per line. The substitutions file may optionally have a second field with a SNP identifier.
+Input files should be plain text with UNIX line endings (LF). `BAD_Mutations` takes a FASTA file containing the query coding sequence, and a text file with the list of codons to predict. The coding sequence does not have to start with ATG, but it should be supplied in the 5ʹ to 3ʹ direction, and its length should be a multiple of 3. The codons should be supplied as numerical offsets with respect to the provided FASTA file, starting from 1 and one codon listed per line. The substitutions file may optionally have a second field with a SNP identifier.
 
 There is no programmatic means of enforcing the consistency of directionality between the FASTA file and the substitutions file. This means it is possible to submit them in the reverse order, but keep in mind that the coordinates must match in order for the predictions to be valid.
 
@@ -138,14 +138,15 @@ Because the HyPhy script traverses the alignment from end-to-end, the test secti
 | P-value          | Float       | A _p_-value for the likelihood ratio test                                            |
 | SeqCount         | Integer     | Number of non-gap amino acid residues in the alignment at that position              |
 | Alignment        | String      | Alignment column, showing amino acids and gaps                                       |
-| RefereceAA       | String      | Amino acid state in reference species                                                |
+| ReferenceAA       | String      | Amino acid state in reference species                                                |
 | MaskedConstraint | Float       | A constraint value for the codon across the phylogeny, without the reference species |
 | MaskedP-value    | Float       | A _p_-value for the likelihood ratio test, without the reference species             |
 
 [Return to TOC](#toc)
 
 ## <a name="compiledreport"></a>Compiled HyPhy Report
-The output of the `compile` command has all of the same information as the raw HyPhy report, but also includes columns for transcript ID and amino acid position. These additional columns are prepended to the columns listed above, and are called `GeneID` and `CDSPos`, respectively. The `GeneID` column contains the transcript or gene name, taken from the query FASTA file. The `CDSPos` column contains the **1-based** amino acid residue number that has a nonsynonymous SNP, as calculated from the raw HyPhy output. The fields are tab-delimited. **Warining!!!The logistic P value calculated in this step is only valid for the 41 genomes! If you have the more aligned genome, please use a heuristic way to determine the deleterious variants.**
+The output of the `compile` command has all of the same information as the raw HyPhy report, but also includes columns for transcript ID and amino acid position. These additional columns are prepended to the columns listed above, and are called `GeneID` and `CDSPos`, respectively. The `GeneID` column contains the transcript or gene name, taken from the query FASTA file. The `CDSPos` column contains the **1-based** amino acid residue number that has a nonsynonymous SNP, as calculated from the raw HyPhy output. The fields are tab-delimited.
+**Warning!!! The logistic _p_-value calculated in this step is only valid for the 41 genomes in [Kono *et al.* 2018](https://doi.org/10.1534/g3.118.200563). For new alignments using additional species, please use a heuristic approach to identify a cutoff to identify deleterious variants.**
 
 ## <a name="predictions"></a>Making Deleterious Predictions
 `BAD_Mutations` merely implements a likelihood ratio test, and does not generate hard predictions on whether or not individual variants are deleterious. Criteria for determining significance, such as site filtering and correction for multiple testing, are left for the user to decide. For example, one simple method for multiple test correction is to apply a Bonferroni correction, with the number of codons with nonsynonymous variants as the number of tests performed. An additional heuristic could be the number of non-gap amino acid residues in the multiple sequence alignment must be greater than 10 for a site to be considered for prediction. Since these specific procedures and criteria will vary from study to study, we do not make any assumptions as to how the user will filter and interpret results.
@@ -206,7 +207,7 @@ The `setup` subcommand takes the following options:
 [Return to TOC](#toc)
 
 ### <a name="fetch"></a>The `fetch` Subcommand
-The `fetch` subcommand creates the necessary BLAST databases for identifying homologues. It will fetch gzipped CDS FASTA files from both Phytozome 10 and Ensembl Plants, unzip them, and convert them into BLAST databases. Fetching data from Phytozome requires a (free) account with the [JGI Genome Portal](http://genome.jgi.doe.gov/). Note that not every genome sequence in Phytozome is available to be used for this analysis. Check the species info page on Phytozome for specific data usage policies.
+The `fetch` subcommand creates the necessary BLAST databases for identifying homologues. It will fetch gzipped CDS FASTA files from both Phytozome 10 and Ensembl Plants, unzip them, and convert them into BLAST databases. Fetching data from Phytozome requires a (free) account with the [JGI Genome Portal](http://genome.jgi.doe.gov/). Note that not every genome sequence in Phytozome is available to be used for this analysis. Check the species information page on Phytozome for specific data usage policies.
 
 The `fetch` subcommand accepts the following options:
 
