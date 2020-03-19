@@ -164,7 +164,7 @@ def align(arg, unaligned, log):
     aln = aligner.PastaAlign(
         arg['pasta_path'],
         arg['clustalo_path'],
-        arg['fasttree_path']
+        arg['fasttree_path'],
         unaligned,
         arg['fasta'],
         arg['loglevel'])
