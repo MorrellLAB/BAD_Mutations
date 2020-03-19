@@ -241,7 +241,8 @@ class PastaAlign(object):
         clustalo_out = tempfile.NamedTemporaryFile(
             mode='w+t',
             prefix='BAD_Mutations_Clustalo_Out_',
-            suffix='.fasta')
+            suffix='.fasta',
+            delete=False)
         #   Create the command line
         cmd = [
             'bash',
@@ -263,7 +264,7 @@ class PastaAlign(object):
         #   And save the paths to these files as class variables
         self.aln_out = aln_out
         self.tree_out = tree_out
-        # Seek back to the beginning of the file so it can be read again
+        # Seek back to the beginning of the output file so it can be read again
         clustalo_out.seek(0)
         return (out, err)
 
