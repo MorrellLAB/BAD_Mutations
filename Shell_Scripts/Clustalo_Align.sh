@@ -19,6 +19,7 @@ FASTTREE="${4}"
     --full-iter \
     --threads=1 \
     --outfmt=fasta \
+    --force \
     -o "${OUTPUT}"
 
 # then make a tree
