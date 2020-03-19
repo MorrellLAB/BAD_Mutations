@@ -177,6 +177,7 @@ def align(arg, unaligned, log):
         log.debug('stdout: \n' + stdout.decode('utf-8'))
         log.debug('stderr: \n' + stderr.decode('utf-8'))
     else:
+        log.warn('Only two sequences; using clustal-omega for alignment.')
         stdout, stderr = aln.clustalo_align()
         log.debug('stdout: \n' + stdout.decode('utf-8'))
         log.debug('stderr: \n' + stderr.decode('utf-8'))

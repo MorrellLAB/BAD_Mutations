@@ -33,6 +33,8 @@ class PastaAlign(object):
         self.input_dict = {}
         self.query = query_sequence
         self.pasta_path = check_modules.check_executable(pasta_path)
+        self.clustalo_path = check_modules.check_executable(clustalo_path)
+        self.fasttree_path = check_modules.check_executable(fasttree_path)
         self.protein_input = None
         self.aln_out = None
         self.tree_out = None
