@@ -263,6 +263,8 @@ class PastaAlign(object):
         #   And save the paths to these files as class variables
         self.aln_out = aln_out
         self.tree_out = tree_out
+        # Seek back to the beginning of the file so it can be read again
+        clustalo_out.seek(0)
         return (out, err)
 
     def sanitize_outputs(self):
