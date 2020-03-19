@@ -23,6 +23,8 @@ class PastaAlign(object):
     def __init__(
             self,
             pasta_path,
+            clustalo_path,
+            fasttree_path,
             unaligned_sequences,
             query_sequence,
             verbose):

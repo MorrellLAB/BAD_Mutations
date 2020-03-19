@@ -163,6 +163,8 @@ def align(arg, unaligned, log):
     log.info('Creating a new instance of PastaAlign.')
     aln = aligner.PastaAlign(
         arg['pasta_path'],
+        arg['clustalo_path'],
+        arg['fasttree_path']
         unaligned,
         arg['fasta'],
         arg['loglevel'])
