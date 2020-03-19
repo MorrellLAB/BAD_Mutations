@@ -6,3 +6,5 @@ dependencies:
     - pasta=1.7.8
     - mafft=7.407
     - hyphy=2.3
+    - clustalo=1.2.4
+    - fasttree=2.1.10

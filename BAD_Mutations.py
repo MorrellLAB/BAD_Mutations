@@ -149,7 +149,9 @@ def align(arg, unaligned, log):
     missing_reqs = check_modules.missing_executables(
         [
             arg['bash_path'],
-            arg['pasta_path']
+            arg['pasta_path'],
+            arg['clustalo_path'],
+            arg['fasttree_path']
         ])
     if missing_reqs:
         log.error(
@@ -168,11 +170,16 @@ def align(arg, unaligned, log):
     #       Check length is multiple of 3
     #       Translate to protein
     #       Remove STOP codons
-    aln.prepare_sequences()
+    nseqs = aln.prepare_sequences()
     #   Then align them
-    stdout, stderr = aln.pasta_align()
-    log.debug('stdout: \n' + stdout.decode('utf-8'))
-    log.debug('stderr: \n' + stderr.decode('utf-8'))
+    if nseqs > 2:
+        stdout, stderr = aln.pasta_align()
+        log.debug('stdout: \n' + stdout.decode('utf-8'))
+        log.debug('stderr: \n' + stderr.decode('utf-8'))
+    else:
+        stdout, stderr = aln.clustalo_align()
+        log.debug('stdout: \n' + stdout.decode('utf-8'))
+        log.debug('stderr: \n' + stderr.decode('utf-8'))
     #   Backtranslate the alignment
     aln.back_translate()
     #   Then sanitize the alignment and tree

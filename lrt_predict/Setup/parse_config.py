@@ -22,7 +22,9 @@ class ConfigHandler(object):
                 'SUM': 'sum_path',
                 'TBLASTX': 'tblastx_path',
                 'PASTA': 'pasta_path',
-                'HYPHY': 'hyphy_path'
+                'HYPHY': 'hyphy_path',
+                'CLUSTALO': 'clustalo_path',
+                'FASTTREE': 'fasttree_path'
                 }
     #   Here is the string that prefixes a variable delcaration
     DECLR = '#define'
