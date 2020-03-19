@@ -233,19 +233,19 @@ class PastaAlign(object):
         #   Get the base directory of the LRT package
         lrt_path = os.path.realpath(__file__).rsplit(os.path.sep, 3)[0]
         #   Then build the path to the pasta script
-        clustal_script = os.path.join(
+        clustalo_script = os.path.join(
             lrt_path,
             'Shell_Scripts',
             'Clustalo_Align.sh')
         # Clustal-omega needs an output filename
-        clustal_out = tempfile.NamedTemporaryFile(
+        clustalo_out = tempfile.NamedTemporaryFile(
             mode='w+t',
             prefix='BAD_Mutations_Clustalo_Out_',
             suffix='.fasta')
         #   Create the command line
         cmd = [
             'bash',
-            clustal_script,
+            clustalo_script,
             self.clustalo_path,
             self.protein_input.name,
             clustalo_out.name,
