@@ -258,8 +258,8 @@ class PastaAlign(object):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
         out, err = p.communicate()
-        aln_out = clustal_out.name
-        tree_out = clustal_out.name.replace('.fasta', '.tre')
+        aln_out = clustalo_out.name
+        tree_out = clustalo_out.name.replace('.fasta', '.tre')
         #   And save the paths to these files as class variables
         self.aln_out = aln_out
         self.tree_out = tree_out
