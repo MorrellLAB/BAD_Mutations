@@ -138,6 +138,8 @@ class SetupEnv(object):
         handle.write('#define TBLASTX ' + self.tblastx_path + '\n')
         handle.write('#define PASTA ' + self.pasta_path + '\n')
         handle.write('#define HYPHY ' + self.hyphy_path + '\n')
+        handle.write('#define CLUSTALO ' + self.clustalo_path + '\n')
+        handle.write('#define FASTTREE ' + self.fasttree_path + '\n')
         handle.flush()
         handle.close()
         self.mainlog.info('Wrote configuration into ' + self.config_file)
