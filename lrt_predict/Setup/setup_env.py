@@ -76,7 +76,7 @@ class SetupEnv(object):
         self.pasta_path = spawn.find_executable('run_pasta.py') or ''
         self.hyphy_path = spawn.find_executable('HYPHYMP') or spawn.find_executable('hyphymp') or ''
         self.clustalo_path = spawn.find_executable('clustalo') or ''
-        self.fasttree_path = spanw.find_executable('fasttree') or ''
+        self.fasttree_path = spawn.find_executable('fasttree') or ''
         self.mainlog.debug(
             'Setting executable path variables:\n' +
             '#define BASH ' + self.bash_path + '\n' +
