@@ -1,4 +1,8 @@
 name: bad_mutations
+channels:
+    - defaults
+    - conda-forge
+    - bioconda
 dependencies:
     - python=3.*
     - biopython=1.72
@@ -8,3 +12,4 @@ dependencies:
     - hyphy=2.3
     - clustalo=1.2.4
     - fasttree=2.1.10
+    - dendropy=4.4.0
