@@ -302,7 +302,7 @@ def validate_args(args, log):
                     'Username is not a valid e-mail address.')
         #   Username not supplied, and we need to access JGI
         elif not args['convert_only']:
-            args['user'] = raw_input('Username for JGI Genomes Portal: ')
+            args['user'] = input('Username for JGI Genomes Portal: ')
         #   Else, we only want to convert
         else:
             pass
@@ -364,13 +364,14 @@ def validate_args(args, log):
 #   Python 3+.
 def usage():
     """Print a usage message."""
-    print('''Usage: BAD_Mutations.py <subcommand> <arguments>
+    print("""Usage: BAD_Mutations.py <subcommand> <arguments>
 
-where <subcommand> is one of 'setup', 'fetch', or 'predict.' This script will
-download the necessary data to perform the likelihood ratio test (LRT) for
-deleterious SNP prediction as described in Chun and Fay (2009) in Genome
-Research. Because of the data sources used, this implementation is specific to
-SNP annotation in plants.
+where <subcommand> is one of 'setup', 'fetch', 'align', 'predict', or
+'compile.' This package will download the necessary data to perform the
+likelihood ratio test (LRT) for deleterious SNP prediction as described in Chun
+and Fay (2009) in Genome Research. Because of the data sources used, this
+implementation is specific to SNP annotation in plants. If you use this package
+to predict deleterious SNPs, please cite https://doi.org/10.1534/g3.118.200563.
 
 The 'setup' subcommand will create a configuration file that contains paths to
 requried executables and parameters for alignment. This is optional, but
@@ -389,8 +390,13 @@ PASTA, and produce a phylogenetic tree.
 The 'predict' subcommand will run the LRT with a given query sequence and a
 list of affected codons.
 
+The 'compile' subcommand will gather the single-gene predictions and write them
+into a single table, with a logistic regression P-value, as described in the
+Kono et al. (2018) G3 paper at https://doi.org/10.1534/g3.118.200563.
+
 Dependencies:
     Biopython
     tblastx (NCBI BLAST executables)
-    pasta (Phylogeny-aware sequence alignment)''')
+    pasta (Phylogeny-aware sequence alignment)
+    HyPhy (for dN and dS calculations)""")
     return

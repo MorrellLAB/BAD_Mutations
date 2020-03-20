@@ -37,7 +37,7 @@ ensembl_fetch = [
     # 'solanum_tuberosum',
     # 'sorghum_bicolor',
     # 'theobroma_cacao',
-    # 'triticum_aestivum',
+    'triticum_aestivum',
     'triticum_urartu',
     # 'vitis_vinifera',
     # 'zea_mays'

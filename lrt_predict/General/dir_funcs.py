@@ -5,12 +5,14 @@
 import os
 import logging
 
-#   A function to set the verbosity level
+
 def verbose(v):
+    """Set a verbosity level."""
     #   Initialize the logger, with the current module name
     l = logging.getLogger(__name__)
     s = logging.StreamHandler()
-    formatter = logging.Formatter('===%(asctime)s - %(name)s===\n%(levelname)s\t%(message)s')
+    formatter = logging.Formatter(
+        '===%(asctime)s - %(name)s===\n%(levelname)s\t%(message)s')
     if v:
         #   If verbose, set the logger to DEBUG to emit all sorts of msgs
         l.setLevel(logging.DEBUG)
@@ -26,8 +28,8 @@ def verbose(v):
     return l
 
 
-#   A function to create a base directory for the species
 def makebase(basedir, l):
+    """Make the base directory for a species."""
     l.debug('Base directory is ' + basedir)
     #   Get the dirname of the LRT base
     base_parent = os.path.dirname(basedir)
@@ -43,8 +45,8 @@ def makebase(basedir, l):
     return
 
 
-#   A general function to make a directory
 def make_species_dir(basedir, spdir, l):
+    """Make a directory."""
     l.debug('Species directory is ' + os.path.join(basedir, spdir))
     #   create the name of the target directory
     target_dir = os.path.join(basedir, spdir)
@@ -60,14 +62,18 @@ def make_species_dir(basedir, spdir, l):
     return target_dir
 
 
-#   A function for moving files
 def move_file(filename, dirname, l):
+    """Move a file."""
     #   Check that the file is read/write
     if not(os.access(filename, os.W_OK) and os.access(filename, os.R_OK)):
         l.error('Error! ' + filename + ' is not read/write')
         exit(1)
     try:
-        l.debug('Moving ' + filename + ' to ' + os.path.join(dirname, filename))
+        l.debug(
+            'Moving ' +
+            filename +
+            ' to ' +
+            os.path.join(dirname, filename))
         os.rename(filename, os.path.join(dirname, filename))
     except(OSError, IOError) as msg:
         l.error('Could not move ' + filename + ' into ' + dirname + '. ' + msg)

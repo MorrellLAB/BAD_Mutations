@@ -35,7 +35,6 @@ class HyPhyParser(object):
             if fname.endswith('_Predictions.txt')]
         return pred_files
 
-
     def logistic_p_values(self, unmasked, masked, cons, m_cons, ref, alt, aln):
         """Calculate a p-value for the test, based on a logistic regression
         reported in the accompanying manuscript. The equations are as follows:
@@ -158,7 +157,6 @@ log(p/(1-p)) = -2.453-0.1904*LRT(masked)-0.1459*constraint+0.2199*max(Rn,An)-0.2
         #   First check the alt. If it's NA, we return NA as well
         if alt == 'NA':
             return prediction + ['NA', 'NA']
-        print([str(i) + ' ' + j for i,j in enumerate(prediction)])
         u, m = self.logistic_p_values(
             prediction[7],
             prediction[12],

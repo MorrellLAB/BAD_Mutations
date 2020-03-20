@@ -50,6 +50,6 @@ class Fetcher(object):
         #   for each one
         for fname in fname_list:
             out, error = format_blast.format_blast(makeblastdb_path, fname)
-            self.mainlog.info('stdout: \n' + out)
-            self.mainlog.info('stderr: \n' + error)
+            self.mainlog.info('stdout: \n' + out.decode('utf-8'))
+            self.mainlog.info('stderr: \n' + error.decode('utf-8'))
         return

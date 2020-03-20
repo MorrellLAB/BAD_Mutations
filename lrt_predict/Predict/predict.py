@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-
-#   A script that performs the alignment and LRT prediction
+"""Performs hrediction with HyPhy"""
 
 #   Import standard library modules here
 import subprocess
@@ -104,9 +103,9 @@ class LRTPredict(object):
         infile.write(self.nmsa_path + '\n')
         infile.write(os.path.abspath(self.phylogenetic) + '\n')
         infile.write(alignedsubs.name + '\n')
-        #   Remove all non-allowed characters in sequence name, and replace them
-        #   with underscores
-        safe_name = re.sub('[:\.\+-]', '_', self.query.id)
+        # Remove all non-allowed characters in sequence name, and replace them
+        # with underscores
+        safe_name = re.sub(r'[:\.\+-]', '_', self.query.id)
         infile.write(safe_name)
         infile.flush()
         #   Print out the HyPhy input to debug
@@ -153,7 +152,7 @@ class LRTPredict(object):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
         out, err = p.communicate()
-        self.mainlog.debug('stdout:\n' + out)
-        self.mainlog.debug('stderr:\n' + err)
+        self.mainlog.debug('stdout:\n' + out.decode('utf-8'))
+        self.mainlog.debug('stderr:\n' + err.decode('utf-8'))
         #   Return the output file
         return self.hyphy_output

@@ -8,8 +8,9 @@ import subprocess
 import logging
 import re
 
-#   A simple wrapper around os.path.isfile(), since this name is easier to read
+
 def file_exists(fname, l):
+    """A simple wrapper around os.path.isfile()."""
     l.debug('Checking if ' + fname + ' exists.')
     if os.path.isfile(fname):
         return True
@@ -17,15 +18,15 @@ def file_exists(fname, l):
         return False
 
 
-#   A function that generates a local filename from a remote one
 def local_name(url):
+    """Generate a local filename from a remote URL."""
     #   We assume that the remote url is separated by / and that the file name
     #   is the final part of the url
     return url.split('/')[-1]
 
 
-#   A function that finds the species name given the filename
 def species_name(fname):
+    """Find a species name given a filename."""
     #   Again, assume this time that the species name is the first field in
     #   the _-delimited filename
     species = fname.split('_')[0]
@@ -34,8 +35,8 @@ def species_name(fname):
     return species
 
 
-#   One for ensembl, too
 def ensembl_species_name(fname):
+    """Find a species name given an Ensembl filename."""
     #   The argument to this one is a whole path on the FTP server, so we have
     #   to split on / first
     lfile = local_name(fname)
@@ -46,9 +47,11 @@ def ensembl_species_name(fname):
     return binomial.group()
 
 
-#   A function to calculate md5
 def calculate_md5(fname, l, blocksize=8192):
-    l.info('Calculating MD5 on ' + fname + ' with a blocksize of ' + str(blocksize))
+    """Calculate the MD5 sum."""
+    l.info(
+        'Calculating MD5 on ' + fname + ' with blocksize of ' + str(blocksize)
+        )
     #   If the supplied block size isn't a multiple of 128, then we will exit
     #   with an error, since md5 has a digest block size of 128 bytes
     if (blocksize % 128) != 0:
@@ -71,32 +74,36 @@ def calculate_md5(fname, l, blocksize=8192):
     return md5.hexdigest()
 
 
-#   A function to calculate the CRC32 sum as implemented in the UNIX 'sum' cmd
 def calculate_crc32(fname, l):
+    """Calculate the CRC32 sum, as implemented in UNIX sum command."""
     l.info('Calculating CRC32 on ' + fname + ' with  `sum\' command.')
     cmd = ['sum', fname]
-    p = subprocess.Popen(cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    p = subprocess.Popen(
+        cmd,
+        shell=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE)
     out, err = p.communicate()
-    l.debug('stdout:\n' + out)
-    l.debug('stderr:\n' + err)
+    l.debug('stdout:\n' + out.decode('utf-8'))
+    l.debug('stderr:\n' + err.decode('utf-8'))
     return int(out.strip().split()[0])
 
 
-#   A function to check if the checksum of our local file is the same as that of the
-#   remote file
 def checksum_is_same(local_sum, remote_sum, l):
-    l.info('Comparing local checksum of ' + str(local_sum) + ' and remote checksum of ' + str(remote_sum))
+    """Compare the local and remote checksums."""
+    l.info(
+        'Comparing local checksum of ' +
+        str(local_sum) +
+        ' and remote checksum of ' +
+        str(remote_sum))
     if local_sum == remote_sum:
         return True
     else:
         return False
 
 
-#   A function to find all files with a given suffix in a certain directory
-#   This is essentially a wrapper around the unix find command. This probably
-#   will not work on windows, but this shouldn't be running on Windows
-#   anyway......
 def get_file_by_ext(basedir, suffix, l):
+    """Find all files with a given suffix."""
     l.info('Finding all files with suffix ' + suffix + ' in ' + basedir)
     #   Then execute the find command to get all gzipped cds files
     #   Normally, shell=True is a security hazard, but since we aren't actually
@@ -104,7 +111,12 @@ def get_file_by_ext(basedir, suffix, l):
     #   Example, with basedir=/tmp and suffix=.fasta we have
     #       find /tmp -name "*.fasta"
     command = ' '.join(['find', basedir, '-name', '"*'+suffix+'"'])
-    raw_files = subprocess.check_output(command, shell=True)
+    raw_files = subprocess.check_output(command, shell=True).decode('utf-8')
     file_list = raw_files.strip().split('\n')
-    l.debug('Found ' + str(len(file_list)) +  ' ' + suffix + ' files in ' + basedir)
+    l.debug(
+        'Found ' +
+        str(len(file_list)) +
+        ' ' + suffix +
+        ' files in ' +
+        basedir)
     return file_list

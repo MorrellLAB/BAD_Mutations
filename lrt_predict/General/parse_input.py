@@ -13,8 +13,8 @@ from Bio import Phylo
 from Bio.Phylo.NewickIO import NewickError
 
 #   Our helper scripts
-import lrt_predict.General.set_verbosity
-import lrt_predict.General.file_funcs
+from lrt_predict.General import set_verbosity
+from lrt_predict.General import file_funcs
 
 
 def valid_tree(f, log):
@@ -29,8 +29,8 @@ def valid_tree(f, log):
             p = Phylo.read(f, 'newick')
         except NewickError:
             log.error(
-                'Input file ' + \
-                f + \
+                'Input file ' +
+                f +
                 ' is not a valid Newick tree file!')
             return False
         return True
@@ -49,9 +49,9 @@ def valid_msa(f, log):
             a = AlignIO.read(f, 'fasta')
         except ValueError:
             log.error(
-                'Input file ' + \
-                f + \
-                ' is not a valid FASTA alignment!' + \
+                'Input file ' +
+                f +
+                ' is not a valid FASTA alignment!' +
                 ' Check the length of each sequence.')
             return False
         return True
@@ -69,9 +69,9 @@ def valid_fasta(f, log):
             s = SeqIO.read(f, 'fasta')
         except ValueError:
             log.error(
-                'Input file ' + \
-                f + \
-                ' has more than one record. '+ \
+                'Input file ' +
+                f +
+                ' has more than one record. ' +
                 'This script only accepts single-record FASTA files.')
             return False
         return True
@@ -94,9 +94,9 @@ def parse_subs(f, log):
                     pos = int(tmp[0])
                 except ValueError:
                     log.error(
-                        'Line ' + \
-                        str(index + 1) + \
-                        ' of input file ' + f \
+                        'Line ' +
+                        str(index + 1) +
+                        ' of input file ' + f
                         + ': First field is not an integer.')
                     exit(1)
                 #   If we can sucessfully cast it to integer, then we continue
@@ -105,20 +105,22 @@ def parse_subs(f, log):
                 if len(tmp) == 1:
                     snpid = ''
                     log.warning(
-                        'Variant on line ' + \
-                        str(index + 1) + \
-                        ' of input file ' + \
-                        f + \
-                        ' does not have an ID. ' + \
+                        'Variant on line ' +
+                        str(index + 1) +
+                        ' of input file ' +
+                        f +
+                        ' does not have an ID. ' +
                         'Using the empty string (\'\') as an ID.')
                 else:
                     snpid = tmp[1]
                 #   Return these as a tuple
                 subs_data.append(pos)
     log.info(
-        'Input file ' + \
-        f + \
-        ' contains ' + \
-        str(index+1) + \
+        'Input file ' +
+        f +
+        ' contains ' +
+        str(index+1) +
         ' positions to predict.')
+    # Sort the substitutions
+    subs_data.sort()
     return subs_data

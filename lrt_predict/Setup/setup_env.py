@@ -29,6 +29,8 @@ class SetupEnv(object):
         TBLASTX (str)             Path to tblastx.
         PASTA (str)               Path to pasta.
         HYPHY (str)               Path to HyPhy
+        CLUSTALO (str)            Path to clustal-omega.
+        FASTTREE (str)            Path to fasttree
 
     Contains no class attributes.
 
@@ -73,6 +75,8 @@ class SetupEnv(object):
         self.tblastx_path = spawn.find_executable('tblastx') or ''
         self.pasta_path = spawn.find_executable('run_pasta.py') or ''
         self.hyphy_path = spawn.find_executable('HYPHYMP') or spawn.find_executable('hyphymp') or ''
+        self.clustalo_path = spawn.find_executable('clustalo') or ''
+        self.fasttree_path = spanw.find_executable('fasttree') or ''
         self.mainlog.debug(
             'Setting executable path variables:\n' +
             '#define BASH ' + self.bash_path + '\n' +
@@ -80,7 +84,9 @@ class SetupEnv(object):
             '#define SUM ' + self.sum_path + '\n' +
             '#define TBLASTX ' + self.tblastx_path + '\n' +
             '#define PASTA ' + self.pasta_path + '\n' +
-            '#define HYPHY ' + self.hyphy_path)
+            '#define HYPHY ' + self.hyphy_path + '\n' +
+            '#define CLUSTALO ' + self.clustalo_path + '\n' +
+            '#define FASTTREE ' + self.fasttree_path)
         #   Print out some warnings if executables are not found
         if self.bash_path == '':
             self.mainlog.error('Cannot find bash!')
@@ -89,14 +95,20 @@ class SetupEnv(object):
         if self.sum_path == '':
             self.mainlog.error('Cannot find sum!')
         if self.tblastx_path == '':
-            self.mainlog.warning('Cannot find tblastx! Will download')
+            self.mainlog.warning('Cannot find tblastx!')
             self.missing_progs.append('tBLASTx')
         if self.pasta_path == '':
-            self.mainlog.warning('Cannot find PASTA! Will download')
+            self.mainlog.warning('Cannot find PASTA!')
             self.missing_progs.append('PASTA')
         if self.hyphy_path == '':
-            self.mainlog.warning('Cannot find HyPhy! Will download')
+            self.mainlog.warning('Cannot find HyPhy!')
             self.missing_progs.append('HyPhy')
+        if self.clustalo_path == '':
+            self.mainlog.warning('Cannot find Clustal-omega!')
+            self.missing_progs.append('ClustalO')
+        if self.fasttree_path == '':
+            self.mainlog.warning('Cannot find fasttree!')
+            self.missing_progs.append('fasttree')
         return
 
     def get_deps(self):

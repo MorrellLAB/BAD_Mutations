@@ -23,6 +23,8 @@ class PastaAlign(object):
     def __init__(
             self,
             pasta_path,
+            clustalo_path,
+            fasttree_path,
             unaligned_sequences,
             query_sequence,
             verbose):
@@ -33,6 +35,8 @@ class PastaAlign(object):
         self.input_dict = {}
         self.query = query_sequence
         self.pasta_path = check_modules.check_executable(pasta_path)
+        self.clustalo_path = check_modules.check_executable(clustalo_path)
+        self.fasttree_path = check_modules.check_executable(fasttree_path)
         self.protein_input = None
         self.aln_out = None
         self.tree_out = None
@@ -121,7 +125,8 @@ class PastaAlign(object):
         #   And write the protein sequences into it
         SeqIO.write(fixed_tl_seqs, self.protein_input, 'fasta')
         self.protein_input.flush()
-        return
+        # Return the number of sequences to align here
+        return len(fixed_tl_seqs)
 
     def back_translate(self):
         """Back-translates from amino acid to nucleotide, using the original
@@ -219,6 +224,48 @@ class PastaAlign(object):
         #   And save the paths to these files as class variables
         self.aln_out = aln_out
         self.tree_out = tree_out
+        return (out, err)
+
+    def clustalo_align(self):
+        """Align the amino acid sequences with Clustal-omega. We invoke this
+        function in the case where a sequence only finds one homologue, which
+        means we have a pairwise alignment."""
+        #   Get the base directory of the LRT package
+        lrt_path = os.path.realpath(__file__).rsplit(os.path.sep, 3)[0]
+        #   Then build the path to the pasta script
+        clustalo_script = os.path.join(
+            lrt_path,
+            'Shell_Scripts',
+            'Clustalo_Align.sh')
+        # Clustal-omega needs an output filename
+        clustalo_out = tempfile.NamedTemporaryFile(
+            mode='w+t',
+            prefix='BAD_Mutations_Clustalo_Out_',
+            suffix='.fasta',
+            delete=False)
+        #   Create the command line
+        cmd = [
+            'bash',
+            clustalo_script,
+            self.clustalo_path,
+            self.protein_input.name,
+            clustalo_out.name,
+            self.fasttree_path]
+        self.mainlog.debug(' '.join(cmd))
+        #   Then, we'll execute it
+        p = subprocess.Popen(
+            cmd,
+            shell=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+        out, err = p.communicate()
+        aln_out = clustalo_out.name
+        tree_out = clustalo_out.name.replace('.fasta', '.tre')
+        #   And save the paths to these files as class variables
+        self.aln_out = aln_out
+        self.tree_out = tree_out
+        # Seek back to the beginning of the output file so it can be read again
+        clustalo_out.seek(0)
         return (out, err)
 
     def sanitize_outputs(self):

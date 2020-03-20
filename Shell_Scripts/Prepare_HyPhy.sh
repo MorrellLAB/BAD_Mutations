@@ -23,6 +23,7 @@ if [ "$(uname)" == "Linux" ]
         sed -i -r "s/\./_/g" ${TREE}
         sed -i -r "s/\./_/g" ${FASTA}
         sed -i -e "s/:\([0-9]\)_/:\1\./g" ${TREE}
+        sed -i -r '/^;+$/d' ${TREE}
 #   The equivalent is -E in MacOS
 elif [ "$(uname)" == "Darwin" ]
     then
@@ -32,4 +33,6 @@ elif [ "$(uname)" == "Darwin" ]
         sed -i '.bak' -E "s/'//g" ${TREE}
         sed -i '.bak' -E "s/\+//g" ${FASTA}
         sed -i '.bak' -E "s/\+//g" ${TREE}
+        # Remove lines with just semicolon
+        sed -i '.bak' -E '/^;+$/d' ${TREE}
 fi

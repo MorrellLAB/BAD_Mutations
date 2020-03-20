@@ -1,20 +1,10 @@
 #!/usr/bin/env python
-"""
-Script to perform LRT from Chun and Fay (2009) to predict deleterious SNPs in
-plants. Requires a user name and password for the JGI phyotzome portal (Free)
-Author: Thomas JY Kono and Paul J Hoffman
-        2016-05-27
-        Saint Paul, MN
+"""Perform a likelihood ratio test from Chun and Fay (2009) for deleterious
+SNP prediction in plants.
 
-Version 1.0
+Authors: Thomas JY Kono and Paul J Hoffman
+Paper: https://doi.org/10.1534/g3.118.200563
 """
-#   Dependencies:
-#       1) argparse https://code.google.com/p/argparse/
-#           (Not required for Python 3 and Python 2 >= 2.7)
-#       2) Biopython http://biopython.org/
-#       3) BLAST+ executables from NCBI
-#       4) PASTA phylogeny-aware alignment https://github.com/smirarab/pasta
-#       5) cURL http://curl.haxx.se/
 
 #   to check arguments
 import sys
@@ -159,7 +149,9 @@ def align(arg, unaligned, log):
     missing_reqs = check_modules.missing_executables(
         [
             arg['bash_path'],
-            arg['pasta_path']
+            arg['pasta_path'],
+            arg['clustalo_path'],
+            arg['fasttree_path']
         ])
     if missing_reqs:
         log.error(
@@ -171,6 +163,8 @@ def align(arg, unaligned, log):
     log.info('Creating a new instance of PastaAlign.')
     aln = aligner.PastaAlign(
         arg['pasta_path'],
+        arg['clustalo_path'],
+        arg['fasttree_path'],
         unaligned,
         arg['fasta'],
         arg['loglevel'])
@@ -178,11 +172,17 @@ def align(arg, unaligned, log):
     #       Check length is multiple of 3
     #       Translate to protein
     #       Remove STOP codons
-    aln.prepare_sequences()
+    nseqs = aln.prepare_sequences()
     #   Then align them
-    stdout, stderr = aln.pasta_align()
-    log.debug('stdout: \n' + stdout)
-    log.debug('stderr: \n' + stderr)
+    if nseqs > 2:
+        stdout, stderr = aln.pasta_align()
+        log.debug('stdout: \n' + stdout.decode('utf-8'))
+        log.debug('stderr: \n' + stderr.decode('utf-8'))
+    else:
+        log.warning('Only two sequences; using clustal-omega for alignment.')
+        stdout, stderr = aln.clustalo_align()
+        log.debug('stdout: \n' + stdout.decode('utf-8'))
+        log.debug('stderr: \n' + stderr.decode('utf-8'))
     #   Backtranslate the alignment
     aln.back_translate()
     #   Then sanitize the alignment and tree
@@ -264,7 +264,6 @@ def compile_preds(arg, log):
     log.info('Found a total of ' + str(len(reports)) + ' reports.')
     #   Parse them into prediction data
     parsed_preds = [comp.parse_prediction(rep) for rep in reports]
-    log.info('Found a total of ' + str(len(parsed_preds)) + ' predictions')
     #   Read the long format substitutions file, keying on the same values as
     #   the prediction file (gene ID and postion). This file will also have
     #   the SNP ID in it.
@@ -275,16 +274,17 @@ def compile_preds(arg, log):
             if index == 0:
                 continue
             else:
-                tmp = line.strip().split()
-                #   If the fourth field is 'Yes' we skip it. Only nonsyn here.
-                if tmp[3] == 'Yes':
-                    continue
-                else:
-                    uscore_tx = tmp[4].replace('.', '_')
-                    aapos = tmp[11]
-                    alt_aa = tmp[9]
-                    key = (uscore_tx, aapos)
-                    alts[key] = alt_aa
+                tmp = line.strip().split('\t')
+                # Unpack the values.
+                txid = tmp[0]
+                aapos = tmp[1]
+                alt_aa = tmp[2]
+                snpid = tmp[3]
+                # The HyPhy predictions are keyed on (txid, pos), but we have
+                # to replace dot (.) with underscore because dots crash the
+                # HyPhy sequence parser.
+                key = (txid.replace('.', '_'), aapos)
+                alts[key] = alt_aa
     #   Add P-values to the predictions
     logp_preds = []
     for genepred in parsed_preds:
@@ -378,5 +378,5 @@ def main():
         loglevel.error(msg)
     return
 
-#   Do the work here
+
 main()
