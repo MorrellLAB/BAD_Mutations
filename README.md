@@ -1,18 +1,13 @@
-BAD_Mutations
-============
+# BAD_Mutations
+Software package for predicting deleterious single nucleotide variants using sequence conservation across a phylogenetic sample.
 
-Overview
---------
-`BAD_Mutations` (**B**LAST-**A**ligned-**D**eleterious?) performs a likelihood
-ratio test (LRT) for the prediction of deleterious variants, as described in
-[Chun and Fay (2009)](https://doi.org/10.1101/gr.092619.109). The
-package is designed to identify deleterious variants in plant species.
-`BAD_Mutations` is first used in [Kono et al. (2016)](https://doi.org/10.1093/molbev/msw102), with publication detailing features of the software to follow.
+## Overview
+`BAD_Mutations` (**B**LAST-**A**ligned-**D**eleterious?) performs a likelihood ratio tset (LRT) for the prediction of deleterious single nucleotide variants, as described in [Chun and Fay (2009)](https://doi.org/10.1101/gr.092619.109). This approach uses locus-specific synonymous and nonsynonymous substitution rates, so it is only applicable to *protein coding* regions.
 
+## Citation
+If you use `BAD_Mutations` in your research, please cite the following:
+
+> Kono, T.J., Lei, L., Shih, C.H., Hoffman, P.J., Morrell, P.L. and Fay, J.C., 2018. Comparative genomics approaches accurately predict deleterious variants in plants. G3: Genes, Genomes, Genetics, 8(10), pp.3321-3329. https://doi.org/10.1534/g3.118.200563
+
+## Documentation
 For more information, see the [Wiki](https://github.com/MorrellLAB/BAD_Mutations/wiki) and [user manual](https://github.com/MorrellLAB/BAD_Mutations/wiki/Manual).
-
-For the latest untested changes, including support for Python3, see the [dev branch](https://github.com/MorrellLAB/BAD_Mutations/tree/dev).
-
-Citing BAD_Mutations
---------------------
-Please cite [Kono et al. (2016)](http://mbe.oxfordjournals.org/content/33/9/2307.full) and [Kono et al. (2018)](https://doi.org/10.1534/g3.118.200563).
