@@ -9,5 +9,8 @@ If you use `BAD_Mutations` in your research, please cite the following:
 
 > Kono, T.J., Lei, L., Shih, C.H., Hoffman, P.J., Morrell, P.L. and Fay, J.C., 2018. Comparative genomics approaches accurately predict deleterious variants in plants. G3: Genes, Genomes, Genetics, 8(10), pp.3321-3329. https://doi.org/10.1534/g3.118.200563
 
-## Documentation
-For more information, see the [Wiki](https://github.com/MorrellLAB/BAD_Mutations/wiki) and [user manual](https://github.com/MorrellLAB/BAD_Mutations/wiki/Manual).
+## Installation
+Please see our [installation guide](https://github.com/MorrellLAB/BAD_Mutations/blob/master/Manual/Installation.md) for help with installation of `BAD_Mutations` and its dependencies.
+
+## Usage
+For usage instructions and example command lines, please see our [Wiki](https://github.com/MorrellLAB/BAD_Mutations/wiki) and [user manual](https://github.com/MorrellLAB/BAD_Mutations/wiki/Manual).
