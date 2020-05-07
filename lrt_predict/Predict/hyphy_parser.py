@@ -174,6 +174,7 @@ log(p/(1-p)) = -2.453-0.1904*LRT(masked)-0.1459*constraint+0.2199*max(Rn,An)-0.2
         """Put all the prediction data into a nice report."""
         #   Define a header for the output
         header = [
+            'VariantID',
             'GeneID',
             'CDSPos',
             'AlignedPosition',
