@@ -284,7 +284,7 @@ def compile_preds(arg, log):
                 # to replace dot (.) with underscore because dots crash the
                 # HyPhy sequence parser.
                 key = (txid.replace('.', '_'), aapos)
-                alts[key] = alt_aa
+                alts[key] = (snpid, alt_aa)
     #   Add P-values to the predictions
     logp_preds = []
     for genepred in parsed_preds:
