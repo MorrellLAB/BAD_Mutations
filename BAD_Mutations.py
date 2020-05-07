@@ -283,7 +283,10 @@ def compile_preds(arg, log):
                 # The HyPhy predictions are keyed on (txid, pos), but we have
                 # to replace dot (.) with underscore because dots crash the
                 # HyPhy sequence parser.
-                key = (txid.replace('.', '_'), aapos)
+                #   Note that we no longer replace dots with underscores
+                #   because the key is built from the file name, not the FASTA
+                #   sequence name.
+                key = (txid, aapos)
                 alts[key] = (snpid, alt_aa)
     #   Add P-values to the predictions
     logp_preds = []
