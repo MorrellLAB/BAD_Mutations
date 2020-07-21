@@ -271,9 +271,6 @@ def compile_preds(arg, log):
     alts = {}
     with open(subs, 'r') as f:
         for index, line in enumerate(f):
-            if index == 0:
-                continue
-            else:
                 tmp = line.strip().split('\t')
                 # Unpack the values.
                 txid = tmp[0]

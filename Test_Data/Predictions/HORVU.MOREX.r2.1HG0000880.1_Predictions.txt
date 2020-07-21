@@ -1,0 +1,839 @@
+Sites: 688
+Species: 35
+CPU time taken for dS: 504.32 seconds.
+Total dN: 4.072166428738385
+Total dS: 428.659518236823
+Total dN/dS: 0.009499769060274594
+
+global GT=0.3587568241003929;
+global CT=0.6276490500593715;
+global AC=0.7034561802416223;
+global CG=0.5676613466572205;
+global AT=0.5134707346618445;
+givenTree.Graimondii_221_v2.synRate=1.711536302216106;
+givenTree.Graimondii_221_v2.nsClass1=0.4944272193484026;
+givenTree.Fvesca_226_v1.synRate=0.001869958417286049;
+givenTree.Fvesca_226_v1.nsClass1=16.93670224205276;
+givenTree.Fvesca_501_v2.synRate=0.03489916458043518;
+givenTree.Fvesca_501_v2.nsClass1=0.3988333199795679;
+givenTree.Node5.synRate=4.42941608654722;
+givenTree.Node5.nsClass1=0.1031204651413615;
+givenTree.Csativus_122_v1.synRate=396.5542373579615;
+givenTree.Csativus_122_v1.nsClass1=0.001052603564304228;
+givenTree.Node4.synRate=42.6979641662001;
+givenTree.Node4.nsClass1=0.001725574885958455;
+givenTree.Sbicolor_255_v2.synRate=0;
+givenTree.Sbicolor_255_v2.nsClass1=6.808256582014925e-08;
+givenTree.Sbicolor_454_v3.synRate=0;
+givenTree.Sbicolor_454_v3.nsClass1=0.0007835795261350957;
+givenTree.Sbicolor_313_v3.synRate=1.101648155847254e-17;
+givenTree.Sbicolor_313_v3.nsClass1=0.0007825779593643982;
+givenTree.Node13.synRate=0.0288370287997871;
+givenTree.Node13.nsClass1=0;
+givenTree.Node11.synRate=0.1082147338409494;
+givenTree.Node11.nsClass1=1.195079760223577;
+givenTree.HORVU_MOREX_r2_1HG0000880_1.synRate=0.5282362434418948;
+givenTree.HORVU_MOREX_r2_1HG0000880_1.nsClass1=0.390331698811952;
+givenTree.Aegilops_tauschii.synRate=0;
+givenTree.Aegilops_tauschii.nsClass1=0.006985806692945387;
+givenTree.Triticum_aestivum.synRate=1.101141063433528e-17;
+givenTree.Triticum_aestivum.nsClass1=3.778442588404567e-07;
+givenTree.Node19.synRate=0.2985752826375999;
+givenTree.Node19.nsClass1=0.3661838805345314;
+givenTree.Node17.synRate=0.001751344611283311;
+givenTree.Node17.nsClass1=52.77774064575723;
+givenTree.Bdistachyon_283_v2.synRate=2.536012478782566e-18;
+givenTree.Bdistachyon_283_v2.nsClass1=0.0007825779593643982;
+givenTree.Bdistachyon_314_v3.synRate=7.800982974506411e-18;
+givenTree.Bdistachyon_314_v3.nsClass1=0.0007825779593643982;
+givenTree.Node22.synRate=0.1428361490524123;
+givenTree.Node22.nsClass1=1.250363709815805;
+givenTree.Node16.synRate=0.1453492810490003;
+givenTree.Node16.nsClass1=0.1023357121946017;
+givenTree.Node10.synRate=0.01469270538009445;
+givenTree.Node10.nsClass1=33.55871314849485;
+givenTree.Triticum_urartu.synRate=1.253628992260158;
+givenTree.Triticum_urartu.nsClass1=0.2683662295602334;
+givenTree.Sviridis_311_v1.synRate=0;
+givenTree.Sviridis_311_v1.nsClass1=0.000783361150364933;
+givenTree.Sviridis_500_v2.synRate=7.974487385409721e-17;
+givenTree.Sviridis_500_v2.nsClass1=0.0005829236460037755;
+givenTree.Node30.synRate=0.675780815649714;
+givenTree.Node30.nsClass1=0.4642354854962562;
+givenTree.Node28.synRate=0.0873771825114053;
+givenTree.Node28.nsClass1=1.534265286459189;
+givenTree.Pvirgatum_516_v5.synRate=0.01560072875795839;
+givenTree.Pvirgatum_516_v5.nsClass1=0;
+givenTree.Pvirgatum_273_v1.synRate=0;
+givenTree.Pvirgatum_273_v1.nsClass1=4.509392832887189e-07;
+givenTree.Pvirgatum_383_v3.synRate=1.823139370996841e-17;
+givenTree.Pvirgatum_383_v3.nsClass1=0.0005833060576050108;
+givenTree.Node37.synRate=0;
+givenTree.Node37.nsClass1=3.963742060925934e-05;
+givenTree.Node35.synRate=0;
+givenTree.Node35.nsClass1=0.0007825779593643982;
+givenTree.Pvirgatum_450_v4.synRate=0;
+givenTree.Pvirgatum_450_v4.nsClass1=0.0005823048916543997;
+givenTree.Node34.synRate=4.692315044557033;
+givenTree.Node34.nsClass1=0.03268386997614133;
+givenTree.Zmays_284_5b_.synRate=0;
+givenTree.Zmays_284_5b_.nsClass1=1.388906837434886e-05;
+givenTree.Zmays_493_RefGen_V4.synRate=0;
+givenTree.Zmays_493_RefGen_V4.nsClass1=0.0005833060576050108;
+givenTree.Node43.synRate=2.878802907720864e-18;
+givenTree.Node43.nsClass1=0.0005823048916543997;
+givenTree.Zmays_284_Ensembl_18_2010_01_MaizeSequence.synRate=0;
+givenTree.Zmays_284_Ensembl_18_2010_01_MaizeSequence.nsClass1=0.0005823048916543997;
+givenTree.Node42.synRate=9.631943570808535e-18;
+givenTree.Node42.nsClass1=0.0007825779593643982;
+givenTree.Zmays_284_6a.synRate=7.469709482960204e-19;
+givenTree.Zmays_284_6a.nsClass1=0.0005823048916543997;
+givenTree.Node41.synRate=0.03117276332476489;
+givenTree.Node41.nsClass1=15.15333132854157;
+givenTree.Node33.synRate=241.7141583208946;
+givenTree.Node33.nsClass1=0.0007174015865966467;
+givenTree.Node27.synRate=0.06596300878573064;
+givenTree.Node27.nsClass1=0.7881516093532958;
+givenTree.Phallii_308_v2.synRate=1.158632614469341e-17;
+givenTree.Phallii_308_v2.nsClass1=0.000783361150364933;
+givenTree.Phallii_495_v3.synRate=0;
+givenTree.Phallii_495_v3.nsClass1=0.0005823048916543997;
+givenTree.Node48.synRate=1.017388461479064;
+givenTree.Node48.nsClass1=0.5940283653208612;
+givenTree.Node26.synRate=0.0145242595842294;
+givenTree.Node26.nsClass1=25.11834946008901;
+givenTree.Dcarota_388_v2.synRate=4.751716104716484;
+givenTree.Dcarota_388_v2.nsClass1=0.02052705771691902;
+givenTree.Leersia_perrieri.synRate=2.049670775368161;
+givenTree.Leersia_perrieri.nsClass1=0.22832431581146;
+givenTree.Osativa_323_v7.synRate=0;
+givenTree.Osativa_323_v7.nsClass1=0.009020511607590632;
+givenTree.Osativa_204_v7.synRate=0;
+givenTree.Osativa_204_v7.nsClass1=0.0007825779593643982;
+givenTree.Node56.synRate=2.155290421407942;
+givenTree.Node56.nsClass1=0.08329908760438881;
+givenTree.Node54.synRate=0.003313438109976934;
+givenTree.Node54.nsClass1=68.19901605913788;
+givenTree.Node52.synRate=0.001262327758234174;
+givenTree.Node52.nsClass1=85.03403491725906;
+givenTree.Ahypochondriacus_459_v2.synRate=0;
+givenTree.Ahypochondriacus_459_v2.nsClass1=2.219516633915368e-08;
+givenTree.Ahypochondriacus_315_v1.synRate=0.01830637611795301;
+givenTree.Ahypochondriacus_315_v1.nsClass1=0;
+givenTree.Node59.synRate=9.88433214378586;
+givenTree.Node59.nsClass1=0.01671437358636642;
+givenTree.Node51.synRate=0.007904759929378707;
+givenTree.Node51.nsClass1=59.83892413801954;
+givenTree.Node25.synRate=3.812588675012032;
+givenTree.Node25.nsClass1=0.03711266622631707;
+givenTree.Node9.synRate=14.88134827090819;
+givenTree.Node9.nsClass1=0.01489087247619687;
+givenTree.Node3.synRate=0.001855327497352348;
+givenTree.Node3.nsClass1=42.25952454249032;
+givenTree.Mdomestica_491_v1.synRate=0;
+givenTree.Mdomestica_491_v1.nsClass1=0.007021400147311765;
+givenTree.Mdomestica_196_v1.synRate=0;
+givenTree.Mdomestica_196_v1.nsClass1=0.0005823048916543997;
+givenTree.Node62.synRate=17.86714361309739;
+givenTree.Node62.nsClass1=0.01656035080011188;
+givenTree.Node2.synRate=122.3045238371966;
+givenTree.Node2.nsClass1=0.0009537523849985256;
+givenTree.Ppersica_298_v2.synRate=0;
+givenTree.Ppersica_298_v2.nsClass1=0.0005829236460037755;
+givenTree.Ppersica_139_v1.synRate=0;
+givenTree.Ppersica_139_v1.nsClass1=0.0007825779593643982;
+givenTree.Node65.synRate=2.347657623195508;
+givenTree.Node65.nsClass1=0.1653861605520357;
+Tree givenTree=(Graimondii_221_v2:0.487208,((((Fvesca_226_v1:0.0110172,Fvesca_501_v2:0.00879677)Node5:0.669821,Csativus_122_v1:46.1647)Node4:4.98047,(((Sbicolor_255_v2:0,(Sbicolor_454_v3:0,Sbicolor_313_v3:1.28147e-18)Node13:0.0033467)Node11:0.0566603,((HORVU_MOREX_r2_1HG0000880_1:0.131617,(Aegilops_tauschii:0,Triticum_aestivum:1.27794e-18)Node19:0.0719353)Node17:0.0317236,(Bdistachyon_283_v2:2.94995e-19,Bdistachyon_314_v3:9.0743e-19)Node22:0.0774806)Node16:0.021941)Node10:0.169847,((((Triticum_urartu:0.260218,(Sviridis_311_v1:0,Sviridis_500_v2:9.2707e-18)Node30:0.185411)Node28:0.0558565,(((Pvirgatum_516_v5:0.00181055,(Pvirgatum_273_v1:0,Pvirgatum_383_v3:2.11948e-18)Node37:0)Node35:0,Pvirgatum_450_v4:0)Node34:0.596868,(((Zmays_284_5b_:0,Zmays_493_RefGen_V4:0)Node43:3.34673e-19,Zmays_284_Ensembl_18_2010_01_MaizeSequence:0)Node42:1.12041e-18,Zmays_284_6a:8.68386e-20)Node41:0.164702)Node33:28.1114)Node27:0.0253842,(Phallii_308_v2:1.34775e-18,Phallii_495_v3:0)Node48:0.324167)Node26:0.126095,((Dcarota_388_v2:0.584726,(Leersia_perrieri:0.397466,(Osativa_323_v7:0,Osativa_204_v7:0)Node56:0.311357)Node54:0.077444)Node52:0.036751,(Ahypochondriacus_459_v2:0,Ahypochondriacus_315_v1:0.00212456)Node59:1.20347)Node51:0.16222)Node25:0.490724)Node9:1.80263)Node3:0.0269524,(Mdomestica_491_v1:0,Mdomestica_196_v1:0)Node62:2.17448)Node2:14.2339,(Ppersica_298_v2:0,Ppersica_139_v1:0)Node65:0.404864);
+Position	L0	L1	Constraint	Chisquared	P-value	SeqCount	Alignment	ReferenceAA	MaskedConstraint	MaskedP-value
+0	-------------MM--------MMMMMMMM----	-	NOSNP
+3	-------------GG--------------------	-	NOSNP
+6	-------------DD--------------------	-	NOSNP
+9	-------------QQ--------------------	-	NOSNP
+12	-------------EE--------------------	-	NOSNP
+15	-------------HH--------------------	-	NOSNP
+18	-------------EE--------------------	-	NOSNP
+21	-------------DD--------------------	-	NOSNP
+24	-------------LL--------------------	-	NOSNP
+27	-------------EE--------------------	-	NOSNP
+30	-------------RR--------------------	-	NOSNP
+33	-------------II--------------------	-	NOSNP
+36	-------------LL--------------------	-	NOSNP
+39	-------------II--------------------	-	NOSNP
+42	-------------EE--------------------	-	NOSNP
+45	-------------KK--------------------	-	NOSNP
+48	-------------NN--------------------	-	NOSNP
+51	-------------AA--------------------	-	NOSNP
+54	-------------NN--------------------	-	NOSNP
+57	-------------AA--------------------	-	NOSNP
+60	-------------II--------------------	-	NOSNP
+63	-------------PP--------------------	-	NOSNP
+66	-------------LL--------------------	-	NOSNP
+69	-------------SS--------------------	-	NOSNP
+72	-------------YY--------------------	-	NOSNP
+75	-------------TT--------------------	-	NOSNP
+78	-------------FF--------------------	-	NOSNP
+81	-------------LL--------------------	-	NOSNP
+84	-------------KK--------------------	-	NOSNP
+87	-------------YY--------------------	-	NOSNP
+90	-------------II--------------------	-	NOSNP
+93	-------------TT--------------------	-	NOSNP
+96	-------------NN--------------------	-	NOSNP
+99	-------------NN--------------------	-	NOSNP
+102	-------------FF--------------------	-	NOSNP
+105	-------------SS--------RR----------	-	NOSNP
+108	-------------HH--------RR----------	-	NOSNP
+111	-------------EE--------EE----------	-	NOSNP
+114	-------------RR--------AA----------	-	NOSNP
+117	-------------EE--------RR----------	-	NOSNP
+120	-------------II--------II----------	-	NOSNP
+123	-------------GG--------GG----------	-	NOSNP
+126	-------------RR--------DD----------	-	NOSNP
+129	-------------GG--------GG----------	-	NOSNP
+132	-------------GG--------GG----------	-	NOSNP
+135	-------------FF--------------------	-	NOSNP
+138	-------------GG--------------------	-	NOSNP
+141	-------------II--------------------	-	NOSNP
+144	-------------VV--------------------	-	NOSNP
+147	-------------YY--------------------	-	NOSNP
+150	-------------KK--------------------	-	NOSNP
+153	-------------GG--------------------	-	NOSNP
+156	-------------VV--------------------	-	NOSNP
+159	-------------LL--------------------	-	NOSNP
+162	-------------RR--------------------	-	NOSNP
+165	-------------NN--------------------	-	NOSNP
+168	-------------GG--------------------	-	NOSNP
+171	-------------NN--------------------	-	NOSNP
+174	-------------VV--------------------	-	NOSNP
+177	-------------AA--------------------	-	NOSNP
+180	-------------VV--------------------	-	NOSNP
+183	-------------KK--------------------	-	NOSNP
+186	-------------KK--------------------	-	NOSNP
+189	-------------LL--------------------	-	NOSNP
+192	-------------SS--------------------	-	NOSNP
+195	-------------RR--------------------	-	NOSNP
+198	-------------TT--------------------	-	NOSNP
+201	-------------DD--------------------	-	NOSNP
+204	-------------DD--------------------	-	NOSNP
+207	-------------II--------------------	-	NOSNP
+210	-------------SS--------------------	-	NOSNP
+213	-------------EE--------------------	-	NOSNP
+216	-------------KK--------------------	-	NOSNP
+219	-------------QQ--------------------	-	NOSNP
+222	-------------FF--------------------	-	NOSNP
+225	-------------EE--------------------	-	NOSNP
+228	-------------DD--------------------	-	NOSNP
+231	-------------EE--------------------	-	NOSNP
+234	-------------LL--------------------	-	NOSNP
+237	-------------FF--------------------	-	NOSNP
+240	-------------CC--------------------	-	NOSNP
+243	-------------LL--------------------	-	NOSNP
+246	-------------II--------------------	-	NOSNP
+249	-------------RR--------------------	-	NOSNP
+252	-------------VV--------------------	-	NOSNP
+255	-------------KK--------------------	-	NOSNP
+258	-------------HH--------------------	-	NOSNP
+261	-------------KK--------------------	-	NOSNP
+264	-------------NN--------------------	-	NOSNP
+267	-------------II--------------------	-	NOSNP
+270	-------------VV--------------------	-	NOSNP
+273	-------------RR--------------------	-	NOSNP
+276	-------------FF--------------------	-	NOSNP
+279	-------------LL--------------------	-	NOSNP
+282	-------------GG--------------------	-	NOSNP
+285	-------------YY--------------------	-	NOSNP
+288	-------------CC--------------------	-	NOSNP
+291	-------------SS--------------------	-	NOSNP
+294	-------------NN--------------------	-	NOSNP
+297	-------------II--------------------	-	NOSNP
+300	-------------SS--------------------	-	NOSNP
+303	-------------RR--------------------	-	NOSNP
+306	-------------EE--------------------	-	NOSNP
+309	-------------VV--------------------	-	NOSNP
+312	-------------VV--------------------	-	NOSNP
+315	-------------HH--------------------	-	NOSNP
+318	-------------HH--------------------	-	NOSNP
+321	-------------NN--------------------	-	NOSNP
+324	-------------GG--------------------	-	NOSNP
+327	-------------RR--------------------	-	NOSNP
+330	-------------DD--------------------	-	NOSNP
+333	-------------II--------------------	-	NOSNP
+336	-------------LL--------------------	-	NOSNP
+339	-------------AA--------------------	-	NOSNP
+342	-------------DD--------------------	-	NOSNP
+345	-------------VV--------------------	-	NOSNP
+348	-------------QQ--------------------	-	NOSNP
+351	-------------QQ--------------------	-	NOSNP
+354	-------------RR--------------------	-	NOSNP
+357	-------------FF--------------------	-	NOSNP
+360	-------------LL--------------------	-	NOSNP
+363	-------------CC--------------------	-	NOSNP
+366	-------------FF--------------------	-	NOSNP
+369	-------------EE--------------------	-	NOSNP
+372	-------------YY--------------------	-	NOSNP
+375	-------------II--------------------	-	NOSNP
+378	-------------PP--------------------	-	NOSNP
+381	-------------NN--------------------	-	NOSNP
+384	-------------KK--------------------	-	NOSNP
+387	-------------SS--------------------	-	NOSNP
+390	-------------LL--------------------	-	NOSNP
+393	-------------KK--------------------	-	NOSNP
+396	-------------HH--------------------	-	NOSNP
+399	-------------YY--------------------	-	NOSNP
+402	-------------LL--------------------	-	NOSNP
+405	-------------EE--------------------	-	NOSNP
+408	-------------DD--------------------	-	NOSNP
+411	-------------EE--------------------	-	NOSNP
+414	-------------SS--------------------	-	NOSNP
+417	-------------YY--------------------	-	NOSNP
+420	-------------GG--------------------	-	NOSNP
+423	-------------RR--------------------	-	NOSNP
+426	-------------EE--------------------	-	NOSNP
+429	-------------LL--------------------	-	NOSNP
+432	-------------EE--------------------	-	NOSNP
+435	-------------TT--------------------	-	NOSNP
+438	-------------RR--------------------	-	NOSNP
+441	-------------YY--------------------	-	NOSNP
+444	-------------NN--------------------	-	NOSNP
+447	-------------LL--------------------	-	NOSNP
+450	-------------II--------------------	-	NOSNP
+453	-------------EE--------------------	-	NOSNP
+456	-------------GG--------------------	-	NOSNP
+459	-------------II--------------------	-	NOSNP
+462	-------------CC--------------------	-	NOSNP
+465	-------------HH--------------------	-	NOSNP
+468	-------------GG--------------------	-	NOSNP
+471	-------------LL--------------------	-	NOSNP
+474	-------------QQ--------------------	-	NOSNP
+477	-------------YY--------------------	-	NOSNP
+480	-------------LL--------------------	-	NOSNP
+483	-------------HH--------------------	-	NOSNP
+486	-------------NN--------------------	-	NOSNP
+489	-------------EE--------------------	-	NOSNP
+492	-------------QQ--------------------	-	NOSNP
+495	-------------RR--------------------	-	NOSNP
+498	-------------II--------------------	-	NOSNP
+501	-------------NN--------------------	-	NOSNP
+504	-------------HH--------------------	-	NOSNP
+507	-------------LL--------------------	-	NOSNP
+510	-------------DD--------------------	-	NOSNP
+513	-------------LL--------------------	-	NOSNP
+516	-------------KK--------------------	-	NOSNP
+519	-------------PP--------------------	-	NOSNP
+522	-------------EE--------------------	-	NOSNP
+525	-------------NN--------------------	-	NOSNP
+528	-------------II--------------------	-	NOSNP
+531	-------------LL--------------------	-	NOSNP
+534	-------------LL--------------------	-	NOSNP
+537	-------------DD--------------------	-	NOSNP
+540	-------------YY--------------------	-	NOSNP
+543	-------------GG--------------------	-	NOSNP
+546	-------------MM--------------------	-	NOSNP
+549	-------------VV--------------------	-	NOSNP
+552	-------------PP--------------------	-	NOSNP
+555	-------------KK--------------------	-	NOSNP
+558	-------------II--------------------	-	NOSNP
+561	-------------TT--------------------	-	NOSNP
+564	-------------DD--------------------	-	NOSNP
+567	-------------FF--------------------	-	NOSNP
+570	-------------GG--------------------	-	NOSNP
+573	-------------LL--------------------	-	NOSNP
+576	-------------SS--------------------	-	NOSNP
+579	-------------RR--------------------	-	NOSNP
+582	-------------RR--------------------	-	NOSNP
+585	-------------FF--------------------	-	NOSNP
+588	-------------GG--------------------	-	NOSNP
+591	-------------EE--------------------	-	NOSNP
+594	-------------QQ--------------------	-	NOSNP
+597	-------------SS--------------------	-	NOSNP
+600	-------------RR--------------------	-	NOSNP
+603	-------------II--------------------	-	NOSNP
+606	-------------II--------------------	-	NOSNP
+609	-------------TT--------------------	-	NOSNP
+612	-------------KK--------------------	-	NOSNP
+615	-------------NN--------------------	-	NOSNP
+618	-------------II--------------------	-	NOSNP
+621	-------------YY--------------------	-	NOSNP
+624	-------------GG--------------------	-	NOSNP
+627	-------------TT--------------------	-	NOSNP
+630	-------------LL--------------------	-	NOSNP
+633	-------------GG--------------------	-	NOSNP
+636	-------------YY--------------------	-	NOSNP
+639	-------------LL--------------------	-	NOSNP
+642	-------------AA--------------------	-	NOSNP
+645	-------------PP--------------------	-	NOSNP
+648	-------------EE--------------------	-	NOSNP
+651	-------------YY--------------------	-	NOSNP
+654	-------------LL--------------------	-	NOSNP
+657	-------------NN--------------------	-	NOSNP
+660	-------------YY--------------------	-	NOSNP
+663	-------------GG--------------------	-	NOSNP
+666	-------------KK--------------------	-	NOSNP
+669	-------------LL--------------------	-	NOSNP
+672	-------------SS--------------------	-	NOSNP
+675	-------------FF--------------------	-	NOSNP
+678	-------------KK--------------------	-	NOSNP
+681	-------------SS--------------------	-	NOSNP
+684	-------------DD--------------------	-	NOSNP
+687	-------------II--------------------	-	NOSNP
+690	-------------YY--------------------	-	NOSNP
+693	-------------SS--------------------	-	NOSNP
+696	-------------LL--------------------	-	NOSNP
+699	-------------GG--------------------	-	NOSNP
+702	-------------II--------------------	-	NOSNP
+705	-------------II--------------------	-	NOSNP
+708	-------------MM--------------------	-	NOSNP
+711	-------------GG--------------------	-	NOSNP
+714	-------------KK--------------------	-	NOSNP
+717	-------------II--------------------	-	NOSNP
+720	-------------LL--------------------	-	NOSNP
+723	-------------RR--------------------	-	NOSNP
+726	-------------GG--------------------	-	NOSNP
+729	-------------NN--------------------	-	NOSNP
+732	-------------NN--------------------	-	NOSNP
+735	-------------DD--------------------	-	NOSNP
+738	-------------II--------------------	-	NOSNP
+741	-------------LL--------------------	-	NOSNP
+744	-------------DD--------------------	-	NOSNP
+747	-------------FF--------------------	-	NOSNP
+750	-------------QQ--------------------	-	NOSNP
+753	-------------NN--------------------	-	NOSNP
+756	-------------WW--------------------	-	NOSNP
+759	-------------HH--------------------	-	NOSNP
+762	-------------KK--------------------	-	NOSNP
+765	-------------SS--------------------	-	NOSNP
+768	-------------QQ--------------------	-	NOSNP
+771	-------------VV--------------------	-	NOSNP
+774	-------------TT--------------------	-	NOSNP
+777	-------------DD--------------------	-	NOSNP
+780	-------------SS--------------------	-	NOSNP
+783	-------------PP--------------------	-	NOSNP
+786	-------------QQ--------------------	-	NOSNP
+789	-------------VV--------------------	-	NOSNP
+792	-------------KK--------------------	-	NOSNP
+795	-------------RR--------------------	-	NOSNP
+798	-------------CC--------------------	-	NOSNP
+801	-------------II--------------------	-	NOSNP
+804	-------------EE--------------------	-	NOSNP
+807	-------------II--------------------	-	NOSNP
+810	-------------AA--------------------	-	NOSNP
+813	-------------QQ--------------------	-	NOSNP
+816	-------------LL--------------------	-	NOSNP
+819	-------------CC--------------------	-	NOSNP
+822	-------------VV--------------------	-	NOSNP
+825	-------------NN--------------------	-	NOSNP
+828	-------------AA--------------------	-	NOSNP
+831	-------------DD--------------------	-	NOSNP
+834	-------------EE--------------------	-	NOSNP
+837	-------------HH--------------------	-	NOSNP
+840	-------------KK--------------------	-	NOSNP
+843	-------------RR--------------------	-	NOSNP
+846	-------------PP--------------------	-	NOSNP
+849	-------------TT--------------------	-	NOSNP
+852	-------------II--------------------	-	NOSNP
+855	-------------DD--------------------	-	NOSNP
+858	-------------EE--------------------	-	NOSNP
+861	-------------II--------------------	-	NOSNP
+864	-------------II--------------------	-	NOSNP
+867	-------------AA--------------------	-	NOSNP
+870	-------------MM--------------------	-	NOSNP
+873	-------------LL--------------------	-	NOSNP
+876	-------------NN--------------------	-	NOSNP
+879	-------------EE--------------------	-	NOSNP
+882	-------------II--------------------	-	NOSNP
+885	-------------HH--------------------	-	NOSNP
+888	-------------MM--------------------	-	NOSNP
+891	-------------SS--------------------	-	NOSNP
+894	-------------RR--------------------	-	NOSNP
+897	-------------SS--------------------	-	NOSNP
+900	-------------NN--------------------	-	NOSNP
+903	-------------SS--------------------	-	NOSNP
+906	-------------VV--------------------	-	NOSNP
+909	-------------PP--------------------	-	NOSNP
+912	-------------SS--------------------	-	NOSNP
+915	-------------LL--------------------	-	NOSNP
+918	-------------EE--------------------	-	NOSNP
+921	-------------KK--------------------	-	NOSNP
+924	-------------MM--------------------	-	NOSNP
+927	-------------EE--------------------	-	NOSNP
+930	-------------GG--------------------	-	NOSNP
+933	-------------QQ--------------------	-	NOSNP
+936	-------------KK--------------------	-	NOSNP
+939	-------------TT--------------------	-	NOSNP
+942	-------------QQ--------------------	-	NOSNP
+945	-------------PP--------------------	-	NOSNP
+948	-------------QQ--------------------	-	NOSNP
+951	-------------HH--------------------	-	NOSNP
+954	-------------VV--------------------	-	NOSNP
+957	-------------AA--------------------	-	NOSNP
+960	-------------PP--------------------	-	NOSNP
+963	-------------II--------------------	-	NOSNP
+966	-------------EE--------------------	-	NOSNP
+969	-------------RR--------------------	-	NOSNP
+972	-------------SS--------------------	-	NOSNP
+975	-------------SS--------------------	-	NOSNP
+978	-------------VV--------------------	-	NOSNP
+981	-------------EE--------------------	-	NOSNP
+984	-------------HH--------------------	-	NOSNP
+987	-------------MM--------------------	-	NOSNP
+990	-------------PP--------------------	-	NOSNP
+993	-------------GG--------------------	-	NOSNP
+996	-------------TT--------------------	-	NOSNP
+999	-------------KK--------------------	-	NOSNP
+1002	-------------AA--------------------	-	NOSNP
+1005	-------------GG--------------------	-	NOSNP
+1008	-------------PP--------------------	-	NOSNP
+1011	-------------EE--------------------	-	NOSNP
+1014	-------------WW--------------------	-	NOSNP
+1017	-------------NN--------------------	-	NOSNP
+1020	-------------RR--------------------	-	NOSNP
+1023	-------------EE--------------------	-	NOSNP
+1026	-------------SS--------------------	-	NOSNP
+1029	-------------AA--------------------	-	NOSNP
+1032	-------------RR--------------------	-	NOSNP
+1035	-------------AA--------------------	-	NOSNP
+1038	-------------SS--------------------	-	NOSNP
+1041	-------------SS--------------------	-	NOSNP
+1044	-------------SS--------------------	-	NOSNP
+1047	-------------QQ--------------------	-	NOSNP
+1050	-------------PP--------------------	-	NOSNP
+1053	-------------PP--------------------	-	NOSNP
+1056	-------------PP--------------------	-	NOSNP
+1059	-------------VV--------------------	-	NOSNP
+1062	-------------RR--------------------	-	NOSNP
+1065	-------------AA--------------------	-	NOSNP
+1068	-------------NN--------------------	-	NOSNP
+1071	-------------KK--------------------	-	NOSNP
+1074	-------------EE--------------------	-	NOSNP
+1077	-------------AA--------------------	-	NOSNP
+1080	-------------QQ--------------------	-	NOSNP
+1083	-------------DD--------------------	-	NOSNP
+1086	-------------AA--------------------	-	NOSNP
+1089	-------------TT--------------------	-	NOSNP
+1092	-------------TT--------------------	-	NOSNP
+1095	-------------TT--------------------	-	NOSNP
+1098	-------------QQ--------------------	-	NOSNP
+1101	-------------KK--------------------	-	NOSNP
+1104	-------------SS--------------------	-	NOSNP
+1107	-------------WW--------------------	-	NOSNP
+1110	-------------FF--------------------	-	NOSNP
+1113	-------------QQ--------------------	-	NOSNP
+1116	-------------RR--------------------	-	NOSNP
+1119	-------------DD--------------------	-	NOSNP
+1122	-------------EE--------------------	-	NOSNP
+1125	-------------SS--------------------	-	NOSNP
+1128	-------------GG--------------------	-	NOSNP
+1131	-------------PP--------------------	-	NOSNP
+1134	-------------SS--------------------	-	NOSNP
+1137	-------------HH--------------------	-	NOSNP
+1140	-------------QQ--------------------	-	NOSNP
+1143	-------------SS--------------------	-	NOSNP
+1146	-------------FF--------------------	-	NOSNP
+1149	-------------AA--------------------	-	NOSNP
+1152	-------------PP--------------------	-	NOSNP
+1155	-------------RR--------------------	-	NOSNP
+1158	-------------QQ--------------------	-	NOSNP
+1161	-------------TT--------------------	-	NOSNP
+1164	-------------EE--------------------	-	NOSNP
+1167	-------------RR--------------------	-	NOSNP
+1170	-------------VV--------------------	-	NOSNP
+1173	-------------VV--------------------	-	NOSNP
+1176	-------------AA--------------------	-	NOSNP
+1179	-------------KK--------------------	-	NOSNP
+1182	-------------EE--------------------	-	NOSNP
+1185	M--MMMMMMMMM-TT----------------MMMM	M	NOSNP
+1188	A--AAAAAAATT-AAMMMMMMMMEE-L----AAAA	A	NOSNP
+1191	E----------------------------------	-	NOSNP
+1194	E----------------------------------	-	NOSNP
+1197	N----------------------------------	-	NOSNP
+1200	V----------------------------------	-	NOSNP
+1203	F----------------------------------	-	NOSNP
+1206	G----------------------------------	-	NOSNP
+1209	K----------------------------------	-	NOSNP
+1212	P----------------------------------	-	NOSNP
+1215	I----------------------------------	-	NOSNP
+1218	T----------------------------------	-	NOSNP
+1221	E----------------------------------	-	NOSNP
+1224	A----------------------------------	-	NOSNP
+1227	D----------------------------------	-	NOSNP
+1230	N----------------------------------	-	NOSNP
+1233	T----------------------------------	-	NOSNP
+1236	A----------------------------------	-	NOSNP
+1239	S----------------------------------	-	NOSNP
+1242	E----------------------------------	-	NOSNP
+1245	K----------------------------------	-	NOSNP
+1248	P----------------------------------	-	NOSNP
+1251	I----------------------------------	-	NOSNP
+1254	T----------------------------------	-	NOSNP
+1257	E----------------------------------	-	NOSNP
+1260	S----------------------------------	-	NOSNP
+1263	E----------------------------------	-	NOSNP
+1266	E----------------------------------	-	NOSNP
+1269	D----------------------------------	-	NOSNP
+1272	N----------------------------------	-	NOSNP
+1275	V----------------------------------	-	NOSNP
+1278	L----------------------------------	-	NOSNP
+1281	D----------------------------------	-	NOSNP
+1284	E----------------------------------	-	NOSNP
+1287	A----------------------------------	-	NOSNP
+1290	A----------------------------------	-	NOSNP
+1293	L----------------------------------	-	NOSNP
+1296	E----------------------------------	-	NOSNP
+1299	L----------------------------------	-	NOSNP
+1302	T----------------------------------	-	NOSNP
+1305	L----------------------------------	-	NOSNP
+1308	S----------------------------------	-	NOSNP
+1311	E----------------------------------	-	NOSNP
+1314	A----------------------------------	-	NOSNP
+1317	R----------------------------------	-	NOSNP
+1320	S----------------------------------	-	NOSNP
+1323	G----------------------------------	-	NOSNP
+1326	S--DSSSSSSTT-PPAAAAAAAALL-T----YYYY	S	NOSNP
+1329	N--NGGGGGGGGNNNNNNNNNNNNNNNSSNNNNNN	G	NOSNP
+1332	L--VVVVVVVVVLCCCCCCCCCCCCPPTTPPVVVV	V	NOSNP
+1335	F--FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF	F	NOSNP
+1338	G--GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG	G	NOSNP
+1341	T--NLLLITTTTDEEAAAADDDDAAVTVVVVNNNN	I	NOSNP
+1344	V--PPPPPPPPPVVVVVVVIIIIVVAAPPPPPPPP	P	NOSNP
+1347	IMMIIIIIIIIIVVVVVVVVVVVVVIVIIIIIIII	I	NOSNP
+1350	DTTTSSSSSSSSNDDDDDDDDDDNNTNTTTTTTQQ	S	NOSNP
+1353	-68.39427191471364	-64.60238393176787	0.1306858716150316	7.583775965891533	0.005889594124254272	35	QDDNEEEMEEAANDDNNNNNNNNDDDADDDDNNNN	M	0.1000797187741913	7.04643301786545e-05
+1356	ASSSEEEQKKEEYYYYYYYYYYYDDEEEERREESS	Q	NOSNP
+1359	-57.67956781089485	-48.85163493759725	0.04810590067822476	17.65586574659521	2.646976775011467e-05	35	FTTTTTTTTTTTKKKKKKKKKKKTTTVTTTTTTTT	T	0.04826604355286986	3.510568198683561e-05
+1362	VVVLVVVVVVVVLLLLLLLLLLLLLLVLLLLLLLL	V	NOSNP
+1365	MRRQRRRILLRRHNNDDDDDDDDHHRKEERREEKK	I	NOSNP
+1368	GAAAAAAAAAAAKEEEEEETTTTEEQSAAQQGGGG	A	NOSNP
+1371	IIIMTTTTTTTTMLLMMMMMMMMLLMYMMMMMMMM	T	NOSNP
+1374	PSSPGGGGGGGGPVVAAAAPPPP--ASSSKKPPPP	G	NOSNP
+1377	EGGDEEEEEEEERRRRRRRRRRR--KRRRRREEEE	E	NOSNP
+1380	YCCYYYYYYYYYYYYYYYYYYYY--YYYYYYYYYY	Y	NOSNP
+1383	AAAEKKKKKKKKVAAVVVVVVVV--RRAARRAAKK	K	NOSNP
+1386	NDDG--------GGGGGGGGGGGRRNGGGGGGGLL	-	NOSNP
+1389	RLLKEEEEEEEERKKKKKKKKKKLLKHKKKKKKKK	E	NOSNP
+1392	-EEVPPPPPPPPPAAAAAATTTTPPKASSEETTAA	P	NOSNP
+1395	-----------------------------NN----	-	NOSNP
+1398	-62.37268349821878	-47.51805404586955	0.02361584909653418	29.70925890469846	5.019450644017098e-08	34	-IIIIIIVIIIIKKKKKKKKKKKVVIIIIIIIIII	V	0.01547263880684528	1.103612312647329e-09
+1401	ATTTTTTTTTTTTTTSSSSTTTTTTTTSSTTGGEE	T	NOSNP
+1404	RAARQQQQQQQQRQQQQQQRRRRRRQRQQQQKKRR	Q	NOSNP
+1407	-64.87671681127217	-59.47452832529126	0.1552605179843209	10.80437697196183	0.001012603976835225	35	LVVRRRRKKKKKKEEEEEEEEEEEEEEVVEELLNN	K	0.1567061932648073	0.001412803875276314
+1410	DDDDDDDDDDDDDDDDDDDDDDDNNDDDDDDDDDD	D	NOSNP
+1413	RRRRVVVVVVVVRRRRRRRRRRRRRRCRRRRRRRR	V	NOSNP
+1416	SAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA	A	NOSNP
+1419	VRRYDDDDDDDDRRRRRRRRRRRQQRRRRRRLLKK	D	NOSNP
+1422	VAAVYYYYYYYYEQQEEEEEEEEVVEEEEEEVVVV	Y	NOSNP
+1425	AAAAAAATTTAAAAAAAAAAAAAAAAAAAAAAAAA	T	NOSNP
+1428	MIILMMMMMMMMWWWVVVVSSSSWWMMMMMMLLLL	M	NOSNP
+1431	QNNNKKKKKKKKYCCNNNNYYYYSSRRRRRRNNQQ	K	NOSNP
+1434	WMMMMMMMMMMMLAALLLLLLLLRRLMLLLLMMMM	M	NOSNP
+1437	K--KIIIIIIIIVVVVVVVNNNNMMIIIIIIKKKK	I	NOSNP
+1440	D--NNNNNNNNNNNNNNNNNNNNYYHHHHHHNNNN	N	NOSNP
+1443	R--AAAAAAADDEEEEEEEEEEEIIAAAAAAAAVV	A	NOSNP
+1446	G--QNNNGGGSSDDDDDDDNNNNDDEGEEEEAAGG	G	NOSNP
+1449	G--GEEEGGGDDDDDSSSSEEEEDDDRGGDDEEDD	G	NOSNP
+1452	NRRKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK	K	NOSNP
+1455	YDDDDDDDDDDDEKKNNNNSSSSKKNNNNNNDDDD	D	NOSNP
+1458	TSSKVVVIIIIIGGGDDDDKKKKGGLMLLIIFFLL	I	NOSNP
+1461	ANNNNNNDNNDDKKKKKKKKKKKQQNDDDSSNNKK	D	NOSNP
+1464	AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA	A	NOSNP
+1467	VRRQQQQQQQQQSLLSSSSKKKKSSLLLLLLRRLL	Q	NOSNP
+1470	DTTDKKKQTTKKRRRKKKKDDDDKKQHQQQQTTTT	Q	NOSNP
+1473	YYYYFFFFFFFFYYYYYYYYYYYYYHHHHHHHHFF	F	NOSNP
+1476	VVVVVVVVVVVVVVVVVVVVVVVVVVAAAVVVVVV	V	NOSNP
+1479	REEEDDDDDDDDDDDQQQQNNNNAALGLLLLEEEE	D	NOSNP
+1482	ENNKNNNNNNNNGVVGGGGMMMMNNDEGGNNKKNN	N	NOSNP
+1485	VLLLLLLLLLLLLLLVVVVLLLLLLLLLLLLLLLL	L	NOSNP
+1488	KKKRKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK	K	NOSNP
+1491	-70.67415271000844	-69.33041975011056	0.1608145602830712	2.687465919795756	0.1011405473770628	35	RKKEDDDIEEEEAAADDDDDDDDDDDSAAAAEEKK	I	0.1125004426567713	0.0004560476506560995
+1494	RQQERRRKRRRRILLWWWWWWWWMMKSSSNNQQQQ	K	NOSNP
+1497	WWWWYYYYYYYYYYYYYYYYYYYYYYHYYYYYYHH	Y	NOSNP
+1500	GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG	G	NOSNP
+1503	NNNSNNNNNNYYDNNNNNNNNNNTTSSDDNNDDDD	N	NOSNP
+1506	GGGGGGGGGGQQGGGGGGGGGGGGGGGGGGGGGGG	G	NOSNP
+1509	VVVVIIIIIIIIQQQVVVVAAAAVVVVVVVVVVII	I	NOSNP
+1512	SSSATTTSSSSSSSSSSSSSSSSSSSSSSSSSSSS	S	NOSNP
+1515	TTTTTTTVVVTTMTTTTTTTTTTTTTAAATTTTTT	V	NOSNP
+1518	LLLLKKKKKKKKMLLLLLLLLLLWWLMMMLLLLLL	K	NOSNP
+1521	CCCCCCCCCCCCCCCCCCCCCCCCCCVVVCCCCCC	C	NOSNP
+1524	VLLLLLLLLLLLLLLLLLLVVVVLLLLLLLLLLLL	L	NOSNP
+1527	LVVIIIIIIIIILVVIIIIIIIILLVVVVVVVVII	I	NOSNP
+1530	YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY	Y	NOSNP
+1533	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	N	NOSNP
+1536	GAAAAAAAAAAASAAAAAAQQQQAAAAAAAAAAAA	A	NOSNP
+1539	TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT	T	NOSNP
+1542	GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG	G	NOSNP
+1545	ENNDAAATAATTDDDSSSSGGGGDDNDAADDDDDD	T	NOSNP
+1548	RTTTSSSNTTTTTTTTTTTTTTTSSTKAATTTTTT	N	NOSNP
+1551	LIIILLLLLLLLLLLLLLLLLLLLLLLLLLLIILL	L	NOSNP
+1554	TNNKKKKSNNDDHYYRRRRRRRRRRQEEEQQTTTT	S	NOSNP
+1557	YYYFFFFFLLFFHHHYYYYYYYYYYLLLLFFYYYY	F	NOSNP
+1560	HVVVVVVVAAVVVVVVVVVIIIISSVVVVAASSSS	V	NOSNP
+1563	TRRRTTTTNNTTAAAAAAADDDDNNEDDDYYDDII	T	NOSNP
+1566	---------------------------GG------	-	NOSNP
+1569	---------------------------EE------	-	NOSNP
+1572	---------------------------GG------	-	NOSNP
+1575	---------------------------GG------	-	NOSNP
+1578	DDDEYYYYYYYYNHHDDDDDDDDSSQSSSNNKKSS	Y	NOSNP
+1581	NHHYKKKKKKNNHHHKKKKKKKKHHKKMMKKKKKK	K	NOSNP
+1584	DNNSDDDNDDDDDDDDDDDDDDDSSDDDDEEDDDD	N	NOSNP
+1587	WFFWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW	W	NOSNP
+1590	WHHHHHHIHHHHCYYYYYYLLLLLLLDYYNNLLCC	I	NOSNP
+1593	GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG	G	NOSNP
+1596	-----------------------GG-S--------	-	NOSNP
+1599	NHHHHHHSHHHHHYYFFFFYYYYSSYSYYYYHHHH	S	NOSNP
+1602	IIIIIIIIIIIIIIIIIIIPPPPIIVVVVIIIIII	I	NOSNP
+1605	-------------NN--------------------	-	NOSNP
+1608	-------------DD--------------------	-	NOSNP
+1611	-GGGYYYFYYYYGSSCCCCGGGGYYYYYYYYGGGG	F	NOSNP
+1614	YPPPEEEDDDDDSKKRRRRPPPPNNNHHHKKKKHH	D	NOSNP
+1617	LAASTTTTTTTTAEETTTTTTTTPPEEEEEEAAFF	T	NOSNP
+1620	PPPPPPPPPPPPPGGPPPPPPPPGGQEQQQQPPPP	P	NOSNP
+1623	YYYYYYYYYYYYYYYYYYYYYYYYYPPPPPPYYYY	Y	NOSNP
+1626	PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPVVPP	P	NOSNP
+1629	QVVSSSSSSSSSAAATTTTTTTTEETSAATTAATT	S	NOSNP
+1632	IKKEEEEDDDDDMEEEEEEEEEEEESSSSTTLLLL	D	NOSNP
+1635	IIIIIIIIIIIIIIIIIIIIIIIIIFFFFFFIIII	I	NOSNP
+1638	EEEEQQQQQQQQGGGGGGGGGGGGGELQQEEAAAA	Q	NOSNP
+1641	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	N	NOSNP
+1644	GGGGGGGGGGGGGSSGGGGGGGGGGGGGGGGGGGG	G	NOSNP
+1647	QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ	Q	NOSNP
+1650	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW	W	NOSNP
+1653	AGGGGGGGGGGGAGGAAAAAAAAAALILLIIGGGG	G	NOSNP
+1656	CAAAAAAAAAPPAVVAAAASSSSAAASAAAAAAAA	A	NOSNP
+1659	FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF	F	NOSNP
+1662	FLLLIIILLLLLHHHLLLLLLLLLLLLLLLLLLLL	L	NOSNP
+1665	HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH	H	NOSNP
+1668	VVVVVVVVVVVVVVVVVVVVVVVVVAAAAAAVVVV	V	NOSNP
+1671	----CCC----------------------------	-	NOSNP
+1674	----HHH----------------------------	-	NOSNP
+1677	----GGG----------------------------	-	NOSNP
+1680	----III----------------------------	-	NOSNP
+1683	----GGG----------------------------	-	NOSNP
+1686	-----II----------------------------	-	NOSNP
+1689	-----WW----------------------------	-	NOSNP
+1692	-----PP----------------------------	-	NOSNP
+1695	-----SS----------------------------	-	NOSNP
+1698	-----RR----------------------------	-	NOSNP
+1701	-----DD----------------------------	-	NOSNP
+1704	-----NN----------------------------	-	NOSNP
+1707	-----VV----------------------------	-	NOSNP
+1710	KKKK-HHKHH--HHHHHHHHHHHHHHHHHHHKKQQ	K	NOSNP
+1713	RTTT-PPPPP--GRRNNNNKKKKGGPPPPPPTTKK	P	NOSNP
+1716	TSSA-AARSS--AQQTTTTTTTTEESGTTTTAALL	R	NOSNP
+1719	AGGA-GGAGG--GGGGGGGGGGGVVSGAASSGGGG	A	NOSNP
+1722	AAAV-AAAAA--EEEAAAAAAAAMMQRQQQQEETT	A	NOSNP
+1725	AAAP-AAAAA--PPPAAAAAAAA--AASSAASSPP	A	NOSNP
+1728	SAAS-RRKVV--SSSSSSSSSSSVVLVIILLSSEE	K	NOSNP
+1731	GGGG-GGGGG--GGGGGGGGGGGGGGGGGGGGGGG	G	NOSNP
+1734	SSSS-SSSSS--SSSSSSSSSSSSSCCCCSSSSSS	S	NOSNP
+1737	MEEA-AATAA--VMMEEEEMMMMLLEEEEEETTVV	T	NOSNP
+1740	GAAG-GGAGG--AGGAAAAAAAAGGAGAAAAAAAA	A	NOSNP
+1743	AAAS-AAAAA--AAAAAAAAAAAAAVAAAAAAATT	A	NOSNP
+1746	VVVC-AAVVV--VVVVVVVVVVVVVRRRRWWVVVV	V	NOSNP
+1749	VVVV-VVVVV--VVVVVVVVVVVVVVVVVVVVVVV	V	NOSNP
+1752	YYYY-YYYYY--YYYYYYYYYYYYYYFFFYYYYYY	Y	NOSNP
+1755	RRRR-RRRRR--RRRRRRRRRRRRRRRRRRRRRNN	R	NOSNP
+1758	GGGG-TTSTT--GGGGGGGGGGGGGGGGGGGGGGG	S	NOSNP
+1761	KSSQ-KKRKK--KKKTTTTKKKKKKQFRRNNTTKK	R	NOSNP
+1764	-----IIIVV-------------------------	I	NOSNP
+1767	NNNN-PPPPPPPSKKNNNNDDDDNNNTDDNNDDNN	P	NOSNP
+1770	KGGN-SSSSSSSRKKGGGGGGGGRRVSVVIIKKKK	S	NOSNP
+1773	EQQN-SSSSSSSDDDNNNNGGGGHHHTDDKKNNDD	S	NOSNP
+1776	GGGG-SSSRRSSGGGGGGGGGGGGGGGGGGGGGGG	S	NOSNP
+1779	ETTQ-SSSSSSSEQQEEEESSSSQQEEQQEETTEE	S	NOSNP
+1782	DDDL-SSSSSSSDDDEEEEEEEEDDVVVVVVEEDD	S	NOSNP
+1785	TCCC-CCCCCCCLQQRRRRRRRRQQRRRRRRCCRR	C	NOSNP
+1788	DDDD-DDDDDDDDDDDDDDDDDDDDDDDDDDDDGG	D	NOSNP
+1791	WLLW-WWWWWWWYYYLLLLFFFFFFYFFFYYWWRR	W	NOSNP
+1794	LMMM-LLLLLLLLLLLLLLAAAALLMLMMMMMMLL	L	NOSNP
+1797	VMMV-FFFFFFFVLLLLLLMMMMLLIVVVIILLLL	F	NOSNP
+1800	AAAA-SSTSSSSAAAGGGGAAAAAAAAAAAASSAA	T	NOSNP
+1803	WWWW-WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW	W	NOSNP
+1806	DCCS-SSSTTSSGSSSSSSSSSSSSSTSSNNSSSS	S	NOSNP
+1809	NNNN-IIVVVIITTTTTTTTTTTTTAILLTTNNNN	V	NOSNP
+1812	PPPP-PPPPPPPTPPPPPPPPPPPPPPPPPPPP--	P	NOSNP
+1815	WWWY-YYFYYYYSWWWWWWWWWWWWWWWWWWWW--	F	NOSNP
+1818	NRRY--------SGGGGGGGGGGNNGGSSSSGGNN	-	NOSNP
+1821	TRRR---------IIPPPPAAAAPPP-----RRRR	-	NOSNP
+1824	LQQL---------------------------TTVV	-	NOSNP
+1827	RRRF-IIIIIMM-WWWWWW----IIDWAAKKKKAA	I	NOSNP
+1830	FFFA-GGGGGGG-YYYYYYSSSSYYYGTTTTWWYY	G	NOSNP
+1833	TDDD-DDNAADDLRRSSSSKKKKTTQGQQQQDDKK	N	NOSNP
+1836	NNNN-SSNNNNNANNNNNNNNNNNNNNNNNNNNNN	N	NOSNP
+1839	QSSK-SSGGGGGGKKKKKKRRRRKKSRSSSSTTKK	G	NOSNP
+1842	AVVA-VVVIIVVVAAAAAAAAAAAAAAAAAAVVVV	V	NOSNP
+1845	YWNY-YYYYYYYYYYYYYYYYYYYYYYYYYYYYFF	Y	NOSNP
+1848	AVTT-TTTTTTTCCCCCCCCCCCCCTTTTTTTTTT	T	NOSNP
+1851	EKTE-EEEEEEEEEEKKKKEEEEEEEEEEEEEEEE	E	NOSNP
+1854	IT-I-IIIIIIIIIIIIIIIIIIFFVVVVVVIISS	I	NOSNP
+1857	NR-R-RRRRRRRGGGGGGGGGGGGGRRRRRRRRRR	R	NOSNP
+1860	QE-E-EEEEEDDGGGGGGGSSSSPPEEEEGGEETT	E	NOSNP
+1863	AV-K-EEQEEEEVVVVVVVVVVVVVKKKKKKPPAA	Q	NOSNP
+1866	GD-G-GGGGGGGDDDDDDDGGGGNNDDDDDDGGEE	G	NOSNP
+1869	HH-H-HHHHHPPHYYSSSSSSSSIIHYHHHHHHHH	H	NOSNP
+1872	YF-Y-FFFYYFFFFFFFFFFFFFYYFFFFFFFFYY	F	NOSNP
+1875	DA-E-PPPPPPPVKKQQQQQQQQEEPKPPKKEELL	P	NOSNP
+1878	RR-A-PPKSS--NRRSSSSSSSSEEQDNNQQKKDD	K	NOSNP
+1881	-Y---------------------------------	-	NOSNP
+1884	-T-P-------------------------------	-	NOSNP
+1887	-P-H----VV---------------------EENN	-	NOSNP
+1890	IA-D----GG---------------------GGVV	-	NOSNP
+1893	DK-Y-HHHSS--RRRQQQQQQQQRRYKYYYYTTGG	H	NOSNP
+1896	WW-W-WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW	W	NOSNP
+1899	---------------------------------II	-	NOSNP
+1902	EQ-E-DDDDDTTSDDDDDDDDDDDDSGGGNNDDPP	D	NOSNP
+1905	AS-Y-YYYYYDDTEEQQQQKKKKEEYDYYYYIILL	Y	NOSNP
+1908	LL-I-IIIIIIIIIILLLLLLLLMMIIIIIIIIII	I	NOSNP
+1911	GY-F-YYYYYYYYYYYYYYYYYYAAKKKKRRYYYY	Y	NOSNP
+1914	RK-S-DDNDD--AVVSSSSTTTTNNGNEEGGNNDD	N	NOSNP
+1917	---------------------------EESS----	-	NOSNP
+1920	TK-L-AAVVVVVKKKKKKKNNNNRRLKKKLLFFYY	V	NOSNP
+1923	-----RRRKKEE-----------------------	R	NOSNP
+1926	IL-L-LLLLLLLVLLIIIILLLLLLLLLLLLLLVV	L	NOSNP
+1929	SD-N-EEAEEKKREENNNNNNNNDDEDEEAACCDD	A	NOSNP
+1932	SV-D-RRNNNKKKNNNNNNKKKKQQKNKKNNQQKK	N	NOSNP
+1935	AT-L-SSSAASSFAAAAAAAAAASSAAAAAATTSS	S	NOSNP
+1938	GR-S-GGNDDGGNDDDDDDGGGGGGENGGEERRGG	N	NOSNP
+1941	RY---RRLLLRRYYYYYYYYYYYYYKKKKKKPPTT	L	NOSNP
+1944	QH---SSHNNSSYSSNNNNTTTTVVIIII-IYYYY	H	NOSNP
+1947	HH-H-SSSSSIIWSSWWWWTTTTSSTTCC-TSSKK	S	NOSNP
+1950	RS-R-TTTTTTTNRRKKKKNNNNHHTITT-VEESS	T	NOSNP
+1953	AD-D-DDDDDVVDTTDDDDAAAAFFDDDD-DDDEE	D	NOSNP
+1956	AS-K-NNSKKEEIKKSSSSSSSSTTEEQQ-ETTKK	S	NOSNP
+1959	WW-W-GGNNNRRCSSGGGGSSSSVVTSTT-SWWWW	N	NOSNP
+1962	RK-N-YYYYYYYNGGDDDDTTTTDDDDDD-DNNGG	Y	NOSNP
+1965	GG-G-GGGGGGGGGGGGGGHHHHGGKQKK-K--GG	G	NOSNP
+1968	-------------------------NYNN-F----	-	NOSNP
+1971	CR-C-YYYYYYYCCCFFFFSSSSVVCCCC-C--CC	Y	NOSNP
+1974	VL-L-HHVVVVVSEEEEEESSSSEEAAAA-T--FF	V	NOSNP
+1977	AS-S-SSSSSSSVIIVVVVIIIIVVSSSS-S--SS	S	NOSNP
+1980	QI-N-QQRKKKKDEENNNNSSSSHHATTT-Y--TT	R	NOSNP
+1983	VI-V-TTATTTTAAAAAAAAAAAAAVVVV-A--II	A	NOSNP
+1986	QS-S-DDNNNDDRLLSSSSAAAAEEGSSS-S--SS	N	NOSNP
+1989	TT-T-IIIIIIIIIITTTTTTTTTTIIVV-I--TT	I	NOSNP
+1992	EG-G-GGGGGGGGDDAAAAAAAAEEGGGG-G--GG	G	NOSNP
+1995	IS-S-EEEEEEEAKKTTTTKKKKRRGGGG-G--YY	E	NOSNP
+1998	DD-D-GGGGGNNGGGGGGGGGGGGGLYCC-L--GG	G	NOSNP
+2001	TT-T-TTTSSTTDDDGGGGSSSSGGTSTT-T--TT	T	NOSNP
+2004	SS-N-TTTTTIINSSDDDDSSSSSSSTSS-S--SS	T	NOSNP
+2007	PP-P-VVMMMGGPPPPPPPPPPPPPPSSS-P--PP	M	NOSNP
+2010	LI-L-NNNNNNNKKKIIIIDDDDMMEEEE-E--II	N	NOSNP
+2013	WM-C-AAAAAAAFFFFFFFFFFFFFFCFF-F--VV	A	NOSNP
+2016	EE-V-RRRRRVVTTTSSSSKKKKTTIIII-I--EE	R	NOSNP
+2019	GT-G-AAAGGAAAAAAAAAAAAAAAAAAA-A--AA	A	NOSNP
+2022	VI-I-VVVVVVVRTTTTTTYYYYTTIVVV-I--II	V	NOSNP
+2025	LF-L-FFFFFFFILLIIIIVVVVIILLLL-L--FF	F	NOSNP
+2028	ST-T-KKQQQQQKKKKKKKKKKKKKKHQQ-K--MM	Q	NOSNP
+2031	LL-L-LLLFFLL-TTIIIIIIIILLHHHH-H--LL	L	NOSNP
+2034	EE-T-PPPPPPP-EEPPPPPPPPSSKKKK-N--DD	P	NOSNP
+2037	-A-N-NNYYYYY-HHFFFFYYYY--FFFF-F--DD	Y	NOSNP
+2040	-A-P---------GGSSSSSSSS--SRGG-T--AA	-	NOSNP
+2043	-N-----------PPPPPPAAAA--PPPP-P----	-	NOSNP
+2046	-A-----------------------QLLL-E----	-	NOSNP
+2049	-------------------------PPPP-P----	-	NOSNP
+2052	--------------------------GEE-I----	-	NOSNP
+2055	--------------------------EEE-I----	-	NOSNP
+2058	--------------------------E---P----	-	NOSNP
+2061	--------------------------E--------	-	NOSNP
+Alignment order: Graimondii_221_v2,Fvesca_226_v1,Fvesca_501_v2,Csativus_122_v1,Sbicolor_255_v2,Sbicolor_454_v3,Sbicolor_313_v3,HORVU_MOREX_r2_1HG0000880_1,Aegilops_tauschii,Triticum_aestivum,Bdistachyon_283_v2,Bdistachyon_314_v3,Triticum_urartu,Sviridis_311_v1,Sviridis_500_v2,Pvirgatum_516_v5,Pvirgatum_273_v1,Pvirgatum_383_v3,Pvirgatum_450_v4,Zmays_284_5b_,Zmays_493_RefGen_V4,Zmays_284_Ensembl_18_2010_01_MaizeSequence,Zmays_284_6a,Phallii_308_v2,Phallii_495_v3,Dcarota_388_v2,Leersia_perrieri,Osativa_323_v7,Osativa_204_v7,Ahypochondriacus_459_v2,Ahypochondriacus_315_v1,Mdomestica_491_v1,Mdomestica_196_v1,Ppersica_298_v2,Ppersica_139_v1
+Species masked: HORVU_MOREX_r2_1HG0000880_1
+CPU time taken for sites: 47.73000000000002 seconds.
