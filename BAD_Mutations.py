@@ -271,20 +271,20 @@ def compile_preds(arg, log):
     alts = {}
     with open(subs, 'r') as f:
         for index, line in enumerate(f):
-                tmp = line.strip().split('\t')
-                # Unpack the values.
-                txid = tmp[0]
-                aapos = tmp[1]
-                alt_aa = tmp[2]
-                snpid = tmp[3]
-                # The HyPhy predictions are keyed on (txid, pos), but we have
-                # to replace dot (.) with underscore because dots crash the
-                # HyPhy sequence parser.
-                #   Note that we no longer replace dots with underscores
-                #   because the key is built from the file name, not the FASTA
-                #   sequence name.
-                key = (txid, aapos)
-                alts[key] = (snpid, alt_aa)
+            tmp = line.strip().split('\t')
+            # Unpack the values.
+            txid = tmp[0]
+            aapos = tmp[1]
+            alt_aa = tmp[2]
+            snpid = tmp[3]
+            # The HyPhy predictions are keyed on (txid, pos), but we have
+            # to replace dot (.) with underscore because dots crash the
+            # HyPhy sequence parser.
+            #   Note that we no longer replace dots with underscores
+            #   because the key is built from the file name, not the FASTA
+            #   sequence name.
+            key = (txid, aapos)
+            alts[key] = (snpid, alt_aa)
     #   Add P-values to the predictions
     logp_preds = []
     for genepred in parsed_preds:
