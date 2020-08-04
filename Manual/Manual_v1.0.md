@@ -1,28 +1,32 @@
 # <a name="toc"></a>Table of Contents
-- [Overview](#overview)
-- [Citation](#citation)
-- [Downloading](#downloading)
-    - [Dependencies](#dependencies)
-- [UMN MSI Instructions](#msi)
-- [Input Files](#inputs)
-- [Output Files](#outputs)
-    - [HyPhy Report Format](#hyphyreport)
-    - [Making Deleterious Predictions](#predictions)
-    - [Inferring Ancestral States](#ancestral)
-- [Usage](#usage)
-    - [Basic Invocation](#basic)
-    - [Subcommands](#subcommands)
-        - [General Options](#general)
-        - [Setup Subcommand](#setup)
-        - [Fetch Subcommand](#fetch)
-        - [Align Subcommand](#align)
-        - [Predict Subcommand](#predict)
-        - [Compile Subcommand](#compile)
-    - [Example Command Lines](#examples)
-- [Configuration File Format](#config)
-- [Runtimes](#runtime)
-- [Methods](#methods)
-- [Data Sources](#databases)
+- [<a name="toc"></a>Table of Contents](#table-of-contents)
+- [<a name="overview"></a>Overview](#overview)
+- [<a name="citation"></a>Citation](#citation)
+- [<a name="downloading"></a>Downloading](#downloading)
+- [<a name="dependencies"></a>Dependencies](#dependencies)
+  - [<a name="msi"></a>Instructions for UMN MSI](#instructions-for-umn-msi)
+- [<a name="inputs"></a>Input Files](#input-files)
+  - [A Note on Transcript Names](#a-note-on-transcript-names)
+- [<a name="outputs"></a>Output](#output)
+  - [<a name="hyphyreport"></a>Raw HyPhy Format](#raw-hyphy-format)
+  - [<a name="compiledreport"></a>Compiled HyPhy Report](#compiled-hyphy-report)
+  - [<a name="predictions"></a>Making Deleterious Predictions](#making-deleterious-predictions)
+  - [<a name="ancestral"></a>Inferring Ancestral States](#inferring-ancestral-states)
+- [<a name="usage"></a>Usage](#usage)
+  - [<a name="basic"></a>Basic Invocation](#basic-invocation)
+  - [<a name="subcommands"></a>Subcommands, Options, and Switches](#subcommands-options-and-switches)
+    - [<a name="general"></a>General Options](#general-options)
+    - [<a name="setup"></a>The `setup` Subcommand](#the-setup-subcommand)
+    - [<a name="fetch"></a>The `fetch` Subcommand](#the-fetch-subcommand)
+    - [<a name="align"></a>The `align` Subcommand](#the-align-subcommand)
+    - [<a name="predict"></a>The `predict` Subcommand](#the-predict-subcommand)
+    - [<a name="compile"></a>The `compile` Subcommand](#the-compile-subcommand)
+  - [<a name="examples"></a>Example Command Lines](#example-command-lines)
+    - [A Note on Parallel Execution](#a-note-on-parallel-execution)
+- [<a name="config"></a>Configuration File Format](#configuration-file-format)
+- [<a name="runtime"></a>Runtimes and Benchmarks](#runtimes-and-benchmarks)
+- [<a name="methods"></a>Methods](#methods)
+- [<a name="databases"></a>Data Sources](#data-sources)
 
 # <a name="overview"></a>Overview
 `BAD_Mutations` (**B**LAST-**A**ligned-**D**eleterious?) performs a likelihood ratio test (LRT) for the prediction of deleterious variants. The package is comprised of Python and Bourne Again Shell (BASH) scripts. The LRT uses a [HyPhy](http://hyphy.org/w/index.php/Main_Page) script. `BAD_Mutations` was written with Python 2 syntax, but conversion to Python 3 is planned. `BAD_Mutations` is designed to run from the command line. Running from an interactive Python environment is not recommended nor supported.
@@ -198,7 +202,7 @@ The `setup` subcommand takes the following options:
 | Option          | Value        | Description                                                                                                                                                                                |
 |:----------------|:-------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `--list-species` | NA           | Show all species databases available.                                                                                                                                                      |
-| `-c/--config`    | \[FILE\]     | Where to store the configuration file. Defaults to `LRTPredict_Config.txt`.                                                                                                                |
+| `-c/--config`    | \[FILE\]     | Name of the configuration file. Defaults to `LRTPredict_Config.txt`.                                                                                                                |
 | `-b/--base`      | \[DIR\]      | Directory to store the BLAST databases. Defaults to the current directory.                                                                                                                 |
 | `-d/--deps-dir`  | \[DIR\]      | Directory to download and store the dependencies. Defaults to current directory.                                                                                                           |
 | `-t/--target`    | \[SP\_NAME\] | Target species name. Must be one of the species (case sensitive) given by `--list-species`. This species will be excluded from the prediction pipeline to avoid reference bias. No default. |
