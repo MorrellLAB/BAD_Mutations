@@ -75,6 +75,7 @@ class Phytozome(fetch.Fetcher):
     FAILED_LOGIN = 'Login and password do not match'
     EXPIRED_ACCOUNT = 'Sorry, your password has expired'
     TO_FETCH = phytozome_species.phyto_fetch
+    PHYTOZOME_VERSION = 'PhytozomeV13'
 
     def __init__(self, user, passwd, base,
                  convertonly, verbose):
@@ -169,19 +170,38 @@ class Phytozome(fetch.Fetcher):
         #   Create an element tree out of it, so we can easily step
         #   through the data
         xml_tree = ElementTree.fromstring(xml)
-        #   Step through it and extract all CDS URLs
-        for elem in xml_tree.findall('.//file'):
-            #   if the URL ends in a certain suffix, then save it
-            if elem.attrib.get('url').endswith(suffix):
-                url = elem.attrib.get('url')
-                md5 = elem.attrib.get('md5')
-                #   Check to see that the file is in the list of
-                #   species to download
-                local_filename = file_funcs.local_name(url)
-                species_name = file_funcs.species_name(local_filename)
-                if species_name in self.TO_FETCH:
-                    self.urls.append(url)
-                    self.md5s.append(md5)
+        # We will restrict the tree parsing to just the latest version of
+        # Phytozome.
+        for part in xml_tree:
+            if part.attrib['name'] != self.PHYTOZOME_VERSION:
+                continue
+            else:
+                # Get all the CDS files
+                cds_url = [
+                    x.attrib.get('url')
+                    for x
+                    in part.findall('.//file')
+                    if x.attrib.get('url').endswith(suffix)]
+                cds_md5 = [
+                    x.attrib.get('md5')
+                    for x
+                    in part.findall('.//file')
+                    if x.attrib.get('url').endswith(suffix)]
+                # We will sort the CDS files such that we only take the most
+                # recent version of each species.
+                dl_sorted = sorted(
+                    list(zip(cds_url, cds_md5)),
+                    key=lambda x: x[0].split('/')[-1].split('_')[0:1],
+                    reverse=True)
+                # Keep track of which species we've seen
+                sp_seen = set()
+                for fname in dl_sorted:
+                    local_filename = file_funcs.local_name(fname[0])
+                    species_name = file_funcs.species_name(local_filename)
+                    if species_name in self.TO_FETCH and species_name not in sp_seen:
+                        self.urls.append(fname[0])
+                        self.md5s.append(fname[1])
+                        sp_seen.add(species_name)
         self.mainlog.debug('Found ' + str(len(self.urls)) + ' files to fetch')
         return
 
