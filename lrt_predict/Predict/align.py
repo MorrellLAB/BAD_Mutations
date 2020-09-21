@@ -260,7 +260,7 @@ class PastaAlign(object):
             stderr=subprocess.PIPE)
         out, err = p.communicate()
         aln_out = clustalo_out.name
-        tree_out = clustalo_out.name.replace('.fasta', '.tre')
+        tree_out = re.sub(r'\.fa(sta)?$', '.tre', aln_out, flags=re.I)
         #   And save the paths to these files as class variables
         self.aln_out = aln_out
         self.tree_out = tree_out
