@@ -11,7 +11,7 @@ import sys
 #   To handle file copy
 import shutil
 import os
-import pprint
+import re
 
 #   Import the dependency checking script
 import lrt_predict.General.check_modules as check_modules
@@ -201,7 +201,7 @@ def align(arg, unaligned, log):
     new_tree = os.path.join(
         arg['output'],
         os.path.basename(
-            arg['fasta'].replace('.fasta', '.tree')
+            re.sub(r'\.fa(sta)?$', '.tree', arg['fasta'], flags=re.I)
             )
         )
     open(new_nuc, 'w').close()
