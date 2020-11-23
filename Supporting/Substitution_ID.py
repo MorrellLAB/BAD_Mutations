@@ -4,7 +4,7 @@ substitutions files add the SNP position to the combined report. The inputs \
 are taken in this order as arguments:
     1) Combined reports from running "compile" after BAD_Mutations "predict"
     2) "Long substitutions" file preferably created by running "VeP_to_Subs.py"
-​
+
 Code by Sam Hamman & Peter Morrell, borrowing heavily from Tom Kono code here: \
 https://github.com/MorrellLAB/BAD_Mutations/blob/dev/Supporting/VeP_to_Subs.py
 """
