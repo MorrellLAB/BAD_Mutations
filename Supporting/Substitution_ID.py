@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Add SNP name to annotated variants. Need to read the combined reports and \
-substitutions files add the SNP position to the combined report. The inputs \
-are taken in this order as arguments:
+"""Add SNP name to annotated variants. Need to read the combined reports and
+substitutions files and add the SNP position to the combined report.
+The inputs are taken in this order as arguments:
     1) Combined reports from running "compile" after BAD_Mutations "predict"
     2) "Long substitutions" file preferably created by running "VeP_to_Subs.py"
 
-Code by Sam Hamman & Peter Morrell, borrowing heavily from Tom Kono code here: \
+Code by Sam Hamman & Peter Morrell, borrowing from Tom Kono's code here:
 https://github.com/MorrellLAB/BAD_Mutations/blob/dev/Supporting/VeP_to_Subs.py
 """
 
@@ -59,8 +59,8 @@ with open(subs_file, 'rt') as f:
             # pos = tmp[3].replace([-4:], '')
             pos = tmp[3][:-4]
 
-            key = (txid,aa_pos)
-            subs.update({key:pos})
+            key = (txid, aa_pos)
+            subs.update({key: pos})
 
 # Begin empty dict for final output
 # Keys are pairs of gene id and position on said gene
@@ -88,7 +88,7 @@ with open(combined, 'rt') as f:
 
             # Adds the entire adjusted row of data under
             # the unique key pair to the final dicitonary
-            report.update({key:tmp})
+            report.update({key: tmp})
 
 # Write to a temporary text file, grouped first by gene id then by position
 # Also note, sorted lexicographically, not numerically (e.g. 123, 32, 89, etc)
