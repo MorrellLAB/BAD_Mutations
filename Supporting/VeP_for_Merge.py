@@ -39,7 +39,8 @@ except (OSError, PermissionError) as e:
         'Either the file does not exist or the permissions are not open.\n')
     exit(4)
 
-#   Read in the list of primary transcripts.
+#   Read in the list of primary transcripts. Be very careful that the names
+#   are identical to names in the VeP output.
 prime_trans = []
 with gzip.open(primary_trans, 'rt') as f:
     for line in f:
@@ -47,14 +48,11 @@ with gzip.open(primary_trans, 'rt') as f:
         prime_trans.append(tmp)
         uniq_trans = prime_trans
 
-# Start writing the files. We will store the data in a dictionary so that we
-# can make sure that the substitutions are grouped by transcript before writing
-# to disk.
-
-# Grab header line from combined report
+#   Start writing the files. Start with comment and header lines to preserve
 comment_lines = []
 header_line = ""
 
+#   Read each line of the VeP file and preserve only
 subs = []
 with gzip.open(vep, 'rt') as f:
     for line in f:
@@ -73,11 +71,8 @@ with gzip.open(vep, 'rt') as f:
                 tmp[0] = replace_id
                 txid = tmp[4]
                 impact = tmp[6]
-                # if txid in uniq_trans:
-                #    print(txid)
                 # We want to save only the missense varaints
                 if impact == 'missense_variant':
-                    # if uniq_trans.count(txid) > 0:
                     if txid in uniq_trans:
                         subs.append(tmp)
                     else:
@@ -85,11 +80,13 @@ with gzip.open(vep, 'rt') as f:
                 else:
                     continue
 
-# Now, for each transcript:
+# Print the comment and header lines:
 for line in comment_lines:
     print(line)
 print(*header_line, sep = "\t")
 
+#    Printing every line of VeP content 14 times (don't know why).
+#    Find only unique lines and print.
 unique_subs = []
 for item in subs:
     if item not in unique_subs:
