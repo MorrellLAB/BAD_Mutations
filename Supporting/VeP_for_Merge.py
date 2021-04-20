@@ -1,10 +1,11 @@
 #!/usr/bin/env python
-"""Supporting script for BAD_Mutations that will convert a report from the
-Ensembl Variant Effect Predictor (VeP) to the substitutions file needed for
-BAD_Mutations. Assumes that VeP report is the "tabular" report. Takes three
+"""Supporting script for BAD_Mutations that will convert a Ensembl Variant
+Effect Predictor (VeP) to include only primary transcripts and missense changes.
+Variant names are also cleaned up to match the output format in the 'Combined
+Report'. We assume that the VeP report is in the "tabular" report. Takes two
 arguments:
     1) VeP report (gzipped)
-    2) List of primary transcripts listed one per line
+    2) List of primary transcripts listed one per line (gzipped)
 """
 
 import sys
