@@ -40,20 +40,23 @@ except (OSError, PermissionError) as e:
         'Either the file does not exist or the permissions are not open.\n')
     exit(4)
 
-#   Read in the list of primary transcripts to a set. Each primary transcript
-#   name needs to be unique!
+#   Read primary transcripts into a set. Be very careful that the names
+#   are identical to names in the VeP output.
 prime_trans = set()
 with gzip.open(primary_trans, 'rt') as f:
     for line in f:
         tmp = line.strip()
         prime_trans.add(tmp)
-        uniq_trans = prime_trans
+        # Turn this back into a list that I'll iterate on
+        uniq_trans = sorted(prime_trans)
 
 #   Start writing the files. Start with comment and header lines to preserve
 comment_lines = []
 header_line = ""
 
-#   Read each line of the VeP file and preserve only
+#   Read each line of the VeP file and preserve only unique comment_lines
+#   Using a set to store substitutions. Primary transcripts only are going to be
+#   preserved.
 subs = []
 with gzip.open(vep, 'rt') as f:
     for line in f:
@@ -65,8 +68,6 @@ with gzip.open(vep, 'rt') as f:
         else:
             tmp = line.strip().split('\t')
             for lines in tmp:
-            #  The lines below trim the final portion of a position name
-            #  This can matter when the SNP is listed as 'Chr1_1234_G/A'
                 #snpid = tmp[0]
                 #tmpid = re.split("_", snpid)
                 #tmpid = list([tmpid[0], tmpid[1]])
@@ -76,6 +77,7 @@ with gzip.open(vep, 'rt') as f:
                 impact = tmp[6]
                 # We want to save only the missense varaints
                 if impact == 'missense_variant':
+                    # Look for unique transcript names
                     if txid in uniq_trans:
                         subs.append(tmp)
                     else:
@@ -90,7 +92,7 @@ print(*header_line, sep = "\t")
 
 #    Printing every line of VeP content 14 times (don't know why).
 #    Find only unique lines and print.
-unique_subs = []
+unique_subs = list(subs)
 for item in subs:
     if item not in unique_subs:
         unique_subs.append(item)
