@@ -2,8 +2,9 @@
 """Supporting script for BAD_Mutations that will convert a Ensembl Variant
 Effect Predictor (VeP) to include only primary transcripts and missense changes.
 Variant names are also cleaned up to match the output format in the 'Combined
-Report'. We assume that the VeP report is in the "tabular" report. Takes two
-arguments:
+Report'. We assume that the VeP report is in the "tabular" report. Files are
+matched on transcript name (e.g., 'Phvul.001G000400.1.v2.1'). Make sure they
+are the same between files. Takes two arguments:
     1) VeP report (gzipped)
     2) List of primary transcripts listed one per line (gzipped)
 """
