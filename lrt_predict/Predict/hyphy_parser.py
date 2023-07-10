@@ -121,9 +121,7 @@ log(p/(1-p)) = -2.453-0.1904*LRT(masked)-0.1459*constraint+0.2199*max(Rn,An)-0.2
                         #   Check the third field in the 'NOSNP' line - if it is
                         #   not '-', then we increment the CDS position
                         #   counter.
-                        #   July 2023 - looks like this chagned to 'NA' isntead
-                        #   of '-'
-                        if line.strip().split()[2] != 'NA':
+                        if line.strip().split()[2] == 'NA':
                             cds_pos += 1
                         continue
                     #   We first check if we've run off the edge of the
