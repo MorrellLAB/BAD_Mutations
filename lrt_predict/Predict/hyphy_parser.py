@@ -121,27 +121,27 @@ log(p/(1-p)) = -2.453-0.1904*LRT(masked)-0.1459*constraint+0.2199*max(Rn,An)-0.2
                         #   Check the third field in the 'NOSNP' line - if it is
                         #   not '-', then we increment the CDS position
                         #   counter.
-                        if line.strip().split()[2] != '-':
+                        #   July 2023 - looks like this chagned to 'NA' isntead
+                        #   of '-'
+                        if line.strip().split()[2] != 'NA':
                             cds_pos += 1
                         continue
-                    else:
-                        #   We first check if we've run off the edge of the
-                        #   alignment data. The line right after the alignment
-                        #   data starts with 'Alignment'
-                        if line.startswith('Alignment'):
-                            return gene_preds
-                        else:
-                            geneseq += line.strip().split()[8]
-                            #   Increment the CDS position counter. There has to
-                            #   be a non-gap character at the query positions
-                            cds_pos += 1
-                            tmp = line.strip().split()
-                            #   Get the gene ID
-                            #   We will assume this is the first part before the
-                            #   _Predictions suffix.
-                            geneid = os.path.basename(pred_file).rsplit('_', 1)[0]
-                            anno = [geneid, str(cds_pos)] + tmp
-                            gene_preds.append(anno)
+                    #   We first check if we've run off the edge of the
+                    #   alignment data. The line right after the alignment
+                    #   data starts with 'Alignment'
+                    if line.startswith('Alignment'):
+                        return gene_preds
+                    geneseq += line.strip().split()[8]
+                    #   Increment the CDS position counter. There has to
+                    #   be a non-gap character at the query positions
+                    cds_pos += 1
+                    tmp = line.strip().split()
+                    #   Get the gene ID
+                    #   We will assume this is the first part before the
+                    #   _Predictions suffix.
+                    geneid = os.path.basename(pred_file).rsplit('_', 1)[0]
+                    anno = [geneid, str(cds_pos)] + tmp
+                    gene_preds.append(anno)
         print(gene_preds)
         return gene_preds
 
