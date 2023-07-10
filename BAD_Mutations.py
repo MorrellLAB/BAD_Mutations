@@ -13,8 +13,6 @@ import shutil
 import os
 import re
 
-import pprint
-
 #   Import the dependency checking script
 import lrt_predict.General.check_modules as check_modules
 #   Import the verbosity script
@@ -289,8 +287,6 @@ def compile_preds(arg, log):
             alts[key] = (snpid, alt_aa)
     #   Add P-values to the predictions
     logp_preds = []
-    pprint.pprint(parsed_preds)
-    pprint.pprint(alts)
     for genepred in parsed_preds:
         for snppred in genepred:
             var_id, a = alts.get((snppred[0], snppred[1]), ('NA', 'NA'))
