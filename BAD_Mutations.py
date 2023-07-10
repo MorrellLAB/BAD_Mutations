@@ -288,6 +288,7 @@ def compile_preds(arg, log):
     #   Add P-values to the predictions
     logp_preds = []
     print(parsed_preds)
+    print(alts)
     for genepred in parsed_preds:
         for snppred in genepred:
             var_id, a = alts.get((snppred[0], snppred[1]), ('NA', 'NA'))
