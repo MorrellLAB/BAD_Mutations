@@ -117,11 +117,17 @@ log(p/(1-p)) = -2.453-0.1904*LRT(masked)-0.1459*constraint+0.2199*max(Rn,An)-0.2
                     self.mainlog.debug(str(cds_pos) + ' ' + line.strip())
                     #   The prediction lines are ones that do NOT end in 'NOSNP'
                     if 'NOSNP' in line:
-                        geneseq += line.strip().split()[2]
+                        # Sometimes there are NAs in the amino acid column; not
+                        # sure why these are here, but we will skip them and not
+                        # count them.
+                        aln_aa = line.strip().split()[2]
+                        if aln_aa == 'NA':
+                            continue
+                        geneseq += aln_aa
                         #   Check the third field in the 'NOSNP' line - if it is
                         #   not '-', then we increment the CDS position
                         #   counter.
-                        if line.strip().split()[2] == 'NA':
+                        if aln_aa != '-':
                             cds_pos += 1
                         continue
                     #   We first check if we've run off the edge of the
