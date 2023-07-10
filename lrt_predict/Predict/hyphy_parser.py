@@ -102,6 +102,7 @@ log(p/(1-p)) = -2.453-0.1904*LRT(masked)-0.1459*constraint+0.2199*max(Rn,An)-0.2
         #   And an empty list to store the prediction info
         gene_preds = []
         geneseq = ''
+        self.mainlog.debug('Reading ' + pred_file)
         with open(os.path.join(self.preddir, pred_file), 'r') as f:
             for line in f:
                 #   The header for the actual predictions starts with 'Position'
