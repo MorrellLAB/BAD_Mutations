@@ -367,7 +367,7 @@ def main():
                 arguments_valid['output'],
                 os.path.basename(
                     re.sub(
-                        r'\.fa(sta)?$',
+                        r'\.f(n)?a(sta)?$',
                         '_Predictions.txt',
                         arguments_valid['fasta'],
                         re.IGNORECASE)
