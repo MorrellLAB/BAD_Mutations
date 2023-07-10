@@ -366,12 +366,14 @@ def main():
             out_fname = os.path.join(
                 arguments_valid['output'],
                 os.path.basename(
-                    arguments_valid['fasta'].replace(
-                        '.fasta',
-                        '_Predictions.txt')
+                    re.sub(
+                        r'\.fa(sta)?$',
+                        '_Predictions.txt',
+                        arguments_valid['fasta'],
+                        re.IGNORECASE)
                     )
                 )
-            open(out_fname, 'w').close()
+            open(out_fname, 'wt').close()
             shutil.copy2(out.name, out_fname)
             loglevel.info('Prediction in ' + out_fname)
         elif arguments_valid['action'] == 'compile':
