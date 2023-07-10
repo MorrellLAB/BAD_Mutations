@@ -142,6 +142,9 @@ log(p/(1-p)) = -2.453-0.1904*LRT(masked)-0.1459*constraint+0.2199*max(Rn,An)-0.2
                             geneid = os.path.basename(pred_file).rsplit('_', 1)[0]
                             anno = [geneid, str(cds_pos)] + tmp
                             gene_preds.append(anno)
+        # Just for debugging purposes, print out the positions found
+        found_pos = ','.join(i[1] for i in gene_preds)
+        self.mainlog.debug('Found predictions at aligned positions: ' + found_pos)
         return gene_preds
 
     def add_regression(self, alt, prediction):
