@@ -288,13 +288,14 @@ def compile_preds(arg, log):
     #   Add P-values to the predictions
     logp_preds = []
     for genepred in parsed_preds:
-        for snppred in genepred:
-            var_id, a = alts.get((snppred[0], snppred[1]), ('NA', 'NA'))
-            bm_anno = comp.add_regression(a, snppred)
-            # prepend the SNP ID
-            bm_anno.insert(0, var_id)
-            logp_preds.append(bm_anno)
-        #   Then write them into the destination file
+        if genepred:
+            for snppred in genepred:
+                var_id, a = alts.get((snppred[0], snppred[1]), ('NA', 'NA'))
+                bm_anno = comp.add_regression(a, snppred)
+                # prepend the SNP ID
+                bm_anno.insert(0, var_id)
+                logp_preds.append(bm_anno)
+            #   Then write them into the destination file
     comp.compile_predictions(logp_preds)
     return
 

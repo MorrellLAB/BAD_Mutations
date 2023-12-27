@@ -135,7 +135,12 @@ log(p/(1-p)) = -2.453-0.1904*LRT(masked)-0.1459*constraint+0.2199*max(Rn,An)-0.2
                     #   data starts with 'Alignment'
                     if line.startswith('Alignment'):
                         return gene_preds
-                    geneseq += line.strip().split()[8]
+                    # If we get an IndexError here, then we have a malformed
+                    # line, and we will return a False value
+                    try:
+                        geneseq += line.strip().split()[8]
+                    except IndexError:
+                        return False
                     #   Increment the CDS position counter. There has to
                     #   be a non-gap character at the query positions
                     cds_pos += 1
@@ -146,7 +151,6 @@ log(p/(1-p)) = -2.453-0.1904*LRT(masked)-0.1459*constraint+0.2199*max(Rn,An)-0.2
                     geneid = os.path.basename(pred_file).rsplit('_', 1)[0]
                     anno = [geneid, str(cds_pos)] + tmp
                     gene_preds.append(anno)
-        print(gene_preds)
         return gene_preds
 
     def add_regression(self, alt, prediction):
